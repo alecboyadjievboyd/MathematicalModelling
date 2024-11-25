@@ -10,3 +10,6 @@ class ExpressionType(Enum):
     NATURALLOG = 6
     GENERALMULTIVAR = 7
     GENERALSINGLEVAR = 8
+    SINE = 9
+    COSINE = 10
+    TANGENT = 11
