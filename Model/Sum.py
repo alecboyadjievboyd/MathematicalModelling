@@ -1,5 +1,5 @@
-import Expression
-import ExpressionType
+from expression import Expression
+from expression_type import ExpressionType
 
 # Sum of at least two expressions (terms)
 class Sum(Expression):

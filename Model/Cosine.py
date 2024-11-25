@@ -1,8 +1,7 @@
-import Expression
-import ExpressionType
-import Product
-import Sine
-import Constant
+from expression import Expression
+from expression_type import ExpressionType
+from product import Product
+from constant import Constant
 
 # Cosine of an expression
 class Cosine(Expression):
@@ -14,4 +13,5 @@ class Cosine(Expression):
         return f'cos({self.argument})'
     
     def derivative(self, differential):
+        from sine import Sine
         return Product({Constant(-1), Sine(self.argument), self.argument.derivative(differential)})

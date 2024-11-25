@@ -1,5 +1,5 @@
 import abc
-import ExpressionType
+from expression_type import ExpressionType
 
 # Abstract class of expression
 class Expression(abc.ABC):

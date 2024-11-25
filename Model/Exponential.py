@@ -1,9 +1,8 @@
-import Expression
-import ExpressionType
-import Product
-import Sum
-import Constant
-import NaturalLogarithm
+from expression import Expression
+from expression_type import ExpressionType
+from product import Product
+from sum import Sum
+from constant import Constant
 
 # Exponential function with an expression as a base and exponent
 class Exponential(Expression):
@@ -17,6 +16,7 @@ class Exponential(Expression):
         return self.put_brackets(self.base) + "^" + self.put_brackets(self.exponent)
     
     def derivative(self, differential):
+        from natural_logarithm import NaturalLogarithm
         return Product((self, 
                       Sum(( Product((self.exponent.derivative(differential), NaturalLogarithm(self.base))),
                           Product((self.exponent, Exponential(self.base, Constant(-1)), self.base.derivative(differential)))                         

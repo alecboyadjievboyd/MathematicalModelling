@@ -9,14 +9,14 @@
 #     print(path)
 
 
-from Model import Constant
-from Model import Variable
-from Model import Sum
-from Model import Product
-from Model import Exponential
-from Model import GeneralMultivar
-from Model import GeneralSinglevar
-from Model import NaturalLogarithm
+from constant import Constant
+from variable import Variable
+from sum import Sum
+from product import Product
+from exponential import Exponential
+from general_multivar import GeneralMultivar
+from general_singlevar import GeneralSinglevar
+from natural_logarithm import NaturalLogarithm
 
 def D(function, differential = Variable(1)):
     return function.derivative(differential)
@@ -81,10 +81,10 @@ print(D(genf))
 # Derivative of sum
 print(D(Sum((genf, geng, genh))))
 
-# Derivative of product
+# Derivative of Product
 print(D(Product((genf, geng, genh))))
 
-# Derivative of exponential
+# Derivative of Exponential
 print(D(Exponential(genf, genh)))
 print(D(Exponential(Variable(1),Constant(-1))))
 print(D(Exponential(Variable(1),Variable(1))))
@@ -100,3 +100,4 @@ print( D(NaturalLogarithm(Variable(1))))
 # general singlevariable function
 print( GeneralSinglevar('cot', Variable(1)) )
 print( D(GeneralSinglevar('cot', genf)) )
+
