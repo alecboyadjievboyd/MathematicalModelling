@@ -5,6 +5,7 @@ import Cosine
 import Exponential
 import Constant
 
+# Tangent of an expression
 class Tangent(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.TANGENT)

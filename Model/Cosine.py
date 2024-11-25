@@ -4,6 +4,7 @@ import Product
 import Sine
 import Constant
 
+# Cosine of an expression
 class Cosine(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.COSINE)

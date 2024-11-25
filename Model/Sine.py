@@ -3,6 +3,7 @@ import ExpressionType
 import Product
 import Cosine
 
+# Sine of an expression
 class Sine(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.SINE)
