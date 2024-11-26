@@ -19,6 +19,10 @@ class Sum(Expression):
     # pairs of equivalent terms. 
     # If any elements cannot be removed from one or both lists then they are not equal.
     def __eq__(self, other):
+
+        if (self.expression_type != other.expression_type):
+            return False
+        
         selfTerms = self.terms.copy()
         otherTerms = other.terms.copy()
 
@@ -51,17 +55,24 @@ class Sum(Expression):
             
     
     def pfsfSimple(self):   
-         
-        # Consolidation step: If any of the terms are also sums, we expand those sums above.
-         for term in self.terms[1:]:
+     
+        zeroList = []
+        popList = []
+        appendList = []
+        #Zero Elimination + Consolidation step: If any of the terms are also sums, we expand those sums above.
+        for term in self.terms[1:]:
+            # Note that the two statments can never trigger at the same time. 
             if (term.expression_type == ExpressionType.SUM): #If one of the terms itself is a sum. 
-                termNew = term.pfsfSimple() # Simplify the inner sum (incase there are any more nested sums)
-                self.terms.pop(term) # Remove the term from the list
-                for term2 in termNew.terms[1:]:
-                    self.terms.append(term2) ##Add the extracted terms to the sum list. 
+                termsNew = term.pfsfSimple() # Simplify the inner sum (incase there are any more nested sums)
+                popList.append(term) # Add the term to the removal list
+                for term2 in termsNew.terms[1:]:
+                    appendList.append(term2) # Add the extracted terms to the append list. 
+            if term == Constant(0):
+                zeroList(term) # Remove constant terms
 
-        # After consolidated, combine like terms
-        
+        # After consolidated, combine like terms. We assume that all terms are already consolidated and pfsf 
+        for term in self.terms[1:]: 
+
 
 
         

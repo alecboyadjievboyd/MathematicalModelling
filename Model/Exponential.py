@@ -17,6 +17,8 @@ class Exponential(Expression):
         return self.put_brackets(self.base) + "^" + self.put_brackets(self.exponent)
     
     def __eq__(self, other):
+        if (self.expression_type != other.expression_type):
+            return False
         return (self.base == other.base and self.exponent == other.exponent)
     
     def derivative(self, differential):

@@ -15,6 +15,9 @@ class Tangent(Expression):
         return f'tan({self.argument})'
     
     def __eq__(self, other):
+        if (self.expression_type != other.expression_type):
+            return False
+        
         return self.argument == other.argument
     
     def derivative(self, differential):

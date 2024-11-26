@@ -19,6 +19,9 @@ class Product(Expression):
     # pairs of equivalent terms. 
     # If any elements cannot be removed from one or both lists then they are not equal.
     def __eq__(self, other):
+        if (self.expression_type != other.expression_type):
+            return False
+        
         selfTerms = self.factors.copy()
         otherTerms = other.factors.copy()
 

@@ -12,6 +12,8 @@ class Constant(Expression):
         return str(self.value)
     
     def __eq__(self, other):
+        if (self.expression_type != other.expression_type):
+            return False
         return (self.value == other.value)
     
     def derivative(self, differential):
