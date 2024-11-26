@@ -16,3 +16,7 @@ class Expression(abc.ABC):
     @abc.abstractmethod
     def __str__(self):
         pass
+
+    @abc.abstractmethod
+    def __eq__(self, other):
+        pass

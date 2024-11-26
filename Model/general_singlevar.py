@@ -1,6 +1,6 @@
-from expression import Expression
+from Expression import Expression
 from expression_type import ExpressionType
-from product import Product
+from Product import Product
 
 class GeneralSinglevar(Expression):
     def __init__(self, symbol:str, argument):
@@ -10,6 +10,9 @@ class GeneralSinglevar(Expression):
 
     def __str__(self):
         return self.symbol + '(' + self.argument.__str__() + ')'
+    
+    def __eq__(self, other):
+        return (self.symbol == other.symbol and self.argument == other.argument)
     
     def derivative(self, differential):
             return Product((GeneralSinglevar(self.symbol + "\'", self.argument), self.argument.derivative(differential))) # f'
