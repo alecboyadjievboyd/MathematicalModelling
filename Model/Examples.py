@@ -21,6 +21,7 @@ def D(function, differential = Variable(1)):
     return function.derivative(differential)
 
 
+
 # 8
 expr1 = Constant(8)
 print(expr1)
