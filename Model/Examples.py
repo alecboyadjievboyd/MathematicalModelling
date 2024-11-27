@@ -5,9 +5,8 @@
 # model_folder_path = os.path.join(project_root, "Model")
 # sys.path.insert(0, model_folder_path)
 
-# for path in sys.path:
+# for path in sys.path: 
 #     print(path)
-
 
 from constant import Constant
 from variable import Variable
