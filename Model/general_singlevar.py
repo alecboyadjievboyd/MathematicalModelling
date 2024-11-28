@@ -1,6 +1,6 @@
 from Expression import Expression
 from expression_type import ExpressionType
-from Product import Product
+from product import Product
 
 class GeneralSinglevar(Expression):
     def __init__(self, symbol:str, argument):

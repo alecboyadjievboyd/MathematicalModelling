@@ -13,3 +13,7 @@ class ExpressionType(Enum):
     SINE = 9
     COSINE = 10
     TANGENT = 11
+    ARCSINE = 12
+    ARCCOSINE = 13
+    ARCTANGENT = 14
+    EXP = 15

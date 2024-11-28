@@ -1,4 +1,4 @@
-from Constant import Constant
+from constant import Constant
 from Expression import Expression
 from expression_type import ExpressionType
 
@@ -14,6 +14,9 @@ class Sum(Expression):
         for term in self.terms[1:]:
             string_expression += " + " + str(term)
         return string_expression
+    
+    def derivative(self, differential):   
+        return Sum( tuple(term.derivative(differential) for term in self.terms) )    
     
     # This function basically does a "mutual elimination" thing, cutting down copies of both lists until both copies are empty by removing
     # pairs of equivalent terms. 
@@ -54,25 +57,21 @@ class Sum(Expression):
         return True
             
     
-    def pfsfSimple(self):   
+    # def pfsfSimple(self):   
      
-        zeroList = []
-        popList = []
-        appendList = []
-        #Zero Elimination + Consolidation step: If any of the terms are also sums, we expand those sums above.
-        for term in self.terms[1:]:
-            # Note that the two statments can never trigger at the same time. 
-            if (term.expression_type == ExpressionType.SUM): #If one of the terms itself is a sum. 
-                termsNew = term.pfsfSimple() # Simplify the inner sum (incase there are any more nested sums)
-                popList.append(term) # Add the term to the removal list
-                for term2 in termsNew.terms[1:]:
-                    appendList.append(term2) # Add the extracted terms to the append list. 
-            if term == Constant(0):
-                zeroList(term) # Remove constant terms
+    #     zeroList = []
+    #     popList = []
+    #     appendList = []
+    #     #Zero Elimination + Consolidation step: If any of the terms are also sums, we expand those sums above.
+    #     for term in self.terms[1:]:
+    #         # Note that the two statments can never trigger at the same time. 
+    #         if (term.expression_type == ExpressionType.SUM): #If one of the terms itself is a sum. 
+    #             termsNew = term.pfsfSimple() # Simplify the inner sum (incase there are any more nested sums)
+    #             popList.append(term) # Add the term to the removal list
+    #             for term2 in termsNew.terms[1:]:
+    #                 appendList.append(term2) # Add the extracted terms to the append list. 
+    #         if term == Constant(0):
+    #             zeroList(term) # Remove constant terms
 
-        # After consolidated, combine like terms. We assume that all terms are already consolidated and pfsf 
-        for term in self.terms[1:]: 
-
-
-
-        
+    #     # After consolidated, combine like terms. We assume that all terms are already consolidated and pfsf 
+    #     for term in self.terms[1:]:

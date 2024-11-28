@@ -1,7 +1,7 @@
 from Expression import Expression
 from expression_type import ExpressionType
-from Product import Product
-from Cosine import Cosine
+from product import Product
+from cosine import Cosine
 
 # Sine of an expression
 class Sine(Expression):

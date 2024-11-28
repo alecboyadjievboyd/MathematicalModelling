@@ -1,6 +1,6 @@
 from Expression import Expression
 from expression_type import ExpressionType
-from Sum import Sum
+from sum import Sum
 
 # Products of at least two expressions (factors)
 class Product(Expression):

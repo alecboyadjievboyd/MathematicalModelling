@@ -1,8 +1,8 @@
 from Expression import Expression
 from expression_type import ExpressionType
-from Product import Product
-from Sum import Sum
-from Constant import Constant
+from product import Product
+from sum import Sum
+from constant import Constant
 from natural_logarithm import NaturalLogarithm
 
 # Exponential function with an expression as a base and exponent

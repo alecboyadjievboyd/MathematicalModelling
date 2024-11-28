@@ -1,9 +1,9 @@
 from Expression import Expression
 from expression_type import ExpressionType
-from Product import Product
-from Cosine import Cosine
-from Exponential import Exponential
-from Constant import Constant
+from product import Product
+from cosine import Cosine
+from exponential import Exponential
+from constant import Constant
 
 # Tangent of an expression
 class Tangent(Expression):
