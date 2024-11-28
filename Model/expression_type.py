@@ -17,3 +17,4 @@ class ExpressionType(Enum):
     ARCCOSINE = 13
     ARCTANGENT = 14
     EXP = 15
+    FRACTION = 16

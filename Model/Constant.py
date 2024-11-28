@@ -4,7 +4,9 @@ from expression_type import ExpressionType
 # Integer constant. Terminal expression.
 class Constant(Expression):
 
-    def __init__(self, value):
+    def __init__(self, value:int):
+        if type(value) != int:
+            raise Exception("Constants need to be integers") #I wrote this, however it feels a bit weird (I imagine Constant("Pi") could become relevant). If you want to remove it, please have Frac.__init__ check whether the Constants have int values and send a Whatsapp informing about this to Tim.
         super().__init__(ExpressionType.CONSTANT)
         self.value = value
 
