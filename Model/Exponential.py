@@ -1,8 +1,8 @@
 from Expression import Expression
 from expression_type import ExpressionType
-from product import Product
-from sum import Sum
-from constant import Constant
+from Product import Product
+from Sum import Sum
+from Constant import Constant
 from natural_logarithm import NaturalLogarithm
 
 # Exponential function with an expression as a base and exponent
@@ -19,7 +19,9 @@ class Exponential(Expression):
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        return (self.base == other.base and self.exponent == other.exponent)
+        if (str(self) == str(other)):
+            return True
+        else: return False
     
     def derivative(self, differential):
         return Product((self, 

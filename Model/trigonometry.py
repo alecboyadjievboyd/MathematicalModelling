@@ -15,10 +15,13 @@ class Cosine(Expression):
     def __str__(self):
         return f'cos({self.argument})'
     
+    # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        return self.argument == other.argument
+        if (str(self) == str(other)):
+            return True
+        else: return False
     
     def derivative(self, differential):
         
@@ -34,10 +37,13 @@ class Sine(Expression):
     def __str__(self):
         return f'sin({self.argument})'
     
+    # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        return self.argument == other.argument
+        if (str(self) == str(other)):
+            return True
+        else: return False
     
     def derivative(self, differential):
         return Product({Cosine(self.argument), self.argument.derivative(differential)})
@@ -52,11 +58,13 @@ class Tangent(Expression):
     def __str__(self):
         return f'tan({self.argument})'
     
+    # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        
-        return self.argument == other.argument
+        if (str(self) == str(other)):
+            return True
+        else: return False
     
     def derivative(self, differential):
         return Product({Exponential(Cosine(self.argument), Constant(-2)), self.argument.derivative(differential)})
@@ -69,11 +77,13 @@ class Arcsine(Expression):
     def __str__(self):
         return f"arcsin({self.argument})"
     
+    # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        
-        return self.argument == other.argument
+        if (str(self) == str(other)):
+            return True
+        else: return False
 
     def derivative(self, differential):
         return Product((
@@ -89,11 +99,13 @@ class Arccosine(Expression):
     def __str__(self):
         return f"arccos({self.argument})"
     
+    # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        
-        return self.argument == other.argument
+        if (str(self) == str(other)):
+            return True
+        else: return False
 
     def derivative(self, differential):
         return Product((Constant(-1),
@@ -109,11 +121,13 @@ class Arctangent(Expression):
     def __str__(self):
         return f"arctan({self.argument})"
     
+    # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        
-        return self.argument == other.argument
+        if (str(self) == str(other)):
+            return True
+        else: return False
 
     def derivative(self, differential):
         return Product((

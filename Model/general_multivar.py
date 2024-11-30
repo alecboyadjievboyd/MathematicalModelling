@@ -12,7 +12,9 @@ class GeneralMultivar(Expression):
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        return self.symbol == other.symbol
+        if (str(self) == str(other)):
+            return True
+        else: return False
     
     def derivative(self, differential):
         return GeneralMultivar(f"d{self.symbol}/d{differential}") # df/dx1

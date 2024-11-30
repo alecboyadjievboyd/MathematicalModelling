@@ -14,7 +14,9 @@ class GeneralSinglevar(Expression):
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        return (self.symbol == other.symbol and self.argument == other.argument)
+        if (str(self) == str(other)):
+            return True
+        else: return False
     
     def derivative(self, differential):
             return Product((GeneralSinglevar(self.symbol + "\'", self.argument), self.argument.derivative(differential))) # f'

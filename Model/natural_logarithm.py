@@ -14,7 +14,9 @@ class NaturalLogarithm(Expression): #Tim here, I had to add this as it is needed
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
             return False
-        return self.argument == other.argument
+        if (str(self) == str(other)):
+            return True
+        else: return False
     
     def derivative(self, differential):
         from exponential import Exponential
