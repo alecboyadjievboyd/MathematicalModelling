@@ -8,6 +8,7 @@ class Sum(Expression):
     def __init__(self, terms):
         super().__init__(ExpressionType.SUM)
         self.terms = terms
+        self.isConstant = None
 
     def __str__(self):
         string_expression = str(self.terms[0])
@@ -25,6 +26,15 @@ class Sum(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def isConstant(self):
+        if self.isConstant == None: 
+            self.isConstant == True
+            for term in self.terms:
+                if term.isConstant == False:
+                    self.isConstant == False
+                    break
+        return self.isConstant
             
     
     # def pfsfSimple(self):   

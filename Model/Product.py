@@ -8,6 +8,7 @@ class Product(Expression):
     def __init__(self, factors):
         super().__init__(ExpressionType.PRODUCT)
         self.factors = factors
+        self.isConstant = None
     
     def __str__(self):
         string_expression = self.put_brackets(self.factors[0])
@@ -22,6 +23,15 @@ class Product(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def isConstant(self):
+        if self.isConstant == None: 
+            self.isConstant == True
+            for factor in self.factors:
+                if factor.isConstant == False:
+                    self.isConstant == False
+                    break
+        return self.isConstant
     
 #     def derivative(self, differential): #outputs derivative of f*g*h as f'*g*h + g'*f*h + h'*f*g
 #         return Sum(tuple(

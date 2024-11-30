@@ -24,5 +24,8 @@ class Variable(Expression):
         else:
             return Constant(0)
         
+    def isConstant(self):
+        return False
+        
     def pfsf(self):
         return Variable(self.index) 

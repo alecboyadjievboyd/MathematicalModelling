@@ -11,12 +11,8 @@ class GeneralSinglevar(Expression):
     def __str__(self):
         return self.symbol + '(' + self.argument.__str__() + ')'
     
-    def __eq__(self, other):
-        if (self.expression_type != other.expression_type):
-            return False
-        if (str(self) == str(other)):
-            return True
-        else: return False
+    def isConstant(self):
+        return False
     
     def derivative(self, differential):
             return Product((GeneralSinglevar(self.symbol + "\'", self.argument), self.argument.derivative(differential))) # f'

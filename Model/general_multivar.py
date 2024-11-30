@@ -15,6 +15,9 @@ class GeneralMultivar(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def isConstant(self):
+        return False
     
     def derivative(self, differential):
         return GeneralMultivar(f"d{self.symbol}/d{differential}") # df/dx1

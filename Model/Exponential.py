@@ -12,6 +12,7 @@ class Exponential(Expression):
         super().__init__(ExpressionType.EXPONENTIAL)
         self.base = base
         self.exponent = exponent
+        self.isConstant = None
     
     def __str__(self):
         return self.put_brackets(self.base) + "^" + self.put_brackets(self.exponent)
@@ -22,6 +23,14 @@ class Exponential(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def isConstant(self):
+        if self.isConstant == None: 
+            if self.argument.isConstant() and self.base.isConstant():
+                self.isConstant = True
+            else:
+                self.isConstant = False
+        return self.isConstant
     
     def derivative(self, differential):
         return Product((self, 

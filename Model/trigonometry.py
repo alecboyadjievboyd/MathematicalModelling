@@ -1,9 +1,9 @@
 from Expression import Expression
 from expression_type import ExpressionType
-from sum import Sum
-from product import Product
-from constant import Constant
-from exponential import Exponential
+from Sum import Sum
+from Product import Product
+from Constant import Constant
+from Exponential import Exponential
 
 
 # Cosine of an expression
@@ -11,6 +11,7 @@ class Cosine(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.COSINE)
         self.argument = argument
+        self.isConstant = None
         
     def __str__(self):
         return f'cos({self.argument})'
@@ -22,6 +23,14 @@ class Cosine(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def isConstant(self):
+        if self.isConstant == None: 
+            if self.argument.isConstant() == True:
+                self.isConstant = True
+            else:
+                self.isConstant = False
+        return self.isConstant
     
     def derivative(self, differential):
         
@@ -33,6 +42,7 @@ class Sine(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.SINE)
         self.argument = argument
+        self.isConstant = None
         
     def __str__(self):
         return f'sin({self.argument})'
@@ -44,6 +54,14 @@ class Sine(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def isConstant(self):
+        if self.isConstant == None: 
+            if self.argument.isConstant() == True:
+                self.isConstant = True
+            else:
+                self.isConstant = False
+        return self.isConstant
     
     def derivative(self, differential):
         return Product({Cosine(self.argument), self.argument.derivative(differential)})
@@ -54,6 +72,7 @@ class Tangent(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.TANGENT)
         self.argument = argument
+        self.isConstant = None
         
     def __str__(self):
         return f'tan({self.argument})'
@@ -65,6 +84,14 @@ class Tangent(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def isConstant(self):
+        if self.isConstant == None: 
+            if self.argument.isConstant() == True:
+                self.isConstant = True
+            else:
+                self.isConstant = False
+        return self.isConstant
     
     def derivative(self, differential):
         return Product({Exponential(Cosine(self.argument), Constant(-2)), self.argument.derivative(differential)})
@@ -73,6 +100,7 @@ class Arcsine(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.ARCSINE)
         self.argument=argument
+        self.isConstant = None
     
     def __str__(self):
         return f"arcsin({self.argument})"
@@ -85,6 +113,14 @@ class Arcsine(Expression):
             return True
         else: return False
 
+    def isConstant(self):
+        if self.isConstant == None: 
+            if self.argument.isConstant() == True:
+                self.isConstant = True
+            else:
+                self.isConstant = False
+        return self.isConstant
+
     def derivative(self, differential):
         return Product((
             Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
@@ -95,6 +131,7 @@ class Arccosine(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.ARCCOSINE)
         self.argument=argument
+        self.isConstant = None
     
     def __str__(self):
         return f"arccos({self.argument})"
@@ -107,6 +144,14 @@ class Arccosine(Expression):
             return True
         else: return False
 
+    def isConstant(self):
+        if self.isConstant == None: 
+            if self.argument.isConstant() == True:
+                self.isConstant = True
+            else:
+                self.isConstant = False
+        return self.isConstant
+
     def derivative(self, differential):
         return Product((Constant(-1),
             Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
@@ -117,6 +162,7 @@ class Arctangent(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.ARCTANGENT)
         self.argument=argument
+        self.isConstant = None
     
     def __str__(self):
         return f"arctan({self.argument})"
@@ -128,6 +174,14 @@ class Arctangent(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def isConstant(self):
+        if self.isConstant == None: 
+            if self.argument.isConstant() == True:
+                self.isConstant = True
+            else:
+                self.isConstant = False
+        return self.isConstant
 
     def derivative(self, differential):
         return Product((
