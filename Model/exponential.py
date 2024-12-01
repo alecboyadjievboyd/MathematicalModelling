@@ -3,7 +3,6 @@ from expression_type import ExpressionType
 from product import Product
 from sum import Sum
 from constant import Constant
-from natural_logarithm import NaturalLogarithm
 
 # Exponential function with an expression as a base and exponent
 class Exponential(Expression):
@@ -33,8 +32,9 @@ class Exponential(Expression):
         return self.isConstant
     
     def derivative(self, differential):
+        from natural_logarithm import NaturalLogarithm
         return Product((self, 
                       Sum(( Product((self.exponent.derivative(differential), NaturalLogarithm(self.base))),
-                          Product((self.exponent, Exponential(self.base, Constant(-1)), self.base.derivative(differential)))                         
+                          Product((self.exponent, Exponential(self.base, Constant(-1)), self.base.derivative(differential)))
                          ))
                       ))

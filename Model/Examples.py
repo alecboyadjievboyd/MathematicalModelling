@@ -1,13 +1,3 @@
-# import sys
-# import os
-
-# project_root = os.path.dirname(os.path.abspath(__file__))
-# model_folder_path = os.path.join(project_root, "Model")
-# sys.path.insert(0, model_folder_path)
-
-# for path in sys.path: 
-#     print(path)
-
 from constant import Constant
 from variable import Variable
 from sum import Sum
@@ -16,7 +6,7 @@ from exponential import Exponential
 from general_multivar import GeneralMultivar
 from general_singlevar import GeneralSinglevar
 from natural_logarithm import NaturalLogarithm
-from trigonometry import Sine, Cosine, Tangent, Arcsine, Arccosine, Arctangent
+from logarithm import Logarithm
 from exp import Exp
 
 def D(function, differential = Variable(1)):
@@ -25,21 +15,25 @@ def D(function, differential = Variable(1)):
 
 print(Exp(GeneralMultivar("f")).derivative(Variable(1)))
 
-#Hi
+print('Constants:')
 # 8
 expr1 = Constant(8)
-print(expr1)
+# e
+expr2 = Constant('e')
+# pi
+expr3 = Constant('pi')
+print(expr1, expr2, expr3)
 
 # x
 expr2 = Variable(1)
 print(expr2)
 
 # 2x + 4
-expr3 = Sum([ Product([ Constant(2), Variable(1) ]), Constant(4) ])
+expr3 = Sum([Product([Constant(2), Variable(1)]), Constant(4)])
 print(expr3)
 
 # 3x * 2x
-expr4 = Product([ Product([Constant(3), Variable(1)]), Product([ Constant(2), Variable(1) ]) ])
+expr4 = Product([Product([Constant(3), Variable(1)]), Product([Constant(2), Variable(1)])])
 print(expr4)
 
 # x^2
@@ -47,11 +41,11 @@ expr5 = Exponential(Variable(1), Constant(2))
 print(expr5)
 
 # 0x^4
-expr6 = Product([ Constant(0), Exponential(Variable(1), Constant(4)) ])
+expr6 = Product([Constant(0), Exponential(Variable(1), Constant(4))])
 print(expr6)
 
 # (8 + 7) * 3
-expr7 = Product([ Sum([ Constant(8), Constant(7) ]), Constant(3) ])
+expr7 = Product([Sum([Constant(8), Constant(7)]), Constant(3)])
 print(expr7)
 
 # x * ( x * (x * (x+1))) 
@@ -90,17 +84,24 @@ print(D(Product((genf, geng, genh))))
 
 # Derivative of Exponential
 print(D(Exponential(genf, genh)))
-print(D(Exponential(Variable(1),Constant(-1))))
+print(D(Exponential(Variable(1), Constant(-1))))
 print(D(Exponential(Variable(1),Variable(1))))
 
 # Problem with derivative of exponential
-print(  D(Exponential(Constant(0),Variable(1)))  )
+print(D(Exponential(Constant(0), Variable(1))))
 
 # ln
 print( NaturalLogarithm(Variable(1)) )
 print( D(NaturalLogarithm(genf)))
 print( D(NaturalLogarithm(Variable(1))))
 
-# general singlevariable function
-print( GeneralSinglevar('cot', Variable(1)) )
-print( D(GeneralSinglevar('cot', genf)) )
+print('Logarithm:')
+# log_8((x+1)^2)
+expr1 = Logarithm(Constant(8), Exponential(Sum([Variable(1), Constant(1)]), Constant(2)))
+# log_e(pi)
+expr2 = Logarithm(Constant('e'), Constant('pi'))
+print(expr1, expr2)
+
+# general single variable function
+print(GeneralSinglevar('cot', Variable(1)))
+print(D(GeneralSinglevar('cot', genf)))

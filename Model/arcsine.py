@@ -33,5 +33,5 @@ class Arcsine(Expression):
     def derivative(self, differential):
         return Product((
             Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
-                           , Product((Constant(-1), Exponential(Constant(2), Constant(-1)))) ),
+                        , Product((Constant(-1), Exponential(Constant(2), Constant(-1))))),
                            self.argument.derivative(differential)))

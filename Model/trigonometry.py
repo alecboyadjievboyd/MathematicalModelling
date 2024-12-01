@@ -124,7 +124,7 @@ class Arcsine(Expression):
     def derivative(self, differential):
         return Product((
             Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
-                           , Product((Constant(-1), Exponential(Constant(2), Constant(-1)))) ),
+                        , Product((Constant(-1), Exponential(Constant(2), Constant(-1))))),
                            self.argument.derivative(differential)))
 
 class Arccosine(Expression):
@@ -154,9 +154,9 @@ class Arccosine(Expression):
 
     def derivative(self, differential):
         return Product((Constant(-1),
-            Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
-                           , Product((Constant(-1), Exponential(Constant(2), Constant(-1)))) ),
-                           self.argument.derivative(differential)))
+                        Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
+                                    , Product((Constant(-1), Exponential(Constant(2), Constant(-1))))),
+                        self.argument.derivative(differential)))
 
 class Arctangent(Expression):
     def __init__(self, argument):
@@ -185,4 +185,4 @@ class Arctangent(Expression):
 
     def derivative(self, differential):
         return Product((
-            Exponential(Sum((Constant(1), Exponential(self.argument, Constant(2)))),Constant(-1)), self.argument.derivative(differential)))
+            Exponential(Sum((Constant(1), Exponential(self.argument, Constant(2)))), Constant(-1)), self.argument.derivative(differential)))

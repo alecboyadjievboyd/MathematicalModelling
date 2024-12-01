@@ -32,6 +32,6 @@ class Arccosine(Expression):
 
     def derivative(self, differential):
         return Product((Constant(-1),
-            Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
-                           , Product((Constant(-1), Exponential(Constant(2), Constant(-1)))) ),
-                           self.argument.derivative(differential)))
+                        Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
+                                    , Product((Constant(-1), Exponential(Constant(2), Constant(-1))))),
+                        self.argument.derivative(differential)))

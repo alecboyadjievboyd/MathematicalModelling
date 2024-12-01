@@ -1,31 +1,51 @@
 from expression import Expression
 from expression_type import ExpressionType
+from enum import Enum
 
-# Integer constant. Terminal expression.
+
+# Terminal constant value. Either integer or euler number or pi.
 class Constant(Expression):
 
-    def __init__(self, value:int):
-        if type(value) != int:
-            raise Exception("Constants need to be integers") #I wrote this, however it feels a bit weird (I imagine Constant("Pi") could become relevant). If you want to remove it, please have Frac.__init__ check whether the Constants have int values and send a Whatsapp informing about this to Tim.
+    def __init__(self, value):
         super().__init__(ExpressionType.CONSTANT)
-        self.value = value
-        self.isConstant = True 
+        if type(value) == int:
+            self.constant_type = ConstantType.INTEGER
+            self.value = value
+        elif value == 'e':
+            self.constant_type = ConstantType.EULER
+        elif value == 'pi':
+            self.constant_type = ConstantType.PI
+        else:
+            raise Exception("Constant has to be integer or e or pi")
 
     def __str__(self):
-        return str(self.value)
-    
+        match self.constant_type:
+            case ConstantType.INTEGER:
+                return str(self.value)
+            case ConstantType.PI:
+                return 'pi'
+            case ConstantType.EULER:
+                return 'e'
+
     def __eq__(self, other):
-        if (self.expression_type != other.expression_type):
+        if self.expression_type != other.expression_type:
             return False
-        if (str(self) == str(other)):
+        if str(self) == str(other):
             return True
-        else: return False
+        else:
+            return False
 
     def isConstant(self):
         return True
-    
+
     def derivative(self, differential):
         return Constant(0)
-    
+
     def pfsf(self):
         return Constant(self.value)
+
+
+class ConstantType(Enum):
+    INTEGER = 1
+    PI = 2
+    EULER = 3

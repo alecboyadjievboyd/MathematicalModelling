@@ -32,5 +32,5 @@ class Arctangent(Expression):
 
     def derivative(self, differential):
         return Product((
-            Exponential(Sum((Constant(1), Exponential(self.argument, Constant(2)))),Constant(-1)), self.argument.derivative(differential)))
+            Exponential(Sum((Constant(1), Exponential(self.argument, Constant(2)))), Constant(-1)), self.argument.derivative(differential)))
     
