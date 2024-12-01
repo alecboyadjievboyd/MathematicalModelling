@@ -1,5 +1,5 @@
-from Constant import Constant
-from Expression import Expression
+from constant import Constant
+from expression import Expression
 from expression_type import ExpressionType
 
 # Sum of at least two expressions (terms)

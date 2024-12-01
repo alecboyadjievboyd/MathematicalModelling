@@ -1,6 +1,6 @@
 from expression import Expression
 from expression_type import ExpressionType
-from Product import Product
+from product import Product
 from constant import Constant
 
 # Cosine of an expression

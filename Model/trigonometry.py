@@ -1,9 +1,9 @@
-from Expression import Expression
+from expression import Expression
 from expression_type import ExpressionType
-from Sum import Sum
-from Product import Product
-from Constant import Constant
-from Exponential import Exponential
+from sum import Sum
+from product import Product
+from constant import Constant
+from exponential import Exponential
 
 
 # Cosine of an expression
