@@ -1,5 +1,5 @@
 from expression_type import ExpressionType
-from Expression import Expression
+from expression import Expression
 from constant import Constant
 
 # Singular variables, without constants or exponents. Terminal expression.

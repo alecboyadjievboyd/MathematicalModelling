@@ -1,18 +1,18 @@
 from expression import Expression
 from expression_type import ExpressionType
 from product import Product
+from sum import Sum
 from constant import Constant
-from sine import Sine
+from exponential import Exponential
 
-# Cosine of an expression
-class Cosine(Expression):
+class Arctangent(Expression):
     def __init__(self, argument):
-        super().__init__(ExpressionType.COSINE)
-        self.argument = argument
+        super().__init__(ExpressionType.ARCTANGENT)
+        self.argument=argument
         self.isConstant = None
-        
+    
     def __str__(self):
-        return f'cos({self.argument})'
+        return f"arctan({self.argument})"
     
     # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):
@@ -29,7 +29,8 @@ class Cosine(Expression):
             else:
                 self.isConstant = False
         return self.isConstant
-    
+
     def derivative(self, differential):
-        
-        return Product({Constant(-1), Sine(self.argument), self.argument.derivative(differential)})
+        return Product((
+            Exponential(Sum((Constant(1), Exponential(self.argument, Constant(2)))),Constant(-1)), self.argument.derivative(differential)))
+    
