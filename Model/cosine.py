@@ -1,4 +1,4 @@
-from Expression import Expression
+from expression import Expression
 from expression_type import ExpressionType
 from product import Product
 from constant import Constant

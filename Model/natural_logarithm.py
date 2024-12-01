@@ -1,7 +1,7 @@
-from Expression import Expression
+from expression import Expression
 from expression_type import ExpressionType
-from Product import Product
-from Constant import Constant
+from product import Product
+from constant import Constant
 
 class NaturalLogarithm(Expression): #Tim here, I had to add this as it is needed when differentiating Exponential. Feel free to change stuff.
     def __init__(self, argument):
