@@ -19,7 +19,7 @@ class NaturalLogarithm(Logarithm):
         return self.isConstant
     
     def derivative(self, differential):
-        from exponential import Exponential
+        from Model.exponential import Exponential
         return Product([
             Exponential(self.argument, Constant(-1)),
             self.argument.derivative(differential)

@@ -1,4 +1,5 @@
 from Model.constant import Constant
+from Model.sine import Sine
 from Model.variable import Variable
 from Model.sum import Sum
 from Model.product import Product
@@ -12,6 +13,8 @@ from Model.exp import Exp
 
 def D(function, differential = Variable(1)):
     return function.derivative(differential)
+
+print(Sine(Variable(1)))
 
 
 print(Exp(GeneralMultivar("f")).derivative(Variable(1)))

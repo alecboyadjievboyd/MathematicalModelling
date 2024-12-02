@@ -2,7 +2,6 @@ from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.product import Product
 from Model.constant import Constant
-from Model.sine import Sine
 
 
 # Cosine of an expression
@@ -32,5 +31,5 @@ class Cosine(Expression):
         return self.isConstant
     
     def derivative(self, differential):
-        
+        from Model.sine import Sine
         return Product({Constant(-1), Sine(self.argument), self.argument.derivative(differential)})
