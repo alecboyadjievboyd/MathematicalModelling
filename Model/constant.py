@@ -1,5 +1,5 @@
-from expression import Expression
-from expression_type import ExpressionType
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
 from enum import Enum
 
 
@@ -21,7 +21,10 @@ class Constant(Expression):
     def __str__(self):
         match self.constant_type:
             case ConstantType.INTEGER:
-                return str(self.value)
+                if self.value >= 0:
+                    return str(self.value)
+                else:
+                    return f'({str(self.value)})'
             case ConstantType.PI:
                 return 'pi'
             case ConstantType.EULER:

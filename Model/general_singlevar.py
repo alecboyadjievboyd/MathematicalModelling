@@ -1,6 +1,6 @@
-from expression import Expression
-from expression_type import ExpressionType
-from product import Product
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.product import Product
 
 
 class GeneralSinglevar(Expression):

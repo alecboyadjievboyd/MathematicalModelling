@@ -1,13 +1,14 @@
-from constant import Constant
-from variable import Variable
-from sum import Sum
-from product import Product
-from exponential import Exponential
-from general_multivar import GeneralMultivar
-from general_singlevar import GeneralSinglevar
-from natural_logarithm import NaturalLogarithm
-from logarithm import Logarithm
-from exp import Exp
+from Model.constant import Constant
+from Model.variable import Variable
+from Model.sum import Sum
+from Model.product import Product
+from Model.exponential import Exponential
+from Model.general_multivar import GeneralMultivar
+from Model.general_singlevar import GeneralSinglevar
+from Model.natural_logarithm import NaturalLogarithm
+from Model.logarithm import Logarithm
+from Model.exp import Exp
+
 
 def D(function, differential = Variable(1)):
     return function.derivative(differential)

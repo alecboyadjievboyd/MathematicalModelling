@@ -1,7 +1,7 @@
-from expression import Expression
-from expression_type import ExpressionType
-from product import Product
-from constant import Constant
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.product import Product
+
 
 # Cosine of an expression
 class Exp(Expression):

@@ -1,8 +1,9 @@
-from expression import Expression
-from expression_type import ExpressionType
-from product import Product
-from sum import Sum
-from constant import Constant
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.product import Product
+from Model.sum import Sum
+from Model.constant import Constant
+
 
 # Exponential function with an expression as a base and exponent
 class Exponential(Expression):

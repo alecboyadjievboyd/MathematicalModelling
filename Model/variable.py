@@ -1,6 +1,7 @@
-from expression_type import ExpressionType
-from expression import Expression
-from constant import Constant
+from Model.expression_type import ExpressionType
+from Model.expression import Expression
+from Model.constant import Constant
+
 
 # Singular variables, without constants or exponents. Terminal expression.
 class Variable(Expression):

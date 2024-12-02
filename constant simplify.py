@@ -1,9 +1,9 @@
-from expression import Expression
-from expression_type import ExpressionType
-from constant import Constant
-from sum import Sum
-from product import Product
-from exponential import Exponential
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.constant import Constant
+from Model.sum import Sum
+from Model.product import Product
+from Model.exponential import Exponential
 
 #There are two cool things in this file: the class Frac and the function constant_simplify, the latter referencing the former.
 

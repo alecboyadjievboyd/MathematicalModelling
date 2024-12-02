@@ -1,9 +1,9 @@
-from expression import Expression
-from expression_type import ExpressionType
-from product import Product
-from sum import Sum
-from constant import Constant
-from exponential import Exponential
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.product import Product
+from Model.sum import Sum
+from Model.constant import Constant
+from Model.exponential import Exponential
 
 class Arctangent(Expression):
     def __init__(self, argument):

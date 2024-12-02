@@ -1,9 +1,9 @@
-from expression import Expression
-from expression_type import ExpressionType
-from product import Product
-from exponential import Exponential
-from sum import Sum
-from constant import Constant
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.product import Product
+from Model.exponential import Exponential
+from Model.sum import Sum
+from Model.constant import Constant
 
 class Arcsine(Expression):
     def __init__(self, argument):

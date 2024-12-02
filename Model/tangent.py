@@ -1,9 +1,10 @@
-from expression import Expression
-from expression_type import ExpressionType
-from product import Product
-from cosine import Cosine
-from exponential import Exponential
-from constant import Constant
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.product import Product
+from Model.cosine import Cosine
+from Model.exponential import Exponential
+from Model.constant import Constant
+
 
 # Tangent of an expression
 class Tangent(Expression):

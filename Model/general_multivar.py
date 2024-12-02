@@ -1,5 +1,6 @@
-from expression import Expression
-from expression_type import ExpressionType
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+
 
 class GeneralMultivar(Expression):
     def __init__(self, symbol:str):

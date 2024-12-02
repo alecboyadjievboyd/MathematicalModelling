@@ -1,6 +1,6 @@
-from constant import Constant
-from expression import Expression
-from expression_type import ExpressionType
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+
 
 # Sum of at least two expressions (terms)
 class Sum(Expression):

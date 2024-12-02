@@ -1,5 +1,5 @@
 import abc
-from expression_type import ExpressionType
+from Model.expression_type import ExpressionType
 
 
 # Abstract class of expression

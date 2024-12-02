@@ -1,8 +1,8 @@
-from expression import Expression
-from expression_type import ExpressionType
-from exponential import Exponential
-from product import Product
-from constant import Constant
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.exponential import Exponential
+from Model.product import Product
+from Model.constant import Constant
 
 
 class Logarithm(Expression):

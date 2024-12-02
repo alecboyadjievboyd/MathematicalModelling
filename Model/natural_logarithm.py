@@ -1,6 +1,6 @@
-from constant import Constant
-from product import Product
-from logarithm import Logarithm
+from Model.constant import Constant
+from Model.product import Product
+from Model.logarithm import Logarithm
 
 
 class NaturalLogarithm(Logarithm):

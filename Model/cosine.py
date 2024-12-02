@@ -1,8 +1,9 @@
-from expression import Expression
-from expression_type import ExpressionType
-from product import Product
-from constant import Constant
-from sine import Sine
+from Model.expression import Expression
+from Model.expression_type import ExpressionType
+from Model.product import Product
+from Model.constant import Constant
+from Model.sine import Sine
+
 
 # Cosine of an expression
 class Cosine(Expression):
