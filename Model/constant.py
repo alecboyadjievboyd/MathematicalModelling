@@ -19,16 +19,23 @@ class Constant(Expression):
             raise Exception("Constant has to be integer or e or pi")
 
     def __str__(self):
-        match self.constant_type:
-            case ConstantType.INTEGER:
-                if self.value >= 0:
-                    return str(self.value)
-                else:
-                    return f'({str(self.value)})'
-            case ConstantType.PI:
-                return 'pi'
-            case ConstantType.EULER:
-                return 'e'
+        if type(self.value)==int:
+            if self.value >= 0:
+                return str(self.value)
+            else:
+                return f'({str(self.value)})'
+        else: 
+            return('pi or e')
+        # match self.constant_type:
+        #     case ConstantType.INTEGER:
+        #         if self.value >= 0:
+        #             return str(self.value)
+        #         else:
+        #             return f'({str(self.value)})'
+        #     case ConstantType.PI:
+        #         return 'pi'
+        #     case ConstantType.EULER:
+        #         return 'e'
 
     def __eq__(self, other):
         if self.expression_type != other.expression_type:
@@ -46,6 +53,9 @@ class Constant(Expression):
 
     def pfsf(self):
         return Constant(self.value)
+    
+    def consim(self):
+        return self
 
 
 class ConstantType(Enum):

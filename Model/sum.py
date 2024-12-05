@@ -35,6 +35,14 @@ class Sum(Expression):
                     self.isConstant == False
                     break
         return self.isConstant
+    
+    def consim(self): #constant simplify
+        simterms = () #simplified terms
+        for term in self.terms:
+            simterms += (term.consim(),)
+        for term in simterms:
+            for argument in term.genarg():
+                pass
             
     
     # def pfsfSimple(self):   
