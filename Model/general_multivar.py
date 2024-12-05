@@ -22,3 +22,6 @@ class GeneralMultivar(Expression):
     
     def derivative(self, differential):
         return GeneralMultivar(f"d{self.symbol}/d{differential}") # df/dx1
+    
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.symbol,)

@@ -34,3 +34,6 @@ class Tangent(Expression):
     
     def derivative(self, differential):
         return Product({Exponential(Cosine(self.argument), Constant(-2)), self.argument.derivative(differential)})
+
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.argument,)

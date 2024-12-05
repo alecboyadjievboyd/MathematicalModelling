@@ -9,17 +9,33 @@ from Model.general_singlevar import GeneralSinglevar
 from Model.natural_logarithm import NaturalLogarithm
 from Model.logarithm import Logarithm
 from Model.exp import Exp
+from Model.make_expression import MakeExpression
+from Model.expression_type import ExpressionType
+from Model.fraction import Frac
+from Model.simplifying_fractions import frac_constant_simplify
+
+# for arg in (Constant(1), Sum((Constant(2), Constant(4)))):
+#     print(arg)
+
+# for i in range(4):
+#     print(i)
+#     i=0
+#     print(i)
 
 
-def D(function, differential = Variable(1)):
-    return function.derivative(differential)
 
-print(Sine(Variable(1)))
+# x = MakeExpression(ExpressionType.LOGARITHM, (Constant(4),Constant(3),Constant(4)))
+# print(x)
+
+# def D(function, differential = Variable(1)):
+#     return function.derivative(differential)
+
+# print(Sine(Variable(1)))
 
 
-print(Exp(GeneralMultivar("f")).derivative(Variable(1)))
+# print(Exp(GeneralMultivar("f")).derivative(Variable(1)))
 
-print('Constants:')
+# print('Constants:')
 # # 8
 # expr1 = Constant(8)
 # # e

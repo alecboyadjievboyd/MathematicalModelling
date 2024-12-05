@@ -33,3 +33,6 @@ class Cosine(Expression):
     def derivative(self, differential):
         from Model.sine import Sine
         return Product({Constant(-1), Sine(self.argument), self.argument.derivative(differential)})
+    
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.argument,)

@@ -1,5 +1,11 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
+from Model.make_expression import MakeExpression
+from Model.variable import Variable
+from Model.fraction import Frac
+
+def AskAlec(_):
+    print("Alec! We need you!")
 
 
 # Sum of at least two expressions (terms)
@@ -36,14 +42,43 @@ class Sum(Expression):
                     break
         return self.isConstant
     
+    def genarg(self):#needed for constant simplification (consim)
+        return self.terms
+    
     def consim(self): #constant simplify
+        #simplifying the terms of the sum (bottom up)
         simterms = () #simplified terms
         for term in self.terms:
             simterms += (term.consim(),)
+        
+        #replacing anything but fractions with variables
+        varterms = () #replace expressions by variables
         for term in simterms:
-            for argument in term.genarg():
-                pass
-            
+            if term.expression_type != ExpressionType.FRACTION:
+                varargs = () #tuple of arguments with anything but fractions replaced by variables
+                for arg in term.genarg(): # the generalised arguments (so also base, power, terms, factors) of each term
+                    if arg.expression_type != ExpressionType.FRACTION:
+                        arg = Variable(arg) #replacing the argument by a variable (e.g. sqrt(3) becomes x_sqrt(3))
+                        # hasvar = True
+                    varargs += (arg,)
+            # if hasvar:
+            varterms += (MakeExpression(term.expression_type, varargs),) #remake the term but with the variable arguments, and add the new term to the tuple of turns.
+
+        #asking Alec to simplify the expression with variables  
+        simvarterms = AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?
+        
+        #the only things that are not simplified now should be the original fractions
+        #we split the simvarterms between fraction terms and other terms
+        fracsum = Frac(0)
+        nonfracsvt = () #non fraction terms of simvarterms (hence the svt)
+        for term in simvarterms:
+            if term.expression_type == ExpressionType.FRACTION:
+                fracsum += term
+            else:
+                nonfracsvt += (term, )
+
+        return Sum(nonfracsvt + (fracsum,))
+
     
     # def pfsfSimple(self):   
      

@@ -29,3 +29,6 @@ class Logarithm(Expression):
             Exponential(Logarithm(Constant('e'), self.base), -1),
             Exponential(self, -1)
         ])
+
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.base, self.argument)

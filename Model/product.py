@@ -48,3 +48,6 @@ class Product(Expression):
             ) 
             for i in range(len(self.factors))
         ))
+
+    def genarg(self):#needed for constant simplification (consim)
+        return self.factors

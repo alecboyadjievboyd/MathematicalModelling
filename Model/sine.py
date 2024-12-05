@@ -1,6 +1,7 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.product import Product
+from Model.constant import Constant
 
 
 # Sine of an expression
@@ -32,4 +33,15 @@ class Sine(Expression):
     def derivative(self, differential):
         from Model.cosine import Cosine
         return Product({Cosine(self.argument), self.argument.derivative(differential)})
+
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.argument,)
     
+    # def consim(self):
+    #     simarg = self.argument.consim() #simplified argument
+        
+    #     if simarg == Frac('pi'):
+    #         return Frac(-1)
+        
+    #     simvar = AskAlec(Sine(simarg))
+

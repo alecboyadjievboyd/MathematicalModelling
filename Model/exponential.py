@@ -39,3 +39,6 @@ class Exponential(Expression):
                           Product((self.exponent, Exponential(self.base, Constant(-1)), self.base.derivative(differential)))
                          ))
                       ))
+
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.base, self.exponent)

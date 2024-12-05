@@ -1,6 +1,7 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from enum import Enum
+from Model.fraction import Frac
 
 
 # Terminal constant value. Either integer or euler number or pi.
@@ -53,10 +54,17 @@ class Constant(Expression):
 
     def pfsf(self):
         return Constant(self.value)
-    
-    def consim(self):
-        return self
 
+    def genarg(self):#needed for constant simplification (consim)
+        if self.constant_type == ConstantType.INTEGER:
+            return (self.value,)
+        elif self.constant_type == ConstantType.EULER:
+            return ('e')
+        elif self.constant_type == ConstantType.PI:
+            return ('pi')
+        
+    def consim(self):
+        return Frac(self)
 
 class ConstantType(Enum):
     INTEGER = 1

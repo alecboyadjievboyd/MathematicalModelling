@@ -32,3 +32,6 @@ class Exp(Expression):
     
     def derivative(self, differential):
         return Product((Exp(self.argument), self.argument.derivative(differential)))
+
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.argument,)

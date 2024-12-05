@@ -93,7 +93,8 @@ class Frac(Expression):
             i+=1
         return Frac(num, den)
     
-
+    def derivative(self, differential):
+        return Constant(0)
 
 # def constant_simplify(expression: Expression):
 #     if expression.expression_type == ExpressionType.FRACTION:
@@ -134,7 +135,7 @@ class Frac(Expression):
 #     else:
 #         raise Exception("You are asking me to simplify something really scary")
 
-def constant_simplify(expression: Expression):
+def frac_constant_simplify(expression: Expression):
     if expression.expression_type == ExpressionType.CONSTANT:
         return Frac(expression)
     elif expression.expression_type == ExpressionType.FRACTION:#all below should eventually end up calling this
@@ -142,7 +143,7 @@ def constant_simplify(expression: Expression):
     elif expression.expression_type == ExpressionType.SUM:
         new_terms = ()
         for term in expression.terms:
-            new_terms+= (constant_simplify(term),) #These should all be Frac
+            new_terms+= (frac_constant_simplify(term),) #These should all be Frac
         s = Frac(0) #s for sum, but we already defined both sum and Sum
         for term in new_terms:
             s += term
@@ -150,14 +151,14 @@ def constant_simplify(expression: Expression):
     elif expression.expression_type == ExpressionType.PRODUCT: #compare to previous elif, == ExpressionType.SUM
         new_factors = ()
         for factor in expression.factors:
-            new_factors += (constant_simplify(factor),) #These should all be Frac
+            new_factors += (frac_constant_simplify(factor),) #These should all be Frac
         p = Frac(1) #p for product, but we already defined both product and Product
         for factor in new_factors:
             p *= factor
         return p.simplify()
     elif expression.expression_type == ExpressionType.EXPONENTIAL:
-        base = constant_simplify(expression.base) #This should be Frac
-        exponent = constant_simplify(expression.exponent) #This should be Frac
+        base = frac_constant_simplify(expression.base) #This should be Frac
+        exponent = frac_constant_simplify(expression.exponent) #This should be Frac
         returnable = base**exponent
         return returnable.simplify()
         
@@ -165,7 +166,7 @@ def constant_simplify(expression: Expression):
         raise Exception("You are asking me to simplify something really scary")
 
 
-you_like_examples = False
+you_like_examples = True
 if you_like_examples: #that aren't illustrative due to lack of formatting 
     y = Frac(1040,2100)
     print(y)
@@ -173,14 +174,14 @@ if you_like_examples: #that aren't illustrative due to lack of formatting
 
     print(Frac(2,3)+Frac(1,4))
     print(Frac(2,3)*Frac(1,4))
-    print(  constant_simplify(Sum((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))))  )
-    print(  constant_simplify(Product((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))))  )
-    print(  constant_simplify(
+    print(  frac_constant_simplify(Sum((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))))  )
+    print(  frac_constant_simplify(Product((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))))  )
+    print(  frac_constant_simplify(
         Product((
             Frac(1,4), Frac(3,2), Sum((Frac(5),Frac(1,4)))
             ))
         )  )
-    print(  constant_simplify(
+    print(  frac_constant_simplify(
         Sum((
             Frac(1,4), Frac(3,2), Product((Frac(5),Frac(1,4)))
             ))
@@ -196,7 +197,7 @@ if you_like_examples: #that aren't illustrative due to lack of formatting
 
     print(  (Frac(3,5)+Frac(4,6))*Frac(5,2)**Frac(3)  )
 
-    print(  constant_simplify(Sum((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))))  )
-    print(  constant_simplify(Exponential(Sum((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))),Frac(3)))  )
+    print(  frac_constant_simplify(Sum((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))))  )
+    print(  frac_constant_simplify(Exponential(Sum((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))),Frac(3)))  )
 
-    print(constant_simplify(Exponential(Constant(5), Constant(-1))))
+    print(frac_constant_simplify(Exponential(Constant(5), Constant(-1))))

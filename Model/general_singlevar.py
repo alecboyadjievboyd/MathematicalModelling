@@ -19,3 +19,6 @@ class GeneralSinglevar(Expression):
         return Product(
             (GeneralSinglevar(self.symbol + "\'", self.argument), self.argument.derivative(differential))
         )
+
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.symbol, self.argument)

@@ -30,3 +30,6 @@ class Variable(Expression):
         
     def pfsf(self):
         return Variable(self.index) 
+
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.index,)

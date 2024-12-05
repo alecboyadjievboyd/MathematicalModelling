@@ -24,3 +24,6 @@ class NaturalLogarithm(Logarithm):
             Exponential(self.argument, Constant(-1)),
             self.argument.derivative(differential)
         ])
+
+    def genarg(self):#needed for constant simplification (consim)
+        return (self.argument,)
