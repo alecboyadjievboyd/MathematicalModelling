@@ -15,6 +15,19 @@ class Sum(Expression):
         super().__init__(ExpressionType.SUM)
         self.terms = terms
         self.isConstant = None
+        self.primaryOrder = 3 # Monomial Sum
+
+        # Checks if any terms are functions
+
+        for term in self.terms:
+            if term.primaryOrder > 5: # product or sum of functions
+                self.primaryOrder = 6 # Function Sum
+            if term.primaryOrder == 5: # Term is function or greater
+                if term.secondaryOrder != 8: # Not an exponential (cannot be monomial)
+                    self.primaryOrder = 6 # Function Sum
+                else: # Is exponential
+                    if not ((term.base.primaryOrder == 2) and term.argument.isConstant()): # not a monomial
+                        self.primaryOrder = 6 # Function Sum
 
     def __str__(self):
         string_expression = str(self.terms[0])
@@ -32,6 +45,17 @@ class Sum(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def __gt__(self, other):
+
+        if (self.isConstant() == False) and other.isConstant():
+            return True
+                
+        if (self.primaryOrder == other.primaryOrder): # Both sums
+            return max(self.terms) > max(other.terms)
+        
+        else: 
+            return self.primaryOrder > other.primaryOrder # Ordering classes
 
     def isConstant(self):
         if self.isConstant == None: 

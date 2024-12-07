@@ -10,6 +10,20 @@ class Product(Expression):
         super().__init__(ExpressionType.PRODUCT)
         self.factors = factors
         self.isConstant = None
+
+        self.primaryOrder = 4 # Monomial Product
+
+        # Checks if any terms are functions
+
+        for factor in self.factors:
+            if factor.primaryOrder > 5: # product or sum of functions
+                self.primaryOrder = 7 # Function prod
+            if factor.primaryOrder == 5: # Term is function or greater
+                if factor.secondaryOrder != 8: # Not an exponential (cannot be monomial)
+                    self.primaryOrder = 7 # Function prod
+                else: # Is exponential
+                    if not ((factor.base.primaryOrder == 2) and factor.argument.isConstant()): # not a monomial
+                        self.primaryOrder = 7 # Function prod
     
     def __str__(self):
         string_expression = self.put_brackets(self.factors[0])
@@ -24,6 +38,17 @@ class Product(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def __gt__(self, other):
+
+        if (self.isConstant() == False) and other.isConstant():
+            return True
+                
+        if (self.primaryOrder == other.primaryOrder): # Both products
+            return max(self.factors) > max(other.factors)
+        
+        else: 
+            return self.primaryOrder > other.primaryOrder # Ordering classes
 
     def isConstant(self):
         if self.isConstant == None: 
