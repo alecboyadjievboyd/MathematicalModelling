@@ -11,6 +11,8 @@ class Logarithm(Expression):
         self.base = base
         self.argument = argument
         self.isConstant = None
+        self.primaryOrder = 5 # Single Function
+        self.secondaryOrder = 7 # Log
 
     def __str__(self):
         return f'log_{self.base}({str(self.argument)})'
@@ -22,6 +24,22 @@ class Logarithm(Expression):
             return True
         else:
             return False
+        
+    def __gt__(self, other):
+
+        if (self.isConstant() == False) and other.isConstant():
+            return True
+        
+        if (self.primaryOrder == other.primaryOrder): # Both functions
+            if (self.secondaryOrder == other.secondaryOrder): # Both log
+                if other.base == self.base: # If the other base is equal
+                    return self.argument > other.argument
+                else:
+                    return self.base > other.base                  
+            else:
+                return self.secondaryOrder > other.secondaryOrder # Ordering of functions
+        else: 
+            return self.primaryOrder > other.primaryOrder # Ordering classes
 
     def derivative(self, differential):
         return Product([

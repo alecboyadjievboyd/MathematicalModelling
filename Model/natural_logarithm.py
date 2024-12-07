@@ -18,6 +18,8 @@ class NaturalLogarithm(Logarithm):
                 self.isConstant = False
         return self.isConstant
     
+    # Should pull __gt__ and __eq__ from super
+    
     def derivative(self, differential):
         from Model.exponential import Exponential
         return Product([

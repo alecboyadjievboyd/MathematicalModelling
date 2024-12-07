@@ -9,6 +9,8 @@ class Variable(Expression):
     def __init__(self, index):
         super().__init__(ExpressionType.VARIABLE)
         self.index = index
+        self.primaryOrder = 2 #monomial
+        self.secondaryOrder = None
 
     def __str__(self):
         return "x" + str(self.index)
@@ -18,6 +20,17 @@ class Variable(Expression):
             return False
         
         return (self.index == other.index)
+    
+    def __gt__(self, other):
+
+        if other.isConstant():
+            return True
+
+        if (self.primaryOrder == other.primaryOrder): # Both variables
+            return self.index > other.index
+        
+        else: 
+            return self.primaryOrder > other.primaryOrder # Ordering classes
     
     def derivative(self, differential):
         if self.index == differential.index:

@@ -9,6 +9,8 @@ class Constant(Expression):
 
     def __init__(self, value):
         super().__init__(ExpressionType.CONSTANT)
+        self.primaryOrder = 1 # Constant, lowest order
+        self.secondaryOrder = None # No secondary order
         if type(value) == int:
             self.constant_type = ConstantType.INTEGER
             self.value = value
@@ -45,6 +47,16 @@ class Constant(Expression):
             return True
         else:
             return False
+
+    def __gt__(self, other):
+        if other.primaryOrder == self.primaryOrder: # Both simple constants
+            return self.value > other.value # Compare based on value (NOTE: I AM NOT SURE IF THIS WILL WORK WIHT PI AND E)
+        else:
+            return False # Other is a more complex form (NOT NECESSARILY NUMERICALLY LARGER)
+                             # Eventually we may want to replace this with a comparison based on evaluation
+                             # Right now x^(2+1) will be seen as "greater in priority" to x^100, for example
+
+            
 
     def isConstant(self):
         return True

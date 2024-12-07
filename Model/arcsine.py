@@ -10,6 +10,8 @@ class Arcsine(Expression):
         super().__init__(ExpressionType.ARCSINE)
         self.argument=argument
         self.isConstant = None
+        self.primaryOrder = 5 # Single Function
+        self.secondaryOrder = 3 # Arcsin 
     
     def __str__(self):
         return f"arcsin({self.argument})"
@@ -21,6 +23,19 @@ class Arcsine(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def __gt__(self, other):
+
+        if (self.isConstant() == False) and other.isConstant():
+            return True
+        
+        if (self.primaryOrder == other.primaryOrder): # Both functions
+            if (self.secondaryOrder == other.secondaryOrder): # Both arcsin
+                return self.argument > other.argument
+            else:
+                return self.secondaryOrder > other.secondaryOrder # Ordering of functions
+        else: 
+            return self.primaryOrder > other.primaryOrder # Ordering classes
 
     def isConstant(self):
         if self.isConstant == None: 

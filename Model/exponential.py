@@ -13,6 +13,8 @@ class Exponential(Expression):
         self.base = base
         self.exponent = exponent
         self.isConstant = None
+        self.primaryOrder = 5 # Single Function
+        self.secondaryOrder = 8 # Exp (top priority) 
     
     def __str__(self):
         return self.put_brackets(self.base) + "^" + self.put_brackets(self.exponent)
@@ -23,6 +25,33 @@ class Exponential(Expression):
         if (str(self) == str(other)):
             return True
         else: return False
+
+    def __gt__(self, other):
+
+        if (self.isConstant() == False) and other.isConstant():
+            return True
+        
+        if (self.primaryOrder == other.primaryOrder): # Both functions
+            if (self.secondaryOrder == other.secondaryOrder): # Both exp
+                
+                # We must check if the other one is exponential or exp
+                
+                if other.expressionType == self.ExpressionType: # both exponential
+                    if other.base == self.base: # If the other base is equal
+                        return self.exponent > other.exponent
+                    else:
+                        return self.base > other.base
+                else: # other is exp
+                    if self.base == Constant("e"): # If the bases are equal
+                        return self.exponent > other.argument
+                    else:
+                        return self.base > Constant("e")
+                    
+
+            else:
+                return self.secondaryOrder > other.secondaryOrder # Ordering of functions
+        else: 
+            return self.primaryOrder > other.primaryOrder # Ordering classes
 
     def isConstant(self):
         if self.isConstant == None: 
