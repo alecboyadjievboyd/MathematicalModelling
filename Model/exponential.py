@@ -8,10 +8,10 @@ from Model.constant import Constant
 # Exponential function with an expression as a base and exponent
 class Exponential(Expression):
 
-    def __init__(self, base, exponent):
+    def __init__(self, base, argument):
         super().__init__(ExpressionType.EXPONENTIAL)
         self.base = base
-        self.exponent = exponent
+        self.argument = argument
         self.isConstant = None
         self.primaryOrder = 5 # Single Function
         self.secondaryOrder = 8 # Exp (top priority) 
@@ -33,21 +33,10 @@ class Exponential(Expression):
         
         if (self.primaryOrder == other.primaryOrder): # Both functions
             if (self.secondaryOrder == other.secondaryOrder): # Both exp
-                
-                # We must check if the other one is exponential or exp
-                
-                if other.expressionType == self.ExpressionType: # both exponential
-                    if other.base == self.base: # If the other base is equal
-                        return self.exponent > other.exponent
-                    else:
-                        return self.base > other.base
-                else: # other is exp
-                    if self.base == Constant("e"): # If the bases are equal
-                        return self.exponent > other.argument
-                    else:
-                        return self.base > Constant("e")
-                    
-
+                if other.base == self.base: # If the other base is equal
+                    return self.argument > other.argument
+                else:
+                    return self.base > other.base                  
             else:
                 return self.secondaryOrder > other.secondaryOrder # Ordering of functions
         else: 
