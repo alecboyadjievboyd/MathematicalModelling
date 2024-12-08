@@ -60,3 +60,49 @@ class Exponential(Expression):
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.exponent)
+    
+    def pfsf(self):
+        from Model.logarithm import Logarithm
+        # Possible rules
+        # If the exponent is a logarithm with the same base, consolidate
+        # If the base is an exponent, consolidate with the top factor.
+        # If the exponent is an integer AND the base a sum, turn it into a product
+        # so that we can later distribute when simplifying the product
+
+        # Simplify innards first
+
+        argPfsf = self.argument.pfsf()
+        basePfsf = self.base.pfsf()
+
+        # Logarithm case
+        if argPfsf.expression_type == ExpressionType.LOGARITHM:
+            if basePfsf == argPfsf.base: #bases are the same
+                return argPfsf.argument()
+            
+            # If the bases are not the same, it is trickier
+            else: 
+                if argPfsf.argument() > basePfsf: 
+                    # if the argument inside the upper logarithm is more complex, 
+                    # swap the base and that argument
+                    return Exponential(argPfsf.argument(), Logarithm(argPfsf.base, basePfsf)) 
+                    # This essentially is y^log_b(x) = x^log_b(y) iff x is more compelx than y
+
+                # If the argument is less complex or identical, we do nothing
+ 
+        # Exponential case
+        if basePfsf.expression_type == ExpressionType.EXPONENTIAL:
+            return Exponential(basePfsf.base, Product(argPfsf, basePfsf.arg).pfsf()) # (y^a)^b = y^ba
+            # Note that here we pfsf the product after creating it to ensure that the order is good. 
+
+        # Integer Exponent case
+        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == Constant() and isinstance(argPfsf.value, int)):
+            terms = []
+            for i in range[argPfsf.value - 1]: 
+                terms.append(basePfsf) # Should work even though they are duplicates? I cannot forsee issues
+
+            return Product(terms) # no need to simplify since all terms are identical. 
+        
+        # If none of these hold, simply return itself (a copy)
+        return Exponential(basePfsf, argPfsf)
+
+        

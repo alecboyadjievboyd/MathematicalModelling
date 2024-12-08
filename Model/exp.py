@@ -5,7 +5,7 @@ from Model.constant import Constant
 from Model.exponential import Exponential
 
 
-# Cosine of an expression
+# Exp (e^x)
 class Exp(Exponential):
     def __init__(self, argument):
         super().__init__(Constant('e'), argument)
