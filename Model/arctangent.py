@@ -51,3 +51,14 @@ class Arctangent(Expression):
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)
+    
+    def pfsf(self): #simplified form
+
+        argPfsf = self.argument.pfsf() #simplify the arg first
+
+        if argPfsf.expression_type == ExpressionType.TANGENT:
+            return argPfsf.argument # arctan(tan(f(x))) = f(x)
+        else:
+            return Arctangent(argPfsf) 
+
+        # Otherwise, ignore for now as we are not doing identities

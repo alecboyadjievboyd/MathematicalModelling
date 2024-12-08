@@ -60,3 +60,14 @@ class Sine(Expression):
         
     #     simvar = AskAlec(Sine(simarg))
 
+    def pfsf(self): #simplified form
+
+        argPfsf = self.argument.pfsf() #simplify the arg first
+
+        if argPfsf.expression_type == ExpressionType.ARCSINE:
+            return argPfsf.argument # sin(arcsin(f(x))) = f(x)
+        else:
+            return Sine(argPfsf) 
+
+        # Otherwise, ignore for now as we are not doing identities
+

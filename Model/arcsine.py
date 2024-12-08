@@ -53,3 +53,14 @@ class Arcsine(Expression):
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)
+    
+    def pfsf(self): #simplified form
+
+        argPfsf = self.argument.pfsf() #simplify the arg first
+
+        if argPfsf.expression_type == ExpressionType.SINE:
+            return argPfsf.argument # arcsin(sin(f(x))) = f(x)
+        else:
+            return Arcsine(argPfsf) 
+
+        # Otherwise, ignore for now as we are not doing identities
