@@ -6,12 +6,12 @@ from Model.product import Product
 from Model.exponential import Exponential
 
 class Frac(Expression):
-    def __init__(self, num:Constant, den:Constant=1): #num=numerator, den=denominator
+    def __init__(self, num: Constant, den: Constant = 1): #num=numerator, den=denominator
         super().__init__(ExpressionType.FRACTION)
-        if type(num)==int:
-            num=Constant(num)
-        if type(den)==int:
-            den=Constant(den)
+        if type(num) == int:
+            num = Constant(num)
+        if type(den) == int:
+            den = Constant(den)
 
         if den.value == 0:
             raise Exception("division by zero")
