@@ -17,7 +17,7 @@ class Exponential(Expression):
         self.secondaryOrder = 8 # Exp (top priority) 
     
     def __str__(self):
-        return self.put_brackets(self.base) + "^" + self.put_brackets(self.exponent)
+        return self.put_brackets(self.base) + "^" + self.put_brackets(self.argument)
     
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
@@ -53,8 +53,8 @@ class Exponential(Expression):
     def derivative(self, differential):
         from Model.natural_logarithm import NaturalLogarithm
         return Product((self, 
-                      Sum(( Product((self.exponent.derivative(differential), NaturalLogarithm(self.base))),
-                          Product((self.exponent, Exponential(self.base, Constant(-1)), self.base.derivative(differential)))
+                      Sum(( Product((self.argument.derivative(differential), NaturalLogarithm(self.base))),
+                          Product((self.argument, Exponential(self.base, Constant(-1)), self.base.derivative(differential)))
                          ))
                       ))
 
