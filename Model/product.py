@@ -1,6 +1,7 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.sum import Sum
+from Model.constant import Constant
 
 
 # Products of at least two expressions (factors)
@@ -76,3 +77,56 @@ class Product(Expression):
 
     def genarg(self):#needed for constant simplification (consim)
         return self.factors
+    
+    # To consolidate a product and remove one terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
+    def consolidate(self):
+        
+        popList = []
+        appendList = []
+
+        #one Elimination + Consolidation step: If any of the terms are also products, we expand those products above.
+
+        for term in self.factors:
+            # Note that the two statments can never trigger at the same time. 
+            if (term.expression_type == ExpressionType.PRODUCT): #If one of the terms itself is a product. 
+                popList.append(term) # Add the term to the removal list
+                termsNew = term.consolidate() # Consolidate the inner product (incase there are any more nested products)
+                for term2 in termsNew.terms:
+                    appendList.append(term2) # Add the extracted terms to the append list. 
+            elif term == Constant(1):
+                popList.append(term) # Remove one terms (we will do this again later but it is worth doing it now for efficiency)
+
+        for term in popList: # removing the internal sums and zero terms
+            self.factors.pop(term)
+
+        for term in appendList:
+            self.factors.append(term)
+
+    # We now define PFSF
+    def pfsf(self):
+        
+        # first simplify all factors to the max and then consolidate
+
+        # IF A FACTOR IS A SUM
+
+        # separate the factors that are sums into a different list
+        # multiply these sums, then multiply through the non-sum factors to all
+        # you are now left with a large sum of terms. simply run pfsf on this sum and return that (it will call pfsf again on the terms which are products with no sum factors, thus leading to the next section)
+
+        # IF NO FACTORS ARE SUMS
+
+        # yippee, do ordering (in a similar way to sums). 
+        # multiply the constants together and seperate
+        # for the remaining factors, put everything into expression^expression form (similar to how we did c * f(x) form for sums)
+        # compare lower expressions
+        # put into a sorted list one by one by complexity comparison of bases (in the order of increasing complexity, not decreasing as in sums)
+        # combine exponenents for identical bases (may not be the only compatible bases but usually will be)
+        
+        # once done, we go through and revert exponenets back to simplified form (i.e. return base only if exponent is 1 and return 1 if exponent is 0) and simplify constant exponents 
+        # put the consim-ed constant in the front of the new product 
+        # now we are basically done, just do a check if the product contains only one term and if not yippee!
+
+        # this is slightly different from summation because the exponents may be functions not just constants and they can still be combined sensibly. this is due to PFSF definition, where sums are considered 
+        # acceptable as an exponent but not part of a product
+
+        return self

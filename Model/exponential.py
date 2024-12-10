@@ -95,7 +95,7 @@ class Exponential(Expression):
             # Note that here we pfsf the product after creating it to ensure that the order is good. 
 
         # Integer Exponent case
-        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == Constant() and isinstance(argPfsf.value, int)):
+        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == Constant() and isinstance(argPfsf.value, int)): # will always be a sum with one or more terms because it has been pfsf iffied
             terms = []
             for i in range[argPfsf.value - 1]: 
                 terms.append(basePfsf) # Should work even though they are duplicates? I cannot forsee issues

@@ -205,6 +205,9 @@ class Sum(Expression):
 
             if len(term.factors) == 1: # only one element left
                 term = term.factors[0] # remove the product brackets essentially 
+        
+        for term in popList: # removing the zero terms
+            orderedTerms.pop(term)
 
         # now all the terms are simplified to the max with their constants simplified. 
 
