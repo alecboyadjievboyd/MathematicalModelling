@@ -2,6 +2,7 @@ from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.make_expression import MakeExpression
 from Model.variable import Variable
+from Model.constant import Constant
 
 def AskAlec(_):
     print("Alec! We need you!")
@@ -103,22 +104,121 @@ class Sum(Expression):
 
         return Sum(nonfracsvt + (fracsum,))
 
-    
-    # def pfsfSimple(self):   
-     
-    #     zeroList = []
-    #     popList = []
-    #     appendList = []
-    #     #Zero Elimination + Consolidation step: If any of the terms are also sums, we expand those sums above.
-    #     for term in self.terms[1:]:
-    #         # Note that the two statments can never trigger at the same time. 
-    #         if (term.expression_type == ExpressionType.SUM): #If one of the terms itself is a sum. 
-    #             termsNew = term.pfsfSimple() # Simplify the inner sum (incase there are any more nested sums)
-    #             popList.append(term) # Add the term to the removal list
-    #             for term2 in termsNew.terms[1:]:
-    #                 appendList.append(term2) # Add the extracted terms to the append list. 
-    #         if term == Constant(0):
-    #             zeroList(term) # Remove constant terms
+    # To consolidate a sum and remove zero terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
+    def consolidate(self):
+        
+        popList = []
+        appendList = []
 
-    #     # After consolidated, combine like terms. We assume that all terms are already consolidated and pfsf 
-    #     for term in self.terms[1:]:
+        #Zero Elimination + Consolidation step: If any of the terms are also sums, we expand those sums above.
+
+        for term in self.terms:
+            # Note that the two statments can never trigger at the same time. 
+            if (term.expression_type == ExpressionType.SUM): #If one of the terms itself is a sum. 
+                popList.append(term) # Add the term to the removal list
+                termsNew = term.consolidate() # Consolidate the inner sum (incase there are any more nested sums)
+                for term2 in termsNew.terms:
+                    appendList.append(term2) # Add the extracted terms to the append list. 
+            elif term == Constant(0):
+                popList.append(term) # Remove zero terms (we will do this again later but it is worth doing it now for efficiency)
+
+        for term in popList: # removing the internal sums and zero terms
+            self.terms.pop(term)
+
+        for term in appendList:
+            self.terms.append(term)
+
+    def pfsf(self):   
+
+        from Model.product import Product
+
+        termsPfsf = []
+        for term in self.terms:
+            termsPfsf.append(term.pfsf()) # Simplify all the terms
+
+        # termsPsfs is now a simplified terms list that is entirely seperate from the original sum (deep copy + simplify)
+
+        # For consolidation, make this into a sum, consolidate, and then pull terms
+        termsPfsf = Sum(termsPfsf).consolidate().terms 
+
+        # We now have a consolidated sum (containing no sums within it) that has no 0 terms and all terms are simplified by psfs
+        
+
+        constList = []
+
+        # After consolidated, combine like terms and order
+
+        # We first remove and arrange all of the constants + turn everything into the form product(c, stuff)
+        for term in termsPfsf:
+            if term.isConstant():
+                constList.append(term)
+            else:
+                if term.expression_type == ExpressionType.PRODUCT: # if it is a product
+                    if term.factors[0].isConstant() == False: # if it does not have a constant in front (remember that the constant will always be in front bc all terms are pfsf)
+                        term.factors.insert(0, Constant(1)) # add a 1 to the front of the product 
+                else: # if not a product
+                    term = Product(Constant(1), term) # replace the term with a product of one and itself. 
+
+        for term in constList:
+            termsPfsf.pop(term)
+        
+        # Now, without constants, all that is left to do is join like terms and order. 
+        orderedTerms = []
+        orderedTerms.append(termsPfsf[0])
+
+        # Remember greatest complexity goes first
+        for term in termsPfsf[1:]: # all remaining terms
+            added = False
+            for index, termComp in enumerate(orderedTerms):
+                if Product(term.factors[1:]) == Product(termComp.factors[1:]): # If the parts after the constants are equal
+                    # We worry not about consolidating sums here, constant simplifier will do that for constants and we will call it at the end
+                    termComp.factors[0] = Sum(termComp.factors[0], term.factors[0]) # Combine the coefficients into the ordered terms list and move on, we no longer worry about the term
+                    added = True
+                    break # we no longer need to compare with other terms
+                elif Product(term.factors[1:]) > Product(termComp.factors[1:]): # This means that it is greater than the current entry, which means it goes before it
+                    orderedTerms.insert(index, term) 
+                    added = True
+                    break # stop comparing because we have found its place
+                # If it is not >= it is < than the current entry and thus its place is farther to the right
+            # If it has still not been added, append it to the end (it must be < every other term in complexity)
+            if added == False:
+                orderedTerms.append(termComp)
+
+        # NOTE - WE ASSUME FROM THIS POINT FORWARD THAT NONE OF THESE TERMS ARE CONSTANTS (i.e. f(x) + g(x) is never a constant unless both f(x) and g(x) are constants). THIS HOLDS FOR NOW BUT DOES NOT HOLD IN GENERAL
+        # THINK COS^2 + SIN^2 = 1
+
+        # WE NEED TO IMPLEMENT A LOGARITHM CHECK BEFORE THIS TO CONSOLIDATE Log_b(f(x)) + Log_b(g(x)) into Log_b(f + g (x)) if that is what we want to consider simplified, check later with group
+        # In this case we will need to ensure that we can identify if f(x)g(x) = c i.e. g(x) = c * (f(x))^(-1)        
+
+        # This is now fully ordered and basically pfsf. The last thing we need to do is to simplify products with 1s in the front and send all the constants to the constant simplifier 
+
+        popList =  []
+
+        for term in orderedTerms:
+            term.factors[0].consim() # Simplify the front constant 
+            if term.factors[0] == Constant(1): # If it is a 1
+                term.factors.pop(term.factors[0]) # Remove the front factor
+            elif term.factors[0] == Constant(0): # If it is a zero
+                popList.append[term] # we will remove it
+            
+            # if neither of these hold, the front is a constant that is not zero or one, so we leave it as is
+
+            if len(term.factors) == 1: # only one element left
+                term = term.factors[0] # remove the product brackets essentially 
+
+        # now all the terms are simplified to the max with their constants simplified. 
+
+        # After this loop orderedTerms contains all of the terms in pfsf order and simplified. These terms are all non-constant. This means we can add our constant terms from earlier to the end
+
+        orderedTerms.append(Sum(constList).consim()) # Adding the simplified sum of constants to the sum
+
+        # we are finally done (please save me). We just need to do a quick return check
+
+        if len(orderedTerms) == 1: # only one term
+            return orderedTerms[0]
+        else:
+            return Sum(orderedTerms)
+
+
+
+        # Thinking now of a way to do summative identities (ie cos^2 + sin^2 = 1). It could be done through the filtering where if one of the parts is identified and compared with another part, they are joined
