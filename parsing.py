@@ -82,7 +82,31 @@ def factor(input):
         else:
             return l[0] 
     
+def exp(input):
+    bracket = 0
+    if (input == ""):
+        return
+    for i in range(len(input)):
+        if (input[i] == '('):
+            bracket += 1
+        elif (input[i] == ')'):
+            bracket -= 1
+        elif (input[i] == '^' and bracket == 0):
+            return Exponential(factor(input[:i]), expression(input[(i+1):]))
+        
+    return basic(input)
 
+def basic():
+    func = input[:3]
+    if (not (func == "sin" or func == "cos" or func == "tan")):
+        return unit(input)
+    return elem(input, func)
+
+def unit():
+    pass
+
+def elem():
+    pass
      
 def term(input):
 
