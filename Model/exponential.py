@@ -85,7 +85,7 @@ class Exponential(Expression):
                     # if the argument inside the upper logarithm is more complex, 
                     # swap the base and that argument
                     return Exponential(argPfsf.argument(), Logarithm(argPfsf.base, basePfsf)) 
-                    # This essentially is y^log_b(x) = x^log_b(y) iff x is more compelx than y
+                    # This essentially is y^log_b(x) -> x^log_b(y) iff x is more compelex than y
 
                 # If the argument is less complex or identical, we do nothing
  

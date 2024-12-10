@@ -23,7 +23,6 @@ class Exp(Exponential):
         return self.isConstant
     
     # Should pull GT and EQ from super
-                
     
     def derivative(self, differential):
         return Product((Exp(self.argument), self.argument.derivative(differential)))

@@ -50,3 +50,31 @@ class Logarithm(Expression):
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.argument)
+    
+    def pfsf(self):
+        # We want to do the following:
+        # Consolidate if arg is an exponent with the same base.
+        # move y to the front if arg is an exponent with not the same base (log(x^y) = ylog(x))
+        # that is all I can think of so far. 
+
+        # Simplify innards first
+
+        argPfsf = self.argument.pfsf()
+        basePfsf = self.base.pfsf()
+
+        if argPfsf == basePfsf: # If the argument is exactly the base
+            return Constant(1)
+
+        if argPfsf.expression_type == ExpressionType.EXPONENTIAL: # If the argument is an exponential 
+            
+            # If bases are the same
+            if argPfsf.base == basePfsf:
+                return argPfsf.arg # Return just the argument of the exponential 
+            
+            # If bases are not the same
+            else: 
+                return Product(argPfsf.arg, Logarithm(basePfsf, argPfsf.base)).pfsf() # To make sure that it is simplified
+            
+        # If none of these hold
+        return Logarithm(basePfsf, argPfsf)
+            
