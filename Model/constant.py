@@ -1,7 +1,6 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from enum import Enum
-from Model.fraction import Frac
 
 
 # Terminal constant value. Either integer or euler number or pi.
@@ -76,6 +75,7 @@ class Constant(Expression):
             return ('pi')
         
     def consim(self):
+        from Model.fraction import Frac
         return Frac(self)
 
 class ConstantType(Enum):

@@ -2,7 +2,6 @@ from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.make_expression import MakeExpression
 from Model.variable import Variable
-from Model.fraction import Frac
 
 def AskAlec(_):
     print("Alec! We need you!")
@@ -93,6 +92,7 @@ class Sum(Expression):
         
         #the only things that are not simplified now should be the original fractions
         #we split the simvarterms between fraction terms and other terms
+        from Model.fraction import Frac
         fracsum = Frac(0)
         nonfracsvt = () #non fraction terms of simvarterms (hence the svt)
         for term in simvarterms:

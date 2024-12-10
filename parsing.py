@@ -1,8 +1,11 @@
 # Parser
 
 # made for polynomials and integer coefficients
-
-from Model import Constant, Cosine, Examples, Exponential, Variable, Sine, Sum, Expression, expression_type, natural_logarithm, Product
+from Model.constant import Constant
+from Model.variable import Variable
+from Model.exponential import Exponential
+from Model.product import Product
+from Model.sum import Sum
 
 def const(input):
     
