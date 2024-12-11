@@ -6,6 +6,10 @@ from Model.variable import Variable
 from Model.exponential import Exponential
 from Model.product import Product
 from Model.sum import Sum
+from Model.sine import Sine
+from Model.cosine import Cosine
+from Model.tangent import Tangent
+from Model.logarithm import Logarithm
 
 def const(input,start):
     
@@ -42,7 +46,7 @@ def factor(input):
     
     start = 0
 
-    while (start < len(input)):
+    while (start < len(input)): #not sure if i need to do highest level bracket thing idts tho
         if (input[start] >= '0' and input[0] <= '9'):
 
             a, c1 = const(input, start) 
@@ -87,25 +91,40 @@ def exp(input):
         elif (input[i] == ')'):
             bracket -= 1
         elif (input[i] == '^' and bracket == 0):
-            return Exponential(factor(input[:i]), expression(input[(i+1):]))
+            return Exponential(factor(input[:i]), expression(input[(i+1):])) 
         
     return basic(input)
 
 
 
-def basic():
+def basic(input):
     func = input[:3]
     if (not (func == "sin" or func == "cos" or func == "tan")):
         return unit(input)
-    return elem(input, func)
+    return elem(input[3:], func) # changed a bit here added the [3:] - Mukil
 
-def unit():
-    pass
+def unit(input):
 
-def elem():
-    pass
+    if (input == ""):
+        return
+    elif (input[0] == '('):
+        return expression(input[1:len(input)-1])
+    elif (input[0] == 'x'):
+        return Variable(input[2])
+    else:
+        return Constant(int(input))
+
+def elem(input, func):
+
+    if (func == "sin"):
+        return Sine(unit(input))
+    elif (func == "cos"):
+        return Cosine(unit(input))
+    elif (func == "tan"):
+        return Tangent(unit(input))
+    else:
+        return
      
-
 def term(input):
 
     if (input == ""):
