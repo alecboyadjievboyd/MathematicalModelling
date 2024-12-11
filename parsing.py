@@ -95,7 +95,7 @@ def exp(input):
         elif (input[i] == ')'):
             bracket -= 1
         elif (input[i] == '^' and bracket == 0):
-            return Exponential(factor(input[:i]), expression(input[(i+1):])) 
+            return Exponential(basic(input[:i]), exp(input[(i+1):])) 
         
     return basic(input)
 
