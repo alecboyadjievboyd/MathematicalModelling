@@ -10,6 +10,9 @@ from Model.sine import Sine
 from Model.cosine import Cosine
 from Model.tangent import Tangent
 from Model.logarithm import Logarithm
+from Model.arccosine import Arccosine
+from Model.arcsine import Arcsine
+from Model.arctangent import Arctangent
 
 def const(input,start):
     
@@ -72,10 +75,11 @@ def factor(input):
             else:
                 return(Product(exp(input[:c1]), factor(input[c1:])))
             
-        
 
         elif (input[start] == 's' or input[start] == 't' or input[start] =='c'):
             start += 3
+        elif (input[start] == 'a'):
+            start += 6
                 
     
     return exp(start)
@@ -99,9 +103,13 @@ def exp(input):
 
 def basic(input):
     func = input[:3]
-    if (not (func == "sin" or func == "cos" or func == "tan")):
+    if (not (func == "sin" or func == "cos" or func == "tan" or func == "arc")):
         return unit(input)
-    return elem(input[3:], func) # changed a bit here added the [3:] - Mukil
+    else:
+        if (func == "arc"):
+            func == input[:6]
+            return elem(input[6:], func)
+        return elem(input[3:], func)
 
 def unit(input):
 
@@ -116,7 +124,13 @@ def unit(input):
 
 def elem(input, func):
 
-    if (func == "sin"):
+    if (func == "arcsin"):
+        return Arcsine(unit(input))    
+    elif(func == "arccos"):
+        return Arccosine(unit(input))
+    elif (func == "arctan"):
+        return Arctangent(unit(input))  
+    elif (func == "sin"):
         return Sine(unit(input))
     elif (func == "cos"):
         return Cosine(unit(input))
