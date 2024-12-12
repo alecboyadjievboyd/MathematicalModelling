@@ -61,6 +61,59 @@ class Exponential(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.exponent)
     
+    def consim(self):
+        from Model.fraction import Frac
+
+        #simplifying the arguments
+        sb = self.base.consim() #sb = simplified base
+        se = self.argument.consim() #se = simplified exponent(somehow we use .argument instead of .exponent)
+        
+        if se == Frac(0):#a^0=0
+            return Frac(1) 
+        elif sb == Frac(0):#0^a=0, but undefined for a<0
+            if se.expression_type == ExpressionType.FRACTION:
+                if se.num.value < 0:
+                    raise Exception("Zero to negative power")
+            return Frac(0) #0^(negative function) returns 0
+
+        #simplifying frac^frac
+        if sb.expression_type == se.expression_type == ExpressionType.FRACTION:
+            if se.den == Constant(1):
+                return sb**se #recall that Frac.__pow__ outputs simplified fraction.
+            else:
+                if se.num.value < 0:
+                    sb = Frac(sb.den, sb.num)
+                    se = Frac(- se.num.value, se.den)
+                #if se.num.value==0, then se.den would have been 1 and we would have not gotten here
+                # se.num.value is now > 0
+
+                if se.quo() == Constant(0):
+                    return Exponential(sb, se) #sb**(Frac(se.srem(),se.den))
+                else: # se.quo().value > 0:
+                    return Product((sb**(se.quo), Exponential(sb, Frac(se.rem(), se.den))  ))
+
+
+        if sb.expression_type == ExpressionType.EXPONENTIAL:
+            if sb.base.expression_type == ExpressionType.FRACTION:
+                pass
+
+
+
+
+        if sb.expression_type == ExpressionType.EXPONENTIAL: 
+            if sb.base.expression_type == ExpressionType.FRACTION:
+                if sb.base.num.value>0:
+                    return Exponential(sb.base, Product((sb.argument,se)) ).consim() #(a^b)^c -> a^(b*c) but that only holds for a>=0
+                else: #sb.base.num.value <0: (if sb.base==0, then sb would have been simplified to Frac(0) and we wouldn't be here)
+                    #we need 
+                    if sb.argument.expression_type == ExpressionType.FRACTION:
+                        pass
+                    else: #
+                        pass
+            # else:
+
+
+    
     def pfsf(self):
         from Model.logarithm import Logarithm
         # Possible rules

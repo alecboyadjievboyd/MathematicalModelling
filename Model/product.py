@@ -78,6 +78,10 @@ class Product(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return self.factors
     
+    def consim(self):
+        print("make Product.consim")
+        return self
+    
     # To consolidate a product and remove one terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
     def consolidate(self):
         

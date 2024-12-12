@@ -8,6 +8,9 @@ from Model.exponential import Exponential
 class Frac(Expression):
     def __init__(self, num: Constant, den: Constant = 1): #num=numerator, den=denominator
         super().__init__(ExpressionType.FRACTION)
+        self.primaryOrder = 1 # Constant, lowest order #I(Tim) just copy pasted these from constant
+        self.secondaryOrder = None # No secondary order
+
         if type(num) == int:
             num = Constant(num)
         if type(den) == int:
@@ -15,7 +18,9 @@ class Frac(Expression):
 
         if den.value == 0:
             raise Exception("division by zero")
-        elif den.value < 0:
+        if num.value == 0:
+            den.value = 1
+        if den.value < 0:
             den.value = -den.value
             num.value = -num.value
         
@@ -36,7 +41,26 @@ class Frac(Expression):
         #     self.num=num
         #     self.den=den
 
-
+    def srem(self): #srem = signed remainder
+        #e.g. (-3)/2 = -1 + -1/2 instead of -2 + 1/2
+        if self.num.value>=0:
+            srem = self.num.value % self.den.value
+        else: #self.num.value<0:
+            srem = - ( (-self.num.value) % self.den.value)
+        return Constant(srem)
+            
+    def rem(self): #rem = remainder
+        return Constant(self.num.value % self.den.value)
+    
+    def squo(self): #squo = signed quotient
+        if self.num.value>=0:
+            squo = self.num.value // self.den.value
+        else: # self.num.value<0:
+            squo = - ( (-self.num.value) // self.den.value)
+        return Constant(self.num.value // self.den.value)
+    
+    def quo(self): #quo = quotient
+        return Constant(self.num.value // self.den.value)
 
     def __str__(self):
         if self.den.value==1:
@@ -66,14 +90,14 @@ class Frac(Expression):
             return Frac(1)
         elif exponent>0:
             return Frac( self.num.value**exponent, self.den.value**exponent ).simplify()
-        else: #exponent.num.value<0:
+        else: #exponent<0:
             return Frac( self.den.value**-exponent, self.num.value**-exponent ).simplify()
 
     
     def __eq__(self, other):
         selfsimp = self.simplify()#maybe it is more efficient to check whether the numerator of the difference is zero
         othersimp = other.simplify()
-        if selfsimp.num == othersimp().num and selfsimp().den == othersimp().den:
+        if selfsimp.num == othersimp.num and selfsimp.den == othersimp.den:
             return True
         else:
             return False
@@ -81,6 +105,8 @@ class Frac(Expression):
     def simplify(self): #probably more efficent ways exist
         num=self.num.value
         den=self.den.value
+        if num ==0:
+            return Frac(0)
         small=min(num, den)
         i=2
         while i <= small:#could restict this to only primes.
