@@ -206,7 +206,7 @@ class Sum(Expression):
                 # If it is not >= it is < than the current entry and thus its place is farther to the right
             # If it has still not been added, append it to the end (it must be < every other term in complexity)
             if added == False:
-                orderedTerms.append(termComp)
+                orderedTerms.append(term)
 
         # NOTE - WE ASSUME FROM THIS POINT FORWARD THAT NONE OF THESE TERMS ARE CONSTANTS (i.e. f(x) + g(x) is never a constant unless both f(x) and g(x) are constants). THIS HOLDS FOR NOW BUT DOES NOT HOLD IN GENERAL
         # THINK COS^2 + SIN^2 = 1
