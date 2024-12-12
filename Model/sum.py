@@ -70,6 +70,8 @@ class Sum(Expression):
         return self.terms
     
     def consim(self): #constant simplify
+        old = self #we will need this at the end
+
         #simplifying the terms of the sum (bottom up)
         simterms = () #simplified terms
         for term in self.terms:
@@ -89,32 +91,42 @@ class Sum(Expression):
         #asking Alec to simplify the expression with variables  
         alecsim = AskAlec(Sum(varterms))
         if alecsim.expression_type == ExpressionType.SUM:
-            simvarterms = alecsim.terms
+            alecterms = alecsim.terms
         else: #if alecsim.expression_type != ExpressionType.SUM:
-            simvarterms = (alecsim,)
-
+            alecterms = (alecsim,)
         # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
         
+        #We simplify each of the terms
+        simalecterms = ()
+        for term in alecterms:
+            simalecterms += (term.consim(),) #Lets hope this doesn't cause a loop.
+
         #the only things that are not simplified now should be the original fractions
-        #we split the simvarterms between fraction terms and other terms
+        #we split the simalecterms between fraction terms and other terms
         from Model.fraction import Frac
         fracsum = Frac(0)
-        nonfracsvt = () #non fraction terms of simvarterms (hence the svt)
-        for term in simvarterms:
+        nonfracsat = () #non fraction terms of simalecterms (hence the sat)
+        for term in simalecterms:
             if term.expression_type == ExpressionType.FRACTION:
-                fracsum += term
+                fracsum += term #recall that fractional addition gives the simplified sum
             else:
-                nonfracsvt += (term, )
+                nonfracsat += (term, )
 
-        if nonfracsvt == ():
-            return fracsum.simplify()
+        #recall we defined old
+        if nonfracsat == ():
+            new = fracsum.simplify()
         elif fracsum == Frac(0):
-            if len(nonfracsvt)==1:
-                return nonfracsvt[0]
+            if len(nonfracsat)==1:
+                new = nonfracsat[0]
             else: #len(nonfracsvt)>1:
-                return Sum(nonfracsvt)
+                new = Sum(nonfracsat)
         else:
-            return Sum( nonfracsvt + (fracsum.simplify(),) )
+            new = Sum( nonfracsat + (fracsum,) )
+        
+        if new == old: #equal in representation
+            return new
+        else:
+            return new.consim() #We sure do hope this doesn't end up looping.
 
     # To consolidate a sum and remove zero terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
     def consolidate(self):
