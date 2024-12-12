@@ -83,13 +83,17 @@ class Sum(Expression):
                 for arg in term.genarg(): # the generalised arguments (so also base, power, terms, factors) of each term
                     if arg.expression_type != ExpressionType.FRACTION:
                         arg = Variable(arg) #replacing the argument by a variable (e.g. sqrt(3) becomes x_sqrt(3))
-                        # hasvar = True
                     varargs += (arg,)
-            # if hasvar:
-            varterms += (MakeExpression(term.expression_type, varargs),) #remake the term but with the variable arguments, and add the new term to the tuple of turns.
+            varterms += (MakeExpression(term.expression_type, varargs),) #remake the term but with the variable arguments, and add the new term to the tuple of terms.
 
         #asking Alec to simplify the expression with variables  
-        simvarterms = AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?
+        alecsim = AskAlec(Sum(varterms))
+        if alecsim.expression_type == ExpressionType.SUM:
+            simvarterms = alecsim.terms
+        else: #if alecsim.expression_type != ExpressionType.SUM:
+            simvarterms = (alecsim,)
+
+        # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
         
         #the only things that are not simplified now should be the original fractions
         #we split the simvarterms between fraction terms and other terms
@@ -102,7 +106,15 @@ class Sum(Expression):
             else:
                 nonfracsvt += (term, )
 
-        return Sum(nonfracsvt + (fracsum,))
+        if nonfracsvt == ():
+            return fracsum.simplify()
+        elif fracsum == Frac(0):
+            if len(nonfracsvt)==1:
+                return nonfracsvt[0]
+            else: #len(nonfracsvt)>1:
+                return Sum(nonfracsvt)
+        else:
+            return Sum( nonfracsvt + (fracsum.simplify(),) )
 
     # To consolidate a sum and remove zero terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
     def consolidate(self):
