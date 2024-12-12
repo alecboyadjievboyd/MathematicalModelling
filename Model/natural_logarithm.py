@@ -11,13 +11,13 @@ class NaturalLogarithm(Logarithm):
         return f'ln({self.argument})'
 
     def isConstant(self):
-        if self.isConstant is None:
+        if self.isconstant is None:
             if self.argument.isConstant():
-                self.isConstant = True
+                self.isconstant = True
             else:
-                self.isConstant = False
+                self.isconstant = False
         return self.isConstant
-    
+      
     # Should pull __gt__ and __eq__ from super
     
     def derivative(self, differential):

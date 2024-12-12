@@ -15,7 +15,7 @@ class Exp(Exponential):
     
     # I assume here that this class is meant to represent e^f(x)?
     def isConstant(self):
-        if self.isConstant == None: 
+        if self.isConstant is None: 
             if self.argument.isConstant():
                 self.isConstant = True
             else:

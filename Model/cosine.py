@@ -9,7 +9,7 @@ class Cosine(Expression):
     def __init__(self, argument):
         super().__init__(ExpressionType.COSINE)
         self.argument = argument
-        self.isConstant = None
+        self.isconstant = None
         self.primaryOrder = 5 # Single Function
         self.secondaryOrder = 5 # Cos
         
@@ -38,12 +38,12 @@ class Cosine(Expression):
             return self.primaryOrder > other.primaryOrder # Ordering classes
 
     def isConstant(self):
-        if self.isConstant == None: 
+        if self.isconstant == None: 
             if self.argument.isConstant() == True:
-                self.isConstant = True
+                self.isconstant = True
             else:
-                self.isConstant = False
-        return self.isConstant
+                self.isconstant = False
+        return self.isconstant
     
     def derivative(self, differential):
         from Model.sine import Sine

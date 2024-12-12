@@ -10,12 +10,20 @@ class Logarithm(Expression):
         super().__init__(ExpressionType.LOGARITHM)
         self.base = base
         self.argument = argument
-        self.isConstant = None
+        self.isconstant = None
         self.primaryOrder = 5 # Single Function
         self.secondaryOrder = 7 # Log
 
     def __str__(self):
         return f'log_{self.base}({str(self.argument)})'
+    
+    def isConstant(self):
+        if self.isconstant is None:
+            if self.argument.isConstant() and self.base.isConstant():
+                self.isconstant = True
+            else:
+                self.isconstant = False
+        return self.isconstant
 
     def __eq__(self, other):
         if self.expression_type != other.expression_type:

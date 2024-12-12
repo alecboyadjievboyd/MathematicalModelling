@@ -12,7 +12,7 @@ class Exponential(Expression):
         super().__init__(ExpressionType.EXPONENTIAL)
         self.base = base
         self.argument = argument
-        self.isConstant = None
+        self.isconstant = None
         self.primaryOrder = 5 # Single Function
         self.secondaryOrder = 8 # Exp (top priority) 
     
@@ -43,12 +43,12 @@ class Exponential(Expression):
             return self.primaryOrder > other.primaryOrder # Ordering classes
 
     def isConstant(self):
-        if self.isConstant == None: 
+        if self.isconstant is None: 
             if self.argument.isConstant() and self.base.isConstant():
-                self.isConstant = True
+                self.isconstant = True
             else:
-                self.isConstant = False
-        return self.isConstant
+                self.isconstant = False
+        return self.isconstant
     
     def derivative(self, differential):
         from Model.natural_logarithm import NaturalLogarithm
@@ -147,13 +147,20 @@ class Exponential(Expression):
             return Exponential(basePfsf.base, Product(argPfsf, basePfsf.arg).pfsf()) # (y^a)^b = y^ba
             # Note that here we pfsf the product after creating it to ensure that the order is good. 
 
+        # Exponent one case nad 0 case
+        if (argPfsf.value == 1):
+                return basePfsf
+        
+        if (argPfsf.value == 0):
+                return Constant(1)
+        
         # Integer Exponent case
-        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == Constant() and isinstance(argPfsf.value, int)): # will always be a sum with one or more terms because it has been pfsf iffied
+        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == ExpressionType.CONSTANT and isinstance(argPfsf.value, int)): # will always be a sum with one or more terms because it has been pfsf iffied
             terms = []
-            for i in range[argPfsf.value - 1]: 
+            for i in range(0, argPfsf.value, 1): 
                 terms.append(basePfsf) # Should work even though they are duplicates? I cannot forsee issues
 
-            return Product(terms) # no need to simplify since all terms are identical. 
+            return Product(terms).pfsf()
         
         # If none of these hold, simply return itself (a copy)
         return Exponential(basePfsf, argPfsf)
