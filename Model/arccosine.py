@@ -58,9 +58,11 @@ class Arccosine(Expression):
 
         argPfsf = self.argument.pfsf()
 
-        if argPfsf.expression_type == ExpressionType.COSINE:
-            return argPfsf.argument # arccos(cos(f(x))) = f(x)
-        else:
-            return Arccosine(argPfsf) 
+        #if argPfsf.expression_type == ExpressionType.COSINE:
+            #return argPfsf.argument # arccos(cos(f(x))) = f(x)
+        #else:
+            #return Arccosine(argPfsf) 
+
+        return Arccosine(argPfsf)
 
         # Otherwise, ignore for now as we are not doing identities

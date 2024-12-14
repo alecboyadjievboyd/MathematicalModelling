@@ -95,12 +95,12 @@ class Product(Expression):
         for index, term in enumerate(factors):
             # Note that the two statments can never trigger at the same time. 
             if (term.expression_type == ExpressionType.PRODUCT): #If one of the terms itself is a product. 
-                popList.append(term) # Add the term to the removal list
+                popList.append(index) # Add the term to the removal list
                 termsNew = term.consolidate() # Consolidate the inner product (incase there are any more nested products) + to clear zeros from the inner sum
                 for term2 in termsNew.terms:
                     appendList.append(term2) # Add the extracted terms to the append list. 
             elif term == Constant(1):
-                popList.append(term) # Remove one terms (we will do this again later but it is worth doing it now for efficiency)
+                popList.append(index) # Remove one terms (we will do this again later but it is worth doing it now for efficiency)
 
         for index in sorted(popList, reverse = True): # removing the internal sums and zero terms
             factors.pop(index)
@@ -154,7 +154,6 @@ class Product(Expression):
                 sumContained = True
 
         if sumContained == True: # At least one factor is a sum
-
             return Product(factorsPfsf).multOut([]).pfsf() # Will turn it into a sum and then call pfsf on it, meaning that each internal (sum free) product will then be simplified
         
         if sumContained == False:
@@ -170,10 +169,9 @@ class Product(Expression):
                     constList.append(factor)
                 elif factor.expression_type != ExpressionType.EXPONENTIAL: # if it is not an exponent (fully expected to be simplified)
                     factorsPfsf[index] = Exponential(factor, Constant(1)) # Make it exponent :) 
-
-            for index in sorted(constList, reverse = True): # Removing the constants from the front
-                factorsPfsf.pop(index)      
-
+            
+            for index in sorted(constIndex, reverse = True): # Removing the constants from the front
+                factorsPfsf.pop(index)    
             
             orderedFactors = []
 
@@ -217,10 +215,13 @@ class Product(Expression):
             # WHEN SIMPLIFIER EXISTS <3 DO THE FOLLOWING orderedFactors.insert(0, Product(constList).consim()) # Adding the simplified sum of constants to the sum
 
             if len(constList) > 0:
-                orderedFactors.insert(0, Product(constList))
+                if len(constList) == 1:
+                    orderedFactors.insert(0, constList[0])
+                else:
+                    orderedFactors.insert(0, Product(constList))
             
             if len(orderedFactors) == 1: # only one term
                 return orderedFactors[0]
             else:
-                return Sum(orderedFactors)
+                return Product(orderedFactors)
     

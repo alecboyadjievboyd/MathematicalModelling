@@ -77,11 +77,11 @@ class Logarithm(Expression):
             
             # If bases are the same
             if argPfsf.base == basePfsf:
-                return argPfsf.arg # Return just the argument of the exponential 
+                return argPfsf.argument # Return just the argument of the exponential 
             
-            # If bases are not the same
-            else: 
-                return Product(argPfsf.arg, Logarithm(basePfsf, argPfsf.base)).pfsf() # To make sure that it is simplified
+            # If bases are not the same # NOTE might want to check if this is always preferable in complexity. IT IS NOT BECAUSE PROD FUCNTIONS IS MORE COMPLEX THAN SINGLE FUCNTION
+            #else: 
+                #return Product(argPfsf.argument, Logarithm(basePfsf, argPfsf.base)).pfsf() # To make sure that it is simplified
             
         # If none of these hold
         return Logarithm(basePfsf, argPfsf)

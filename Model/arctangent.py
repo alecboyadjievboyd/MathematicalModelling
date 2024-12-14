@@ -56,9 +56,10 @@ class Arctangent(Expression):
 
         argPfsf = self.argument.pfsf() #simplify the arg first
 
-        if argPfsf.expression_type == ExpressionType.TANGENT:
-            return argPfsf.argument # arctan(tan(f(x))) = f(x)
-        else:
-            return Arctangent(argPfsf) 
+        #if argPfsf.expression_type == ExpressionType.TANGENT:
+         #   return argPfsf.argument # arctan(tan(f(x))) = f(x)
+        #else:
+         #   return Arctangent(argPfsf) 
 
+        return Arctangent(argPfsf)
         # Otherwise, ignore for now as we are not doing identities

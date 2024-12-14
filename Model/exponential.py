@@ -130,28 +130,29 @@ class Exponential(Expression):
         # Logarithm case
         if argPfsf.expression_type == ExpressionType.LOGARITHM:
             if basePfsf == argPfsf.base: #bases are the same
-                return argPfsf.argument()
+                return argPfsf.argument
             
             # If the bases are not the same, it is trickier
             else: 
-                if argPfsf.argument() > basePfsf: 
+                if argPfsf.argument > basePfsf: 
                     # if the argument inside the upper logarithm is more complex, 
                     # swap the base and that argument
-                    return Exponential(argPfsf.argument(), Logarithm(argPfsf.base, basePfsf)) 
+                    return Exponential(argPfsf.argument, Logarithm(argPfsf.base, basePfsf)) 
                     # This essentially is y^log_b(x) -> x^log_b(y) iff x is more compelex than y
 
                 # If the argument is less complex or identical, we do nothing
  
         # Exponential case
         if basePfsf.expression_type == ExpressionType.EXPONENTIAL:
-            return Exponential(basePfsf.base, Product(argPfsf, basePfsf.arg).pfsf()) # (y^a)^b = y^ba
+            return Exponential(basePfsf.base, Product([argPfsf, basePfsf.argument]).pfsf()) # (y^a)^b = y^ba
             # Note that here we pfsf the product after creating it to ensure that the order is good. 
 
         # Exponent one case nad 0 case
-        if (argPfsf.value == 1):
+        if argPfsf.expression_type == ExpressionType.CONSTANT:
+            if ( argPfsf.value == 1):
                 return basePfsf
         
-        if (argPfsf.value == 0):
+            if (argPfsf.value == 0):
                 return Constant(1)
         
         # Integer Exponent case
@@ -162,7 +163,7 @@ class Exponential(Expression):
 
             return Product(terms).pfsf()
         
-        # If none of these hold, simply return itself (a copy)
+        # If none of these hold, simply return itself with simplified base and argument
         return Exponential(basePfsf, argPfsf)
 
         
