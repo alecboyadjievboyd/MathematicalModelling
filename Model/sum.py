@@ -4,8 +4,12 @@ from Model.make_expression import MakeExpression
 from Model.variable import Variable
 from Model.constant import Constant
 
-def AskAlec(_):
+
+def AskAlec(x):
     print("Alec! We need you!")
+    try: return x.pfsf()
+    except: print("Alec doesn't know")
+    return x
 
 
 # Sum of at least two expressions (terms)
@@ -73,6 +77,9 @@ class Sum(Expression):
         return self.terms
     
     def consim(self): #constant simplify
+        from Model.fraction import Frac
+        from Model.product import Product
+
         old = self #we will need this at the end
 
         #simplifying the terms of the sum (bottom up)
@@ -80,8 +87,9 @@ class Sum(Expression):
         for term in self.terms:
             simterms += (term.consim(),)
         
-        #replacing anything but fractions with variables
-        varterms = () #replace expressions by variables
+        #replacing anything but fractions with variables, sum the fractions.
+        varterms = () #replace expressions by variables 
+        fracsum = Frac(0)
         for term in simterms:
             if term.expression_type != ExpressionType.FRACTION:
                 varargs = () #tuple of arguments with anything but fractions replaced by variables
@@ -89,47 +97,88 @@ class Sum(Expression):
                     if arg.expression_type != ExpressionType.FRACTION:
                         arg = Variable(arg) #replacing the argument by a variable (e.g. sqrt(3) becomes x_sqrt(3))
                     varargs += (arg,)
-            varterms += (MakeExpression(term.expression_type, varargs),) #remake the term but with the variable arguments, and add the new term to the tuple of terms.
+                varterms += (MakeExpression(term.expression_type, varargs),) #remake the term but with the variable arguments, and add the new term to the tuple of terms.
+            else: 
+                fracsum += term
+
+        #replacing stuff with variables, but now (hopefully) correctly. (as the above was incorrect)
+        varterms = () # replace expressions by variables
+        fracsum = Frac(0)
+        for term in simterms:
+            if term.expression_type == ExpressionType.FRACTION:
+                fracsum += term
+            else:
+                if term.expression_type == ExpressionType.PRODUCT:
+                    varfactors = ()
+                    for factor in term.factors:
+                        if factor.expression_type != ExpressionType.FRACTION:
+                            varfactor = Variable(factor)
+                        varfactors += (varfactor,)
+                    varterms += (Product(varfactors),)
+                else:
+                    varterms += (Variable(term),)
+
+
+            
 
         #asking Alec to simplify the expression with variables  
-        alecsim = AskAlec(Sum(varterms))
+        alecsim = AskAlec(Sum(varterms + (fracsum,)))
         if alecsim.expression_type == ExpressionType.SUM:
             alecterms = alecsim.terms
         else: #if alecsim.expression_type != ExpressionType.SUM:
             alecterms = (alecsim,)
         # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
         
-        #We simplify each of the terms
-        simalecterms = ()
+        #we substitute the values that the variables hold, and simplify each term after substitution:
+        nonvarterms = ()
         for term in alecterms:
-            simalecterms += (term.consim(),) #Lets hope this doesn't cause a loop.
+            if term.expression_type != ExpressionType.FRACTION:
+                if term.expression_type == ExpressionType.VARIABLE:
+                    term = term.index
+                else:
+                    termargs = ()
+                    for arg in term.genarg():
+                        if arg.expression_type == ExpressionType.VARIABLE:
+                            arg = arg.index
+                        termargs += (arg,)
+                    term = MakeExpression(term.expression_type, termargs)
+            term = term.consim()
+            nonvarterms += (term,)
 
-        #the only things that are not simplified now should be the original fractions
-        #we split the simalecterms between fraction terms and other terms
-        from Model.fraction import Frac
-        fracsum = Frac(0)
-        nonfracsat = () #non fraction terms of simalecterms (hence the sat)
-        for term in simalecterms:
-            if term.expression_type == ExpressionType.FRACTION:
-                fracsum += term #recall that fractional addition gives the simplified sum
-            else:
-                nonfracsat += (term, )
-
-        #recall we defined old
-        if nonfracsat == ():
-            new = fracsum.simplify()
-        elif fracsum == Frac(0):
-            if len(nonfracsat)==1:
-                new = nonfracsat[0]
-            else: #len(nonfracsvt)>1:
-                new = Sum(nonfracsat)
-        else:
-            new = Sum( nonfracsat + (fracsum,) )
-        
-        if new == old: #equal in representation
+        new = Sum(nonvarterms)
+        if old == new:
             return new
         else:
-            return new.consim() #We sure do hope this doesn't end up looping.
+            return new.consim()
+
+        #did this already ealier:
+        # #the only things that are not simplified now should be the original fractions
+        # #we split the simalecterms between fraction terms and other terms
+        # from Model.fraction import Frac
+        # fracsum = Frac(0)
+        # nonfracsat = () #non fraction terms of simalecterms (hence the sat)
+        # for term in simalecterms:
+        #     if term.expression_type == ExpressionType.FRACTION:
+        #         fracsum += term #recall that fractional addition gives the simplified sum
+        #     else:
+        #         nonfracsat += (term, )
+
+        #recall we defined old
+
+        # if nonfracsat == ():
+        #     new = fracsum.simplify()
+        # elif fracsum == Frac(0):
+        #     if len(nonfracsat)==1:
+        #         new = nonfracsat[0]
+        #     else: #len(nonfracsvt)>1:
+        #         new = Sum(nonfracsat)
+        # else:
+        #     new = Sum( nonfracsat + (fracsum,) )
+        
+        # if new == old: #equal in representation
+        #     return new
+        # else:
+        #     return new.consim() #We sure do hope this doesn't end up looping.
 
     # To consolidate a sum and remove zero terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
     def consolidate(self):

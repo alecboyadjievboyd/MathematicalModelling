@@ -3,6 +3,7 @@ from Model.expression_type import ExpressionType
 from Model.product import Product
 from Model.sum import Sum
 from Model.constant import Constant
+from Model.variable import Variable
 
 
 # Exponential function with an expression as a base and exponent
@@ -59,7 +60,7 @@ class Exponential(Expression):
                       ))
 
     def genarg(self):#needed for constant simplification (consim)
-        return (self.base, self.exponent)
+        return (self.base, self.argument) #return (self.base, self.exponent)
     
     def consim(self):
         from Model.fraction import Frac
@@ -96,7 +97,16 @@ class Exponential(Expression):
         if sb.expression_type == ExpressionType.EXPONENTIAL:
             if sb.base.expression_type == ExpressionType.FRACTION:
                 pass
+        
+        if sb.expression_type == ExpressionType.SUM:
+            if se.expression_type == ExpressionType.FRACTION:
+                if se.den.value == 1: #i.e. the exponent is integer
+                    #replacing each term by a variable
+                    varterms = ()
+                    for term in sb.terms:
+                        varterms += (Variable(term))
 
+                    # varsim = AskAlec(Exponential(Sum(varterms), se))
 
 
 

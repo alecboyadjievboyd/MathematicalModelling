@@ -79,8 +79,15 @@ class Product(Expression):
         return self.factors
     
     def consim(self):
-        print("make Product.consim")
-        return self
+        #simplifying the factors of the product
+        simfactors = ()
+        for factor in self.factors:
+            simfactors += (factor.consim())
+
+        
+
+
+
     
     # To consolidate a product and remove one terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
     def consolidate(self):
