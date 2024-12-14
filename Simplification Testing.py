@@ -288,5 +288,15 @@ current = Logarithm(Constant(2),Exponential(Constant(2),Variable(1))) # NOTE thi
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
+# SUM AND PRODUCT TESTING    
+print(" ")
+print("-------------------------------------------- ")
+print(" ")
+print("TESTING SUM AND PRODUCT IN ONE GIANT EXPRESSION...")
+
+
+current = Sum([Logarithm(Constant(2),Exponential(Constant(3),Variable(1))), Product([Logarithm(Constant(2),Exponential(Constant(3),Variable(1))), Sum([Variable(1), Constant(1)])])]) # NOTE this would normally not be possible bc base cannot be non-constant but I am using it as example that the simplification transfers down
+print("Initial: " + str(current))
+print("Simplified: " + str(current.pfsf()))
 
 
