@@ -303,7 +303,10 @@ class Sum(Expression):
 
         # When consim works do this -------------------------- orderedTerms.append(Sum(constList).consim()) # Adding the simplified sum of constants to the sum
         if len(constList) > 0:
-            orderedTerms.append(Sum(constList))
+            if len(constList) == 1:
+                orderedTerms.append(constList[0])
+            else:
+                orderedTerms.append(Sum(constList))
 
         # we are finally done (please save me). We just need to do a quick return check
         if len(orderedTerms) == 1: # only one term
