@@ -4,6 +4,7 @@ from Model.sum import Sum
 from Model.constant import Constant
 
 
+
 # Products of at least two expressions (factors)
 class Product(Expression):
 
@@ -79,10 +80,131 @@ class Product(Expression):
         return self.factors
     
     def consim(self):
-        #simplifying the factors of the product
-        simfactors = ()
+
+        return self #as it isn't finished yet
+
+        from Model.variable import Variable
+        from Model.exponential import Exponential
+        from Model.fraction import Frac
+
+        def AskAlec(x):
+            print(f"Product.consim asks Alec: {x}")
+            try:
+                y = x.pfsf()
+                print(f"Alec says: {y}")
+                return y
+            except:
+                print("Alec doesn't know")
+                return x
+
+        old = self #we will need this at the end
+
+        #expanting inner products, i.e. (a*b)*c -> a*b*c. In case of products in producs in products (nesting with more than two products), we will loop a few times by recalling consim, but they will eventually, inefficiently, be expanded.
+        expandfactors = ()
         for factor in self.factors:
-            simfactors += (factor.consim())
+            if factor.expression_type == ExpressionType.PRODUCT:
+                expandfactors += factor.factors
+            else:
+                expandfactors += (factor,)
+
+
+        #simplifying the factors of the product (bottom up)
+        simfactors = () #simplified factors
+        for factor in expandfactors:
+            simfactors += (factor.consim(),)
+        
+       
+        #replacing stuff with variables.
+        varfactors = () # replace expressions by variables
+        fracprod = Frac(1) 
+        for factor in simfactors:
+            print(factor)
+            print(factor.expression_type)
+            if factor.expression_type == ExpressionType.FRACTION:
+                fracprod *= factor
+            else:
+                if factor.expression_type == ExpressionType.EXPONENTIAL:
+                    if factor.base.expression_type != ExpressionType.FRACTION:
+                        varbase = Variable(factor.base)
+                    else:
+                        varbase = factor.base
+                    
+                    if factor.argument.expression_type != ExpressionType.FRACTION:
+                        varexpo = Variable(factor.argument)
+                    else:
+                        varexpo = factor.argument
+                    
+                    varfactors += (Exponential(varbase, varexpo),)
+
+                elif factor.expression_type == ExpressionType.SUM:
+                    varterms = ()
+                    for term in factor.terms:
+                        varterms += (Variable(term), )
+                    varfactors += (Sum(varterms),)
+                else:
+                    varfactors += (Variable(factor),)
+
+        #temporarily to see what is happening
+        print(Product(varfactors + (fracprod,))) #notice that this + is tuple appending, not number addition
+        return Product(varfactors + (fracprod,))
+
+
+        #Below is still in the "sum" terminoligy
+
+        #asking Alec to simplify the expression with variables  
+        alecsim = AskAlec(Sum(varterms + (fracsum,)))
+        if alecsim.expression_type == ExpressionType.SUM:
+            alecterms = alecsim.terms
+        else: #if alecsim.expression_type != ExpressionType.SUM:
+            alecterms = (alecsim,)
+        # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
+        
+        # #wrong:
+        # #we substitute the values that the variables hold, and simplify each term after substitution:
+        # nonvarterms = ()
+        # for term in alecterms:
+        #     if term.expression_type != ExpressionType.FRACTION:
+        #         if term.expression_type == ExpressionType.VARIABLE:
+        #             term = term.index
+        #         else:
+        #             termargs = ()
+        #             for arg in term.genarg():
+        #                 if arg.expression_type == ExpressionType.VARIABLE:
+        #                     arg = arg.index
+        #                 termargs += (arg,)
+        #             term = MakeExpression(term.expression_type, termargs)
+        #     term = term.consim()
+        #     nonvarterms += (term,)
+
+        #correct:
+        #we substitute the values that the variables hold, and simplify each term after substitution:
+        nonvarterms = () # replace variables by expressions
+        for term in alecterms:
+            if term.expression_type != ExpressionType.FRACTION:
+                if term.expression_type == ExpressionType.PRODUCT: 
+                    nonvarfactors = ()
+                    for factor in term.factors:
+                        if factor.expression_type == ExpressionType.VARIABLE:
+                            factor = factor.index
+                        nonvarfactors += (factor,)
+                    nonvarterms += (Product(nonvarfactors),)
+                else:
+                    if term.expression_type == ExpressionType.VARIABLE:
+                        term = term.index
+                    nonvarterms += (term,)
+                    
+            else:
+                nonvarterms += (term,) #are we sure this term (fraction) is simplified?
+
+        if len(nonvarterms) > 1:
+            new = Sum(nonvarterms)
+        else:
+            new = nonvarterms[0]
+        
+        if old == new:
+            return new
+        else:
+            return new.consim()
 
         
 

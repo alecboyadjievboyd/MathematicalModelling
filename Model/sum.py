@@ -5,11 +5,7 @@ from Model.variable import Variable
 from Model.constant import Constant
 
 
-def AskAlec(x):
-    print("Alec! We need you!")
-    try: return x.pfsf()
-    except: print("Alec doesn't know")
-    return x
+
 
 
 # Sum of at least two expressions (terms)
@@ -80,26 +76,45 @@ class Sum(Expression):
         from Model.fraction import Frac
         from Model.product import Product
 
+        def AskAlec(x):
+            print(f"Sum.consim asks Alec: {x}")
+            try:
+                y = x.pfsf()
+                print(f"Alec says: {y}")
+                return y
+            except:
+                print("Alec doesn't know")
+                return x
+
         old = self #we will need this at the end
+
+        #expanting inner sums, i.e. (a+b)+c -> a+b+c. In case of sums in sums in sums (nesting with more than two sums), we will loop a few times by recalling consim, but they will eventually, inefficiently, be expanded.
+        expandterms = ()
+        for term in self.terms:
+            if term.expression_type == ExpressionType.SUM:
+                expandterms += term.terms
+            else:
+                expandterms += (term,)
+
 
         #simplifying the terms of the sum (bottom up)
         simterms = () #simplified terms
-        for term in self.terms:
+        for term in expandterms:
             simterms += (term.consim(),)
         
-        #replacing anything but fractions with variables, sum the fractions.
-        varterms = () #replace expressions by variables 
-        fracsum = Frac(0)
-        for term in simterms:
-            if term.expression_type != ExpressionType.FRACTION:
-                varargs = () #tuple of arguments with anything but fractions replaced by variables
-                for arg in term.genarg(): # the generalised arguments (so also base, power, terms, factors) of each term
-                    if arg.expression_type != ExpressionType.FRACTION:
-                        arg = Variable(arg) #replacing the argument by a variable (e.g. sqrt(3) becomes x_sqrt(3))
-                    varargs += (arg,)
-                varterms += (MakeExpression(term.expression_type, varargs),) #remake the term but with the variable arguments, and add the new term to the tuple of terms.
-            else: 
-                fracsum += term
+        # #replacing anything but fractions with variables, sum the fractions.
+        # varterms = () #replace expressions by variables 
+        # fracsum = Frac(0)
+        # for term in simterms:
+        #     if term.expression_type != ExpressionType.FRACTION:
+        #         varargs = () #tuple of arguments with anything but fractions replaced by variables
+        #         for arg in term.genarg(): # the generalised arguments (so also base, power, terms, factors) of each term
+        #             if arg.expression_type != ExpressionType.FRACTION:
+        #                 arg = Variable(arg) #replacing the argument by a variable (e.g. sqrt(3) becomes x_sqrt(3))
+        #             varargs += (arg,)
+        #         varterms += (MakeExpression(term.expression_type, varargs),) #remake the term but with the variable arguments, and add the new term to the tuple of terms.
+        #     else: 
+        #         fracsum += term
 
         #replacing stuff with variables, but now (hopefully) correctly. (as the above was incorrect)
         varterms = () # replace expressions by variables
@@ -108,15 +123,18 @@ class Sum(Expression):
             if term.expression_type == ExpressionType.FRACTION:
                 fracsum += term
             else:
-                if term.expression_type == ExpressionType.PRODUCT:
+                if term.expression_type == ExpressionType.PRODUCT: #note that the product has already been simplified, so there is no need for a fracproduct
                     varfactors = ()
                     for factor in term.factors:
                         if factor.expression_type != ExpressionType.FRACTION:
-                            varfactor = Variable(factor)
-                        varfactors += (varfactor,)
+                            factor = Variable(factor)
+                        varfactors += (factor,)
                     varterms += (Product(varfactors),)
                 else:
                     varterms += (Variable(term),)
+
+        # print(Sum(varterms))
+        # return Sum(varterms)
 
 
             
@@ -129,23 +147,48 @@ class Sum(Expression):
             alecterms = (alecsim,)
         # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
         
+        # #wrong:
+        # #we substitute the values that the variables hold, and simplify each term after substitution:
+        # nonvarterms = ()
+        # for term in alecterms:
+        #     if term.expression_type != ExpressionType.FRACTION:
+        #         if term.expression_type == ExpressionType.VARIABLE:
+        #             term = term.index
+        #         else:
+        #             termargs = ()
+        #             for arg in term.genarg():
+        #                 if arg.expression_type == ExpressionType.VARIABLE:
+        #                     arg = arg.index
+        #                 termargs += (arg,)
+        #             term = MakeExpression(term.expression_type, termargs)
+        #     term = term.consim()
+        #     nonvarterms += (term,)
+
+        #correct:
         #we substitute the values that the variables hold, and simplify each term after substitution:
-        nonvarterms = ()
+        nonvarterms = () # replace variables by expressions
         for term in alecterms:
             if term.expression_type != ExpressionType.FRACTION:
-                if term.expression_type == ExpressionType.VARIABLE:
-                    term = term.index
+                if term.expression_type == ExpressionType.PRODUCT: 
+                    nonvarfactors = ()
+                    for factor in term.factors:
+                        if factor.expression_type == ExpressionType.VARIABLE:
+                            factor = factor.index
+                        nonvarfactors += (factor,)
+                    nonvarterms += (Product(nonvarfactors),)
                 else:
-                    termargs = ()
-                    for arg in term.genarg():
-                        if arg.expression_type == ExpressionType.VARIABLE:
-                            arg = arg.index
-                        termargs += (arg,)
-                    term = MakeExpression(term.expression_type, termargs)
-            term = term.consim()
-            nonvarterms += (term,)
+                    if term.expression_type == ExpressionType.VARIABLE:
+                        term = term.index
+                    nonvarterms += (term,)
+                    
+            else:
+                nonvarterms += (term,) #are we sure this term (fraction) is simplified?
 
-        new = Sum(nonvarterms)
+        if len(nonvarterms) > 1:
+            new = Sum(nonvarterms)
+        else:
+            new = nonvarterms[0]
+        
         if old == new:
             return new
         else:

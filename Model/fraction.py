@@ -96,11 +96,27 @@ class Frac(Expression):
     
     def __eq__(self, other):
         selfsimp = self.simplify()#maybe it is more efficient to check whether the numerator of the difference is zero
-        othersimp = other.simplify()
+        if other.expression_type == ExpressionType.CONSTANT:
+            othersimp = Frac(other)
+        else:
+            othersimp = other.simplify()
+        
         if selfsimp.num == othersimp.num and selfsimp.den == othersimp.den:
             return True
         else:
             return False
+    
+    def __gt__(self,other):
+        if other.expression_type == ExpressionType.CONSTANT: #not sure if this is necessairy
+            other = Frac(other)
+        dif = self + Frac(-1)*other
+        if dif.num.value > 0:
+            return True
+        else:
+            return False
+
+    def isConstant(self):
+        return True
 
     def simplify(self): #probably more efficent ways exist
         num=self.num.value
@@ -125,3 +141,6 @@ class Frac(Expression):
     
     def consim(self):
         return self.simplify()
+    
+    def pfsf(self):
+        return Frac(self.num, self.den).simplify()

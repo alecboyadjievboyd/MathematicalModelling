@@ -63,6 +63,17 @@ class Exponential(Expression):
         return (self.base, self.argument) #return (self.base, self.exponent)
     
     def consim(self):
+        def AskAlec(x):
+            print(f"Exponential.consim asks Alec: {x}")
+            try:
+                y = x.pfsf()
+                print(f"Alec says: {y}")
+                return y
+            except:
+                print("Alec doesn't know")
+                return x
+        
+        return (self)
         from Model.fraction import Frac
 
         #simplifying the arguments
