@@ -8,9 +8,9 @@ def MakeExpression(Etype, genarg): #ExpressionType and the generalised arguments
         return Arcsine(genarg[0])
     elif Etype == ExpressionType.ARCTANGENT:
         return Arctangent(genarg[0])
-    elif Etype == ExpressionType.CONSTANT:
-        from Model.constant import Constant
-        return Constant(genarg[0])
+    elif Etype == ExpressionType.INTEGER:
+        from Model.integer import Integer
+        return Integer(genarg[0])
     elif Etype == ExpressionType.COSINE:
         return Cosine(genarg[0])
     elif Etype == ExpressionType.EXP:

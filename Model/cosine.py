@@ -1,7 +1,7 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.product import Product
-from Model.constant import Constant
+from Model.integer import Integer
 
 
 # Cosine of an expression
@@ -47,7 +47,7 @@ class Cosine(Expression):
     
     def derivative(self, differential):
         from Model.sine import Sine
-        return Product({Constant(-1), Sine(self.argument), self.argument.derivative(differential)})
+        return Product({Integer(-1), Sine(self.argument), self.argument.derivative(differential)})
     
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

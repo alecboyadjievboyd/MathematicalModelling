@@ -3,7 +3,7 @@ from Model.expression_type import ExpressionType
 from Model.product import Product
 from Model.cosine import Cosine
 from Model.exponential import Exponential
-from Model.constant import Constant
+from Model.integer import Integer
 
 
 # Tangent of an expression
@@ -48,7 +48,7 @@ class Tangent(Expression):
         return self.isconstant
     
     def derivative(self, differential):
-        return Product({Exponential(Cosine(self.argument), Constant(-2)), self.argument.derivative(differential)})
+        return Product({Exponential(Cosine(self.argument), Integer(-2)), self.argument.derivative(differential)})
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

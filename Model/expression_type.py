@@ -4,7 +4,7 @@ from enum import Enum
 # Enumerator for types of expressions
 class ExpressionType(Enum):
     VARIABLE = 1
-    CONSTANT = 2
+    INTEGER = 2
     SUM = 3
     PRODUCT = 4
     EXPONENTIAL = 5
@@ -19,3 +19,5 @@ class ExpressionType(Enum):
     ARCTANGENT = 14
     EXP = 15
     FRACTION = 16
+    EULER = 17
+    PI = 18

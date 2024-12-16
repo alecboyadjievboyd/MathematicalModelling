@@ -1,6 +1,6 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.sum import Sum
 from Model.product import Product
 from Model.exponential import Exponential
@@ -8,12 +8,12 @@ from Model.exponential import Exponential
 #There are two cool things in this file: the class Frac and the function constant_simplify, the latter referencing the former.
 
 class Frac(Expression):
-    def __init__(self, num:Constant, den:Constant=1): #num=numerator, den=denominator
+    def __init__(self, num:Integer, den:Integer=1): #num=numerator, den=denominator
         super().__init__(ExpressionType.FRACTION)
         if type(num)==int:
-            num=Constant(num)
+            num=Integer(num)
         if type(den)==int:
-            den=Constant(den)
+            den=Integer(den)
 
         if den.value == 0:
             raise Exception("division by zero")
@@ -55,7 +55,7 @@ class Frac(Expression):
         return new_frac.simplify()
     
     def __pow__(self, exponent):
-        if exponent.expression_type != ExpressionType.CONSTANT:
+        if exponent.expression_type != ExpressionType.INTEGER:
             if exponent.expression_type != ExpressionType.FRACTION:
                 raise Exception("Exponent is not an integer")
             elif exponent.den.value != 1:
@@ -94,7 +94,7 @@ class Frac(Expression):
         return Frac(num, den)
     
     def derivative(self, differential):
-        return Constant(0)
+        return Integer(0)
 
 # def constant_simplify(expression: Expression):
 #     if expression.expression_type == ExpressionType.FRACTION:
@@ -136,7 +136,7 @@ class Frac(Expression):
 #         raise Exception("You are asking me to simplify something really scary")
 
 def frac_constant_simplify(expression: Expression):
-    if expression.expression_type == ExpressionType.CONSTANT:
+    if expression.expression_type == ExpressionType.INTEGER:
         return Frac(expression)
     elif expression.expression_type == ExpressionType.FRACTION:#all below should eventually end up calling this
         return expression.simplify()
@@ -186,18 +186,18 @@ if you_like_examples: #that aren't illustrative due to lack of formatting
             Frac(1,4), Frac(3,2), Product((Frac(5),Frac(1,4)))
             ))
         )  )
-    print(Frac(5) ** Constant(-2))
+    print(Frac(5) ** Integer(-2))
     print(Frac(5)**Frac(-2))
-    print(Frac(5) ** Constant(0))
+    print(Frac(5) ** Integer(0))
     print(Frac(5)**Frac(0))
-    print(Frac(5) ** Constant(3))
+    print(Frac(5) ** Integer(3))
     print(Frac(5)**Frac(3))
-    print(Frac(3,-2) ** Constant(-2))
-    print(Frac(3,-2) ** Constant(-3))
+    print(Frac(3,-2) ** Integer(-2))
+    print(Frac(3,-2) ** Integer(-3))
 
     print(  (Frac(3,5)+Frac(4,6))*Frac(5,2)**Frac(3)  )
 
     print(  frac_constant_simplify(Sum((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))))  )
     print(  frac_constant_simplify(Exponential(Sum((Frac(1,4), Frac(3,2), Frac(5),Frac(1,4))),Frac(3)))  )
 
-    print(frac_constant_simplify(Exponential(Constant(5), Constant(-1))))
+    print(frac_constant_simplify(Exponential(Integer(5), Integer(-1))))

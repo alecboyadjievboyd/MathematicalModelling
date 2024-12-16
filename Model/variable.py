@@ -1,6 +1,6 @@
 from Model.expression_type import ExpressionType
 from Model.expression import Expression
-from Model.constant import Constant
+from Model.integer import Integer
 
 
 # Singular variables, without constants or exponents. Terminal expression.
@@ -34,9 +34,9 @@ class Variable(Expression):
     
     def derivative(self, differential):
         if self.index == differential.index:
-            return Constant(1)
+            return Integer(1)
         else:
-            return Constant(0)
+            return Integer(0)
         
     def isConstant(self):
         return False

@@ -2,7 +2,7 @@ from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.make_expression import MakeExpression
 from Model.variable import Variable
-from Model.constant import Constant
+from Model.integer import Integer
 
 
 
@@ -240,7 +240,7 @@ class Sum(Expression):
                 termsNew = term.consolidate() # Consolidate the inner sum (incase there are any more nested sums)
                 for term2 in termsNew.terms:
                     appendList.append(term2) # Add the extracted terms to the append list. 
-            elif term == Constant(0):
+            elif term == Integer(0):
                 popList.append(index) # Remove zero terms (we will do this again later but it is worth doing it now for efficiency)
 
         for index in sorted(popList, reverse = True): # removing the internal sums and zero terms from lattest index to most recent
@@ -283,9 +283,9 @@ class Sum(Expression):
             else:
                 if term.expression_type == ExpressionType.PRODUCT: # if it is a product
                     if term.factors[0].isConstant() == False: # if it does not have a constant in front (remember that the constant will always be in front bc all terms are pfsf)
-                        term.factors.insert(0, Constant(1)) # add a 1 to the front of the product 
+                        term.factors.insert(0, Integer(1)) # add a 1 to the front of the product
                 else: # if not a product
-                    termsPfsf[index] = Product([Constant(1), term]) # replace the term with a product of one and itself. 
+                    termsPfsf[index] = Product([Integer(1), term]) # replace the term with a product of one and itself.
 
         for index in sorted(constIndex, reverse = True):
             termsPfsf.pop(index)
@@ -327,9 +327,9 @@ class Sum(Expression):
 
             for index, term in enumerate(orderedTerms):
                 # When consim works do this -------------------------- term.factors[0].consim() # Simplify the front constant 
-                if term.factors[0] == Constant(1): # If it is a 1
+                if term.factors[0] == Integer(1): # If it is a 1
                     term.factors.pop(0) # Remove the front factor
-                elif term.factors[0] == Constant(0): # If it is a zero
+                elif term.factors[0] == Integer(0): # If it is a zero
                     popList.append[index] # we will remove it
                 
                 # if neither of these hold, the front is a constant that is not zero or one, so we leave it as is

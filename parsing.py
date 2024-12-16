@@ -1,7 +1,7 @@
 # Parser
 
 # made for polynomials and integer coefficients
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.variable import Variable
 from Model.exponential import Exponential
 from Model.product import Product
@@ -120,7 +120,7 @@ def unit(input):
     elif (input[0] == 'x'):
         return Variable(input[2])
     else:
-        return Constant(int(input))
+        return Integer(int(input))
 
 def elem(input, func):
 
@@ -168,8 +168,8 @@ def term(input):
                 elif (input_rest[j] == '*' and bracket == 0):
                     factor2 = input_rest[:j]
                     term_last = input_rest[j+1:]
-                    return Product([factor(factor1), Exponential(factor(factor2), Constant(-1)), term(term_last)])
-            return Product([factor(input[:i]), Exponential(factor(input[(i+1):]), Constant(-1))]) # if we don't find another multiplication sign, we return the division of the two factors
+                    return Product([factor(factor1), Exponential(factor(factor2), Integer(-1)), term(term_last)])
+            return Product([factor(input[:i]), Exponential(factor(input[(i+1):]), Integer(-1))]) # if we don't find another multiplication sign, we return the division of the two factors
     
     return factor(input)
 
@@ -194,7 +194,7 @@ def expression(input):
         elif (input[i] == '+' and bracket == 0):
             return Sum([term(input[:i]), expression(input[(i+1):])])
         elif (input[i] == '-' and bracket == 0):
-            return Sum([term(input[:i]), Product([Constant(-1), expression(input[(i+1):])])])
+            return Sum([term(input[:i]), Product([Integer(-1), expression(input[(i + 1):])])])
     
     return term(input)
 

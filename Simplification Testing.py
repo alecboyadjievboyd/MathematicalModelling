@@ -2,7 +2,7 @@ from Model.product import Product
 from Model.sum import Sum
 from Model.exponential import Exponential
 from Model.logarithm import Logarithm
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.exp import Exp
 from Model.arctangent import Arctangent
 from Model.tangent import Tangent
@@ -23,7 +23,7 @@ print("-------------------------------------------- ")
 print(" ")
 print("TESTING CONSTANTS...")
 
-current = Constant(2)
+current = Integer(2)
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -49,7 +49,7 @@ print(" ")
 print("Already Simplified Case:")
 print(" ")
 
-current = Exponential(Variable(1), Constant(2))
+current = Exponential(Variable(1), Integer(2))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -57,7 +57,7 @@ print(" ")
 print("Exponent = 1 Case:")
 print(" ")
 
-current = Exponential(Variable(1), Constant(1))
+current = Exponential(Variable(1), Integer(1))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -65,7 +65,7 @@ print(" ")
 print("Exponent = 0 Case:")
 print(" ")
 
-current = Exponential(Variable(1), Constant(0))
+current = Exponential(Variable(1), Integer(0))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -73,7 +73,7 @@ print(" ")
 print("Base is sum, Exponent = 2 Case:")
 print(" ")
 
-current = Exponential(Sum([Variable(1), Variable(2)]), Constant(2))
+current = Exponential(Sum([Variable(1), Variable(2)]), Integer(2))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -81,7 +81,7 @@ print(" ")
 print("Base is exponent case:")
 print(" ")
 
-current = Exponential(Exponential(Variable(1), Variable(2)), Constant(2))
+current = Exponential(Exponential(Variable(1), Variable(2)), Integer(2))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf())) 
 
@@ -89,7 +89,7 @@ print(" ")
 print("Logarithm case, same base:")
 print(" ")
 
-current = Exponential(Constant(2), Logarithm(Constant(2), Variable(1)))
+current = Exponential(Integer(2), Logarithm(Integer(2), Variable(1)))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -105,7 +105,7 @@ print(" ")
 print("Logarithm case, different bases:")
 print(" ")
 
-current = Exponential(Constant(2), Logarithm(Constant(3), Variable(1)))
+current = Exponential(Integer(2), Logarithm(Integer(3), Variable(1)))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -113,7 +113,7 @@ print(" ")
 print("Logarithm case, different bases, more complex already the base:")
 print(" ")
 
-current = Exponential(Variable(1), Logarithm(Constant(3), Constant(2)))
+current = Exponential(Variable(1), Logarithm(Integer(3), Integer(2)))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -121,7 +121,7 @@ print(" ")
 print("Basic Exponenital, only simplification can happen in the arg and base")
 print(" ")
 
-current = Exponential(Sum([Variable(1), Product([Constant(2),Variable(1)])]), Product([Sum([Variable(1), Constant(1)]), Variable(1)]))
+current = Exponential(Sum([Variable(1), Product([Integer(2), Variable(1)])]), Product([Sum([Variable(1), Integer(1)]), Variable(1)]))
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -276,7 +276,7 @@ print(" ")
 print("logarithm with identical base and argument (should reduce)")
 print(" ")
 
-current = Logarithm(Constant(2),Constant(2)) # NOTE this would normally not be possible bc base cannot be non-constant but I am using it as example that the simplification transfers down
+current = Logarithm(Integer(2), Integer(2)) # NOTE this would normally not be possible bc base cannot be non-constant but I am using it as example that the simplification transfers down
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -284,7 +284,7 @@ print(" ")
 print("logarithm with exponential argumen with identical base(should reduce)")
 print(" ")
 
-current = Logarithm(Constant(2),Exponential(Constant(2),Variable(1))) # NOTE this would normally not be possible bc base cannot be non-constant but I am using it as example that the simplification transfers down
+current = Logarithm(Integer(2), Exponential(Integer(2), Variable(1))) # NOTE this would normally not be possible bc base cannot be non-constant but I am using it as example that the simplification transfers down
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
@@ -295,7 +295,7 @@ print(" ")
 print("TESTING SUM AND PRODUCT IN ONE GIANT EXPRESSION...")
 
 
-current = Sum([Logarithm(Constant(2),Exponential(Constant(3),Variable(1))), Product([Logarithm(Constant(2),Exponential(Constant(3),Variable(1))), Sum([Variable(1), Constant(1)])])]) # NOTE this would normally not be possible bc base cannot be non-constant but I am using it as example that the simplification transfers down
+current = Sum([Logarithm(Integer(2), Exponential(Integer(3), Variable(1))), Product([Logarithm(Integer(2), Exponential(Integer(3), Variable(1))), Sum([Variable(1), Integer(1)])])]) # NOTE this would normally not be possible bc base cannot be non-constant but I am using it as example that the simplification transfers down
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 

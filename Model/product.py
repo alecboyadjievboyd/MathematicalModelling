@@ -1,7 +1,7 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.sum import Sum
-from Model.constant import Constant
+from Model.integer import Integer
 
 
 
@@ -228,7 +228,7 @@ class Product(Expression):
                 termsNew = term.consolidate() # Consolidate the inner product (incase there are any more nested products) + to clear zeros from the inner sum
                 for term2 in termsNew.terms:
                     appendList.append(term2) # Add the extracted terms to the append list. 
-            elif term == Constant(1):
+            elif term == Integer(1):
                 popList.append(index) # Remove one terms (we will do this again later but it is worth doing it now for efficiency)
 
         for index in sorted(popList, reverse = True): # removing the internal sums and zero terms
@@ -297,7 +297,7 @@ class Product(Expression):
                     constIndex.append(index)
                     constList.append(factor)
                 elif factor.expression_type != ExpressionType.EXPONENTIAL: # if it is not an exponent (fully expected to be simplified)
-                    factorsPfsf[index] = Exponential(factor, Constant(1)) # Make it exponent :) 
+                    factorsPfsf[index] = Exponential(factor, Integer(1)) # Make it exponent :)
             
             for index in sorted(constIndex, reverse = True): # Removing the constants from the front
                 factorsPfsf.pop(index)    
@@ -333,11 +333,11 @@ class Product(Expression):
                     if factor.argument.expression_type == ExpressionType.SUM: # If not a sum, it was not joined and thus there is no need to simplify as it is already pfsf (for efficiency)
                         factor.argument.pfsf() # Simplify the exp
 
-                    if factor.argument == Constant(1): # If it is a 1
+                    if factor.argument == Integer(1): # If it is a 1
                         orderedFactors[index] = factor.base # no need for an exponent
 
-                    elif factor.argument == Constant(0): # If it is a zero
-                        orderedFactors[index] = Constant(1) # Exponent resolves to a constant
+                    elif factor.argument == Integer(0): # If it is a zero
+                        orderedFactors[index] = Integer(1) # Exponent resolves to a constant
                     
                     # if neither of these hold, the arg is not zero or one, so we leave it as is
 

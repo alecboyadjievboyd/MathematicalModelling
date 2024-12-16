@@ -1,6 +1,6 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.sum import Sum
 from Model.product import Product
 from Model.exponential import Exponential
@@ -8,7 +8,7 @@ from Model.fraction import Frac
 
 
 def frac_constant_simplify(expression: Expression):
-    if expression.expression_type == ExpressionType.CONSTANT:
+    if expression.expression_type == ExpressionType.INTEGER:
         return Frac(expression)
     elif expression.expression_type == ExpressionType.FRACTION:#all below should eventually end up calling this
         return expression.simplify()

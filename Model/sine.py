@@ -1,7 +1,7 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.product import Product
-from Model.constant import Constant
+from Model.integer import Integer
 
 
 # Sine of an expression

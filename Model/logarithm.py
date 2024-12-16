@@ -2,7 +2,7 @@ from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.exponential import Exponential
 from Model.product import Product
-from Model.constant import Constant
+from Model.integer import Integer
 
 
 class Logarithm(Expression):
@@ -52,7 +52,7 @@ class Logarithm(Expression):
     def derivative(self, differential):
         return Product([
             self.argument.derivative(differential),
-            Exponential(Logarithm(Constant('e'), self.base), -1),
+            Exponential(Logarithm(Integer('e'), self.base), -1),
             Exponential(self, -1)
         ])
 
@@ -71,7 +71,7 @@ class Logarithm(Expression):
         basePfsf = self.base.pfsf()
 
         if argPfsf == basePfsf: # If the argument is exactly the base
-            return Constant(1)
+            return Integer(1)
 
         if argPfsf.expression_type == ExpressionType.EXPONENTIAL: # If the argument is an exponential 
             

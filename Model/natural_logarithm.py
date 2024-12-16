@@ -1,11 +1,11 @@
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.product import Product
 from Model.logarithm import Logarithm
 
 
 class NaturalLogarithm(Logarithm):
     def __init__(self, argument):
-        super().__init__(Constant('e'), argument)
+        super().__init__(Integer('e'), argument)
         
     def __str__(self):
         return f'ln({self.argument})'
@@ -23,7 +23,7 @@ class NaturalLogarithm(Logarithm):
     def derivative(self, differential):
         from Model.exponential import Exponential
         return Product([
-            Exponential(self.argument, Constant(-1)),
+            Exponential(self.argument, Integer(-1)),
             self.argument.derivative(differential)
         ])
 

@@ -1,20 +1,20 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.sum import Sum
 from Model.product import Product
 from Model.exponential import Exponential
 
 class Frac(Expression):
-    def __init__(self, num: Constant, den: Constant = 1): #num=numerator, den=denominator
+    def __init__(self, num: Integer, den: Integer = 1): #num=numerator, den=denominator
         super().__init__(ExpressionType.FRACTION)
         self.primaryOrder = 1 # Constant, lowest order #I(Tim) just copy pasted these from constant
         self.secondaryOrder = None # No secondary order
 
         if type(num) == int:
-            num = Constant(num)
+            num = Integer(num)
         if type(den) == int:
-            den = Constant(den)
+            den = Integer(den)
 
         if den.value == 0:
             raise Exception("division by zero")
@@ -47,20 +47,20 @@ class Frac(Expression):
             srem = self.num.value % self.den.value
         else: #self.num.value<0:
             srem = - ( (-self.num.value) % self.den.value)
-        return Constant(srem)
+        return Integer(srem)
             
     def rem(self): #rem = remainder
-        return Constant(self.num.value % self.den.value)
+        return Integer(self.num.value % self.den.value)
     
     def squo(self): #squo = signed quotient
         if self.num.value>=0:
             squo = self.num.value // self.den.value
         else: # self.num.value<0:
             squo = - ( (-self.num.value) // self.den.value)
-        return Constant(self.num.value // self.den.value)
+        return Integer(self.num.value // self.den.value)
     
     def quo(self): #quo = quotient
-        return Constant(self.num.value // self.den.value)
+        return Integer(self.num.value // self.den.value)
 
     def __str__(self):
         if self.den.value==1:
@@ -77,7 +77,7 @@ class Frac(Expression):
         return new_frac.simplify()
     
     def __pow__(self, exponent):
-        if exponent.expression_type != ExpressionType.CONSTANT:
+        if exponent.expression_type != ExpressionType.INTEGER:
             if exponent.expression_type != ExpressionType.FRACTION:
                 raise Exception("Exponent is not an integer")
             elif exponent.den.value != 1:
@@ -96,7 +96,7 @@ class Frac(Expression):
     
     def __eq__(self, other):
         selfsimp = self.simplify()#maybe it is more efficient to check whether the numerator of the difference is zero
-        if other.expression_type == ExpressionType.CONSTANT:
+        if other.expression_type == ExpressionType.INTEGER:
             othersimp = Frac(other)
         else:
             othersimp = other.simplify()
@@ -107,7 +107,7 @@ class Frac(Expression):
             return False
     
     def __gt__(self,other):
-        if other.expression_type == ExpressionType.CONSTANT: #not sure if this is necessairy
+        if other.expression_type == ExpressionType.INTEGER: #not sure if this is necessairy
             other = Frac(other)
         dif = self + Frac(-1)*other
         if dif.num.value > 0:
@@ -134,7 +134,7 @@ class Frac(Expression):
         return Frac(num, den)
     
     def derivative(self, differential):
-        return Constant(0)
+        return Integer(0)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.num, self.den)

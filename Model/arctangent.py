@@ -2,7 +2,7 @@ from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.product import Product
 from Model.sum import Sum
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.exponential import Exponential
 
 class Arctangent(Expression):
@@ -47,7 +47,7 @@ class Arctangent(Expression):
 
     def derivative(self, differential):
         return Product((
-            Exponential(Sum((Constant(1), Exponential(self.argument, Constant(2)))), Constant(-1)), self.argument.derivative(differential)))
+            Exponential(Sum((Integer(1), Exponential(self.argument, Integer(2)))), Integer(-1)), self.argument.derivative(differential)))
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

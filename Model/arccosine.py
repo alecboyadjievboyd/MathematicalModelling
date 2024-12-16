@@ -3,7 +3,7 @@ from Model.expression_type import ExpressionType
 from Model.product import Product
 from Model.exponential import Exponential
 from Model.sum import Sum
-from Model.constant import Constant
+from Model.integer import Integer
 
 class Arccosine(Expression):
     def __init__(self, argument):
@@ -46,9 +46,9 @@ class Arccosine(Expression):
         return self.isconstant
 
     def derivative(self, differential):
-        return Product((Constant(-1),
-                        Exponential(Sum((Constant(1), Product((Constant(-1), Exponential(self.argument, Constant(2))))))
-                                    , Product((Constant(-1), Exponential(Constant(2), Constant(-1))))),
+        return Product((Integer(-1),
+                        Exponential(Sum((Integer(1), Product((Integer(-1), Exponential(self.argument, Integer(2))))))
+                                    , Product((Integer(-1), Exponential(Integer(2), Integer(-1))))),
                         self.argument.derivative(differential)))
     
     def genarg(self): #needed for constant simplification (consim)

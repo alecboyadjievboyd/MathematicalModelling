@@ -1,6 +1,6 @@
 from Model.expression_type import ExpressionType
-from Model.constant import Constant
-from Model.constant import ConstantType
+from Model.integer import Integer
+from Model.integer import ConstantType
 from Model.exponential import Exponential
 from Model.logarithm import Logarithm
 from Model.sum import Sum
@@ -19,9 +19,9 @@ def division_by_zero(expression):
     base = expression.base
     exponent = expression.exponent
 
-    return ((base.expression_type == ExpressionType.CONSTANT and base.constant_type == ConstantType.INTEGER and
+    return ((base.expression_type == ExpressionType.INTEGER and base.constant_type == ConstantType.INTEGER and
              base.value == 0) and
-            (exponent.expression_type == ExpressionType.CONSTANT and exponent.constant_type == ConstantType.INTEGER and
+            (exponent.expression_type == ExpressionType.INTEGER and exponent.constant_type == ConstantType.INTEGER and
              exponent.value <= 0))
 
 
@@ -33,10 +33,10 @@ def exponential_negative_base(expression):
     base = expression.base
     exponent = expression.exponent
 
-    return (base.expression_type == ExpressionType.CONSTANT and base.constant_type == ConstantType.INTEGER and
+    return (base.expression_type == ExpressionType.INTEGER and base.constant_type == ConstantType.INTEGER and
             base.value < 0 and
-            (exponent.expression_type != ExpressionType.CONSTANT or
-             (exponent.expression_type == ExpressionType.CONSTANT and exponent.constant_type != ConstantType.INTEGER)))
+            (exponent.expression_type != ExpressionType.INTEGER or
+             (exponent.expression_type == ExpressionType.INTEGER and exponent.constant_type != ConstantType.INTEGER)))
 
 
 # Checks if an expression is undefined logarithm. The expression is undefined if it is a logarithm with non-positive
@@ -47,9 +47,9 @@ def negative_logarithm(expression):
     base = expression.base
     argument = expression.argument
 
-    return ((base.expression_type == ExpressionType.CONSTANT and base.constant_type == ConstantType.INTEGER and
+    return ((base.expression_type == ExpressionType.INTEGER and base.constant_type == ConstantType.INTEGER and
              base.value <= 0) or
-            (argument.expression_type == ExpressionType.CONSTANT and argument.constant_type == ConstantType.INTEGER and
+            (argument.expression_type == ExpressionType.INTEGER and argument.constant_type == ConstantType.INTEGER and
              argument.value <= 0))
 
 
@@ -62,39 +62,39 @@ def undefined(expression):
 if __name__ == "__main__":
 
     # Checking which of 1^1, 0^1, 1^0, 0^0 is undefined - "division by zero"
-    expr1 = Exponential(Constant(1), Constant(1))
-    expr2 = Exponential(Constant(0), Constant(1))
-    expr3 = Exponential(Constant(1), Constant(0))
-    expr4 = Exponential(Constant(0), Constant(0))
+    expr1 = Exponential(Integer(1), Integer(1))
+    expr2 = Exponential(Integer(0), Integer(1))
+    expr3 = Exponential(Integer(1), Integer(0))
+    expr4 = Exponential(Integer(0), Integer(0))
     print(f'{expr1} undefined is {undefined(expr1)}')
     print(f'{expr2} undefined is {undefined(expr2)}')
     print(f'{expr3} undefined is {undefined(expr3)}')
     print(f'{expr4} undefined is {undefined(expr4)}\n')
 
     # Checking which of 1^(-1), e^(-6), 0^(-1), 0^(-6) is undefined - division by zero
-    expr1 = Exponential(Constant(1), Constant(-1))
-    expr2 = Exponential(Constant('e'), Constant(-6))
-    expr3 = Exponential(Constant(0), Constant(-1))
-    expr4 = Exponential(Constant(0), Constant(-6))
+    expr1 = Exponential(Integer(1), Integer(-1))
+    expr2 = Exponential(Integer('e'), Integer(-6))
+    expr3 = Exponential(Integer(0), Integer(-1))
+    expr4 = Exponential(Integer(0), Integer(-6))
     print(f'{expr1} undefined is {undefined(expr1)}')
     print(f'{expr2} undefined is {undefined(expr2)}')
     print(f'{expr3} undefined is {undefined(expr3)}')
     print(f'{expr4} undefined is {undefined(expr4)}\n')
 
     # Checking which of (-1)^(1+1), (-1)^e, (-1)^(-5) is undefined - exponent with negative base
-    expr1 = Exponential(Constant(-1), Sum([Constant(1), Constant(1)]))
-    expr2 = Exponential(Constant(-1), Constant('e'))
-    expr3 = Exponential(Constant(-1), Constant(-5))
+    expr1 = Exponential(Integer(-1), Sum([Integer(1), Integer(1)]))
+    expr2 = Exponential(Integer(-1), Integer('e'))
+    expr3 = Exponential(Integer(-1), Integer(-5))
     print(f'{expr1} undefined is {undefined(expr1)}')
     print(f'{expr2} undefined is {undefined(expr2)}')
     print(f'{expr3} undefined is {undefined(expr3)}\n')
 
     # Checking which of log_pi(1), log_3(x^2), log_(-1)(x), log_0(0), log_5(-3) is undefined
-    expr1 = Logarithm(Constant('pi'), Constant(1))
-    expr2 = Logarithm(Constant(3), Exponential(Variable(1), Constant(2)))
-    expr3 = Logarithm(Constant(-1), Variable(1))
-    expr4 = Logarithm(Constant(0), Constant(5))
-    expr5 = Logarithm(Constant(5), Constant(-3))
+    expr1 = Logarithm(Integer('pi'), Integer(1))
+    expr2 = Logarithm(Integer(3), Exponential(Variable(1), Integer(2)))
+    expr3 = Logarithm(Integer(-1), Variable(1))
+    expr4 = Logarithm(Integer(0), Integer(5))
+    expr5 = Logarithm(Integer(5), Integer(-3))
     print(f'{expr1} undefined is {undefined(expr1)}')
     print(f'{expr2} undefined is {undefined(expr2)}')
     print(f'{expr3} undefined is {undefined(expr3)}')

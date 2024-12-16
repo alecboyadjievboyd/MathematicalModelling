@@ -2,7 +2,7 @@ from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.product import Product
 from Model.sum import Sum
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.variable import Variable
 
 
@@ -55,7 +55,7 @@ class Exponential(Expression):
         from Model.natural_logarithm import NaturalLogarithm
         return Product((self, 
                       Sum(( Product((self.argument.derivative(differential), NaturalLogarithm(self.base))),
-                          Product((self.argument, Exponential(self.base, Constant(-1)), self.base.derivative(differential)))
+                          Product((self.argument, Exponential(self.base, Integer(-1)), self.base.derivative(differential)))
                          ))
                       ))
 
@@ -90,7 +90,7 @@ class Exponential(Expression):
 
         #simplifying frac^frac
         if sb.expression_type == se.expression_type == ExpressionType.FRACTION:
-            if se.den == Constant(1):
+            if se.den == Integer(1):
                 return sb**se #recall that Frac.__pow__ outputs simplified fraction.
             else:
                 if se.num.value < 0:
@@ -99,7 +99,7 @@ class Exponential(Expression):
                 #if se.num.value==0, then se.den would have been 1 and we would have not gotten here
                 # se.num.value is now > 0
 
-                if se.quo() == Constant(0):
+                if se.quo() == Integer(0):
                     return Exponential(sb, se) #sb**(Frac(se.srem(),se.den))
                 else: # se.quo().value > 0:
                     return Product((sb**(se.quo), Exponential(sb, Frac(se.rem(), se.den))  ))
@@ -169,15 +169,15 @@ class Exponential(Expression):
             # Note that here we pfsf the product after creating it to ensure that the order is good. 
 
         # Exponent one case nad 0 case
-        if argPfsf.expression_type == ExpressionType.CONSTANT:
+        if argPfsf.expression_type == ExpressionType.INTEGER:
             if ( argPfsf.value == 1):
                 return basePfsf
         
             if (argPfsf.value == 0):
-                return Constant(1)
+                return Integer(1)
         
         # Integer Exponent case
-        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == ExpressionType.CONSTANT and isinstance(argPfsf.value, int)): # will always be a sum with one or more terms because it has been pfsf iffied
+        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == ExpressionType.INTEGER and isinstance(argPfsf.value, int)): # will always be a sum with one or more terms because it has been pfsf iffied
             terms = []
             for i in range(0, argPfsf.value, 1): 
                 terms.append(basePfsf) # Should work even though they are duplicates? I cannot forsee issues

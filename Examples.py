@@ -1,4 +1,4 @@
-from Model.constant import Constant
+from Model.integer import Integer
 from Model.sine import Sine
 from Model.variable import Variable
 from Model.sum import Sum
@@ -15,7 +15,7 @@ from Model.fraction import Frac
 from Model.simplifying_fractions import frac_constant_simplify
 
 def rt(x,n=2):
-    return Exponential(Constant(x), Exponential(Constant(n), Constant(-1)))
+    return Exponential(Integer(x), Exponential(Integer(n), Integer(-1)))
 
 def x(n=1):
     return Variable(n)
