@@ -69,11 +69,14 @@ def factor(input):
       
         elif (input[start] == 'x'):
 
-            if (input[start +3] == '^'):
-                start += 4
+            if (start + 3 < len(input)):
+                if (input[start +3] == '^'):
+                    start += 4
 
+                else:
+                    return(Product(exp(input[:c1]), factor(input[c1:])))
             else:
-                return(Product(exp(input[:c1]), factor(input[c1:])))
+                break
             
 
         elif (input[start] == 's' or input[start] == 't' or input[start] =='c'):
@@ -82,7 +85,7 @@ def factor(input):
             start += 6
                 
     
-    return exp(start)
+    return exp(input)
 
     
 def exp(input):
