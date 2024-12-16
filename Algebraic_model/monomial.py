@@ -1,30 +1,24 @@
-from Algebraic_model.expression_type import ExpressionType
-from Algebraic_model.expression import Expression
+from Algebraic_model.algebraic_expression_type import AlgebraicExpressionType
+from Algebraic_model.algebraic_expression import AlgebraicExpression
+from Algebraic_model.constant_fraction import ConstantFraction
 
 
-class Monomial(Expression):
+class Monomial(AlgebraicExpression):
 
-    def __init__(self, coefficient, exponents):
-        super().__init__(ExpressionType.MONOMIAL)
-        self.coefficient = coefficient
-        self.exponents = exponents
+    def __init__(self, exponent, coefficient = ConstantFraction(1)):
+        super().__init__(AlgebraicExpressionType.MONOMIAL, coefficient)
+        self.exponent = exponent
 
     def __str__(self):
 
-        # Computing sum of all exponents of the monomial
-        sum_of_exponents = 0
-        for exponent in self.exponents:
-            sum_of_exponents += exponent
+        if self.exponent == 0:
+            if self.coefficient == 1:
+                string_expression = "1"
+            else:
+                string_expression = ""
+        elif self.exponent == 1:
+            string_expression = "x"
+        else:
+            string_expression = f'x^{self.exponent}'
 
-        string_expression = str(self.coefficient) if self.coefficient != 1 or sum_of_exponents == 0 else ""
-
-        for i, exponent in enumerate(self.exponents):
-            match exponent:
-                case 0:
-                    pass
-                case 1:
-                    string_expression += f'x{i}'
-                case _:
-                    string_expression += f'x{i}^{exponent}'
-
-        return string_expression
+        return self.string_add_coefficient(string_expression)
