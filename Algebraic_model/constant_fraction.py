@@ -30,7 +30,10 @@ class ConstantFraction:
 
     def __str__(self):
         if self.denominator == 1:
-            return str(self.numerator)
+            if self.numerator < 0:
+                return f'({self.numerator})'
+            else:
+                return str(self.numerator)
         else:
             return f'({self.numerator}/{self.denominator})'
 
@@ -47,7 +50,9 @@ class ConstantFraction:
     # Add two constants
     def __add__(self, other):
         # Raise an error if adding non-constant to a constant is attempted
-        if type(other) != ConstantFraction:
+        if type(other) == int:
+            other = ConstantFraction(other)
+        elif type(other) != ConstantFraction:
             return NotImplemented
 
         numerator = self.numerator * other.denominator + self.denominator * other.numerator
@@ -64,14 +69,24 @@ class ConstantFraction:
         denominator = self.denominator * other.denominator
         return ConstantFraction(numerator, denominator)
 
-    # Multiply two constants
+    # Multiply two constants fractions or constant fraction by integer
     def __mul__(self, other):
-        if type(other) != ConstantFraction:
+        if type(other) == ConstantFraction:
+            # ConstantFraction * ConstantFraction
+            numerator = self.numerator * other.numerator
+            denominator = self.denominator * other.denominator
+            return ConstantFraction(numerator, denominator)
+        elif type(other) == int:
+            # ConstantFraction * integer
+            return ConstantFraction(self.numerator * other, self.denominator)
+        else:
             return NotImplemented
 
-        numerator = self.numerator * other.numerator
-        denominator = self.denominator * other.denominator
-        return ConstantFraction(numerator, denominator)
+    def __rmul__(self, other):
+        if type(other) != int:
+            return NotImplemented
+
+        return ConstantFraction(self.numerator * other, self.denominator)
 
     # Divide a constant by a constant
     def __truediv__(self, other):

@@ -7,3 +7,4 @@ class AlgebraicExpressionType(Enum):
     SUM = 2
     PRODUCT = 3
     QUOTIENT = 4
+    POLYNOMIAL = 5

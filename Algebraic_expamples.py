@@ -1,5 +1,6 @@
 from Algebraic_model.constant_fraction import ConstantFraction
 from Algebraic_model.fraction import Fraction
+from Algebraic_model.polynomial import Polynomial
 from Algebraic_model.product import Product
 from Algebraic_model.monomial import Monomial
 from Algebraic_model.sum import Sum
@@ -60,3 +61,15 @@ print(constFrac1 - constFrac4)
 print(constFrac1 * constFrac4)
 print(constFrac1 / constFrac5)
 print(constFrac1 ** 4)
+
+# Examples of polynomials
+print()
+poly1 = Polynomial([2, 0, 3, 0, 0])
+print(poly1)
+print(poly1.get_value(3))
+print(poly1.get_value(ConstantFraction(2, 7)))
+poly2 = Polynomial([6, 1, -1], ConstantFraction(1))
+print(poly2)
+print(poly2.check_root(2))
+print(poly2.check_root(3))
+print(poly2.check_root(-2))
