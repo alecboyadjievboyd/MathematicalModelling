@@ -193,7 +193,7 @@ def expression(input):
     return term(input)
 
 
-user_input = str(input("please input in ASCII math"))
+user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
 x = expression(user_input)
 
