@@ -14,26 +14,26 @@ from Model.arccosine import Arccosine
 from Model.arcsine import Arcsine
 from Model.arctangent import Arctangent
 
-def const(input,start):
+
+def const(input):
     
     j = 0
-
     while (j <len(input)):
         if (input[j]<= '9' and input[j] >= '0'):
             j += 1
         else:
             break
 
-    return input[:j], j + start
+    return j
 
-def bracket(input,start):
+def bracket(input):
     bracket = 0
     j = 0
     while (j < len(input)):
         if (input[j] == '('):
             bracket += 1
         elif (input[j] == ')' and bracket == 1):
-            return input[0:j+1], j+1 + start
+            return j+1
         elif (input[j] == ')'):
             bracket -= 1
         j += 1
@@ -41,50 +41,41 @@ def bracket(input,start):
 
 def factor(input):
 
-    bracket = 0
-    length =  0
-
     if (input == ""):
         return
     
     start = 0
 
-    while (start < len(input)): #not sure if i need to do highest level bracket thing idts tho
-        if (input[start] >= '0' and input[0] <= '9'):
+    while (start < len(input)):
 
-            a, c1 = const(input, start) 
-            if (input[c1] == '^'):
-                start = c1 + 1
-            else:
-                return Product(exp(input[:c1]), factor(input[c1:]))
+        # This part is to check if we have reached a '^' if not we are done and we need to return
+        # We shouldn't stop if we ended the last part at trig function so we check for that as well
+
+        if (input[start] == '^'): 
+            start += 1 
+
+        elif (start != 0 and not (input[start-1] == 'n' or input[start-1] == 's')):
+            return Product([exp(input[:start]), factor(input[start:])])
+        
+        # This part is to check what kind of thing we have    
+                                
+        if (input[start] >= '0' and input[start] <= '9'):
+
+            start +=  const(input[start:]) 
         
         elif (input[start] == '('):
 
-            a, c1 = bracket(input[start:],start)
-
-            if (input[c1] == '^'):
-                start = c1 + 1
-            else:
-                return(Product(exp(input[:c1]), factor(input[c1:])))
+            start += bracket(input[start:])
       
         elif (input[start] == 'x'):
-
-            if (start + 3 < len(input)):
-                if (input[start +3] == '^'):
-                    start += 4
-
-                else:
-                    return(Product(exp(input[:c1]), factor(input[c1:])))
-            else:
-                break
-            
+            start += 3            
 
         elif (input[start] == 's' or input[start] == 't' or input[start] =='c'):
             start += 3
+
         elif (input[start] == 'a'):
             start += 6
-                
-    
+                 
     return exp(input)
 
     
