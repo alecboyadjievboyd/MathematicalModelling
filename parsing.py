@@ -101,7 +101,7 @@ def basic(input):
         return unit(input)
     else:
         if (func == "arc"):
-            func == input[:6]
+            func = input[:6]
             return elem(input[6:], func)
         return elem(input[3:], func)
 
