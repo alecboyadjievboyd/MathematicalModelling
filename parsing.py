@@ -38,6 +38,17 @@ def bracket(input):
             bracket -= 1
         j += 1
             
+def log(input):
+    j = 0
+
+    if (input[0] == '('):
+        j += bracket(input)            
+    elif (input[0] == 'x'):
+        j += 3
+    else:
+        j += const(input)
+    
+    return j
 
 def factor(input):
 
@@ -73,6 +84,9 @@ def factor(input):
         elif (input[start] == 's' or input[start] == 't' or input[start] =='c'):
             start += 3
 
+        elif (input[start] == 'l'):
+            start += 4 + log(input[start+4:])
+            
         elif (input[start] == 'a'):
             start += 6
                  
@@ -97,7 +111,7 @@ def exp(input):
 
 def basic(input):
     func = input[:3]
-    if (not (func == "sin" or func == "cos" or func == "tan" or func == "arc")):
+    if (not (func == "sin" or func == "cos" or func == "tan" or func == "arc" or func == "log")):
         return unit(input)
     else:
         if (func == "arc"):
@@ -130,6 +144,9 @@ def elem(input, func):
         return Cosine(unit(input))
     elif (func == "tan"):
         return Tangent(unit(input))
+    elif (func == "log"):
+        j = log(input[1:])
+        return Logarithm(input[1:j],input[j:])
     else:
         return
      
