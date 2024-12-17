@@ -14,11 +14,38 @@ from Model.expression_type import ExpressionType
 from Model.fraction import Frac
 from Model.simplifying_fractions import frac_constant_simplify
 
+
 def rt(x,n=2):
     return Exponential(Integer(x), Exponential(Integer(n), Integer(-1)))
 
 def x(n=1):
     return Variable(n)
+
+def C(x):
+    return Integer(x)
+
+rtx = Exponential(x(), Exponential( C(2), C(-1)))
+
+print(
+    Product((
+        Exponential(rt(2), rt(3)), 
+    )).consim()
+)
+
+# print("xxxxxxx")
+# print(
+#     Product((
+#         Exponential(rt(2), rt(3)), Exponential(Exponential(rt(2),rt(3)),rt(4))
+#     ))
+# .consim())
+# print("------")
+
+# print(
+#     Product((
+#         Exponential(rtx2, rt(3)), Exponential(Exponential(rtx2,rt(3)),rt(4))
+#     ))
+# .pfsf()
+# )
 
 # print( Sum((rt(3),Product((Constant(2),rt(3))))).consim() )
 
