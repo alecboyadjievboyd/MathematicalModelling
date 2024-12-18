@@ -326,7 +326,7 @@ class Sum(Expression):
             popList =  []
 
             for index, term in enumerate(orderedTerms):
-                # When consim works do this -------------------------- term.factors[0].consim() # Simplify the front constant 
+                term.factors[0] = term.factors[0].consim() # Simplify the front constant 
                 if term.factors[0] == Integer(1): # If it is a 1
                     term.factors.pop(0) # Remove the front factor
                 elif term.factors[0] == Integer(0): # If it is a zero
@@ -349,9 +349,12 @@ class Sum(Expression):
             if len(constList) == 1:
                 orderedTerms.append(constList[0])
             else:
-                orderedTerms.append(Sum(constList))
+                orderedTerms.append(Sum(constList).consim())
+                #orderedTerms.append(Sum(constList))
 
         # we are finally done (please save me). We just need to do a quick return check
+        if len(orderedTerms) == 0: # only one term
+            return Integer(0)
         if len(orderedTerms) == 1: # only one term
             return orderedTerms[0]
         else:

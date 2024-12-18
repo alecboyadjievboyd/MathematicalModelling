@@ -239,7 +239,7 @@ class Product(Expression):
             if (term.expression_type == ExpressionType.PRODUCT): #If one of the terms itself is a product. 
                 popList.append(index) # Add the term to the removal list
                 termsNew = term.consolidate() # Consolidate the inner product (incase there are any more nested products) + to clear zeros from the inner sum
-                for term2 in termsNew.terms:
+                for term2 in termsNew.factors:
                     appendList.append(term2) # Add the extracted terms to the append list. 
             elif term == Integer(1):
                 popList.append(index) # Remove one terms (we will do this again later but it is worth doing it now for efficiency)
@@ -343,14 +343,15 @@ class Product(Expression):
 
                 for index, factor in enumerate(orderedFactors):
 
-                    if factor.argument.expression_type == ExpressionType.SUM: # If not a sum, it was not joined and thus there is no need to simplify as it is already pfsf (for efficiency)
-                        factor.argument.pfsf() # Simplify the exp
+                    if factor.argument.expression_type == ExpressionType.SUM: # If not a sum, it was not joined and thus there is no need to simplify as it is already pfsf (for efficiency) THIS ALSO WILL DEAL WITH CONSTANT SIMP
+                        factor.argument = factor.argument.pfsf() # Simplify the exp
 
                     if factor.argument == Integer(1): # If it is a 1
                         orderedFactors[index] = factor.base # no need for an exponent
 
                     elif factor.argument == Integer(0): # If it is a zero
                         orderedFactors[index] = Integer(1) # Exponent resolves to a constant
+
                     
                     # if neither of these hold, the arg is not zero or one, so we leave it as is
 
@@ -360,8 +361,10 @@ class Product(Expression):
                 if len(constList) == 1:
                     orderedFactors.insert(0, constList[0])
                 else:
-                    orderedFactors.insert(0, Product(constList))
+                    orderedFactors.insert(0, Product(constList).consim())
             
+            if len(orderedFactors) == 0: # only one term
+                return Integer(0)
             if len(orderedFactors) == 1: # only one term
                 return orderedFactors[0]
             else:
