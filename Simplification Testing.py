@@ -329,6 +329,10 @@ current = Product([Exponential(Variable(1), Integer(2)), Exponential(Variable(1)
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
+current = Exponential(Exponential(Variable(1), Integer(2)), Integer(2))
+print("Initial: " + str(current))
+print("Simplified: " + str(current.pfsf()))
+
 
 
 
