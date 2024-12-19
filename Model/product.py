@@ -113,13 +113,14 @@ class Product(Expression):
             simfactors += (factor.consim(),)
         
         def expception(expo): #exponentiation + inception(going down the layers)
+            #If we have something like (2^3)^4, I think this would return 8^4 instead of whatever that is. Similarly, (2^3)^sin(1) returns 8^sin(1) instead of the required (?) x_8 ^sin(1)
             if expo.base.expression_type == ExpressionType.FRACTION:
                 if expo.argument.expression_type == ExpressionType.INTEGER:
                     return expo.base**expo.argument
                 else:
                     return Exponential(Variable(expo.base), expo.argument)
             else:
-                if expo.base.expression_type == ExpressionType.EXPONENTIAL:
+                if expo.base.expression_type == ExpressionType.EXPONENTIAL: 
                     return Exponential(expception(expo.base), expo.argument)
                 else:
                     return Exponential(Variable(expo.base), expo.argument)

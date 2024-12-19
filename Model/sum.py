@@ -189,7 +189,8 @@ class Sum(Expression):
         else:
             new = nonvarterms[0]
         
-        if old == new:
+        #why would the output not be simplified after running through here once? (Except for the poor implimentation of consolidation)
+        if old == new: 
             return new
         else:
             return new.consim()
