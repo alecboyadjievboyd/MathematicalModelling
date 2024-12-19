@@ -38,6 +38,17 @@ def bracket(input):
             bracket -= 1
         j += 1
             
+def log(input):
+    j = 0
+
+    if (input[0] == '('):
+        j += bracket(input)            
+    elif (input[0] == 'x'):
+        j += 3
+    else:
+        j += const(input)
+    
+    return j
 
 def factor(input):
 
@@ -54,7 +65,10 @@ def factor(input):
         if (input[start] == '^'): 
             start += 1 
 
-        elif (start != 0 and not (input[start-1] == 'n' or input[start-1] == 's')):
+        elif (start != 0 and input[start-2] == 'g'):
+            start += log(input[start:])
+
+        elif (start != 0 and not (input[start-1] == 'n' or input[start-1] == 's' or input[start-1] == 'g')):
             return Product([exp(input[:start]), factor(input[start:])])
         
         # This part is to check what kind of thing we have    
@@ -73,6 +87,9 @@ def factor(input):
         elif (input[start] == 's' or input[start] == 't' or input[start] =='c'):
             start += 3
 
+        elif (input[start] == 'l'):
+            start += 4
+            
         elif (input[start] == 'a'):
             start += 6
                  
@@ -97,11 +114,11 @@ def exp(input):
 
 def basic(input):
     func = input[:3]
-    if (not (func == "sin" or func == "cos" or func == "tan" or func == "arc")):
+    if (not (func == "sin" or func == "cos" or func == "tan" or func == "arc" or func == "log")):
         return unit(input)
     else:
         if (func == "arc"):
-            func == input[:6]
+            func = input[:6]
             return elem(input[6:], func)
         return elem(input[3:], func)
 
@@ -130,6 +147,9 @@ def elem(input, func):
         return Cosine(unit(input))
     elif (func == "tan"):
         return Tangent(unit(input))
+    elif (func == "log"):
+        j = log(input[1:])
+        return Logarithm(unit(input[1:j+1]),unit(input[j+1:]))
     else:
         return
      

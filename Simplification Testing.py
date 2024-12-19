@@ -299,4 +299,42 @@ current = Sum([Logarithm(Integer(2), Exponential(Integer(3), Variable(1))), Prod
 print("Initial: " + str(current))
 print("Simplified: " + str(current.pfsf()))
 
+'''def rt(x,n=2):
+    return Exponential(Integer(x), Exponential(Integer(n), Integer(-1)))
+
+current = Product((Exponential(rt(2),rt(3)), Exponential(Exponential(rt(2),rt(3)),rt(5))))
+print("Initial: " + str(current))
+print("Simplified: " + str(current.pfsf()))
+
+current = Sum([Integer(0)])
+print("Initial: " + str(current))
+print("Simplified: " + str(current.pfsf()))
+
+def rt(x,n=2):
+    return Exponential(Integer(x), Exponential(Integer(n), Integer(-1)))
+
+def x(n=1):
+    return Variable(n)
+
+def C(x):
+    return Integer(x)
+
+# rtx = Exponential(Exponential(x(), C(2)), C(-1))
+
+print(
+    Exponential(Exponential(Exponential(x(), C(2)), C(-1)), rt(3)).pfsf()
+)'''
+
+current = Product([Exponential(Variable(1), Integer(2)), Exponential(Variable(1), Integer(2))])
+print("Initial: " + str(current))
+print("Simplified: " + str(current.pfsf()))
+
+current = Exponential(Exponential(Variable(1), Integer(2)), Integer(2))
+print("Initial: " + str(current))
+print("Simplified: " + str(current.pfsf()))
+
+
+
+
+
 
