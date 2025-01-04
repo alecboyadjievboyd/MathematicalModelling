@@ -21,3 +21,4 @@ class ExpressionType(Enum):
     FRACTION = 16
     EULER = 17
     PI = 18
+    HYPERVARIABLE = 19

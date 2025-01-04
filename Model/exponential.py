@@ -4,6 +4,7 @@ from Model.product import Product
 from Model.sum import Sum
 from Model.integer import Integer
 from Model.variable import Variable
+from Model.vartocon import Vartocon
 
 
 # Exponential function with an expression as a base and exponent
@@ -73,8 +74,10 @@ class Exponential(Expression):
                 print("Alec doesn't know")
                 return x
         
-        return (self)
+        # return (self)
         from Model.fraction import Frac
+
+        old = self #not sure if this is necessary
 
         #simplifying the arguments
         sb = self.base.consim() #sb = simplified base
@@ -102,25 +105,44 @@ class Exponential(Expression):
                 if se.quo() == Integer(0):
                     return Exponential(sb, se) #sb**(Frac(se.srem(),se.den))
                 else: # se.quo().value > 0:
-                    return Product((sb**(se.quo), Exponential(sb, Frac(se.rem(), se.den))  ))
+                    return Product((sb**(se.quo()), Exponential(sb, Frac(se.rem(), se.den))  ))
 
-
-        if sb.expression_type == ExpressionType.EXPONENTIAL:
-            if sb.base.expression_type == ExpressionType.FRACTION:
-                pass
         
+        #sums to integer or frac power
         if sb.expression_type == ExpressionType.SUM:
             if se.expression_type == ExpressionType.FRACTION:
-                if se.den.value == 1: #i.e. the exponent is integer
-                    #replacing each term by a variable
-                    varterms = ()
-                    for term in sb.terms:
-                        varterms += (Variable(term))
+                varterms = ()
+                for term in sb.terms:
+                    varterms += (Variable(term),)
 
-                    # varsim = AskAlec(Exponential(Sum(varterms), se))
+                #is this a desired simplified form? 
+                #e.g. (3+x)^(5/2) -> (3+x)^2 * (3+x)^(1/2)
+                #e.g. (3+x)^(-5/2) -> (3+x)^-2 * (3+x)^(-1/2)
+                if se.squo() != Integer(0):
+                    if se.srem() != Integer(0):
+                        varsim = AskAlec(
+                            Product(( Exponential(Sum(varterms), se.squo()), Exponential(Sum(varterms), Frac(se.srem(),se.den)) ))
+                        )
+                    else:
+                        varsim = AskAlec(Exponential(Sum(varterms), se.squo()))
+                else:
+                    if se.srem()!= Integer(0):
+                        varsim = AskAlec(Exponential(Sum(varterms), Frac(se.srem(),se.den)))
+                    else:
+                        return Frac(1)
+                    
+
+                
+                new = Vartocon(varsim)
+                if old == new: #recall "old = Exponential(sb, se)"
+                    return new
+                else:
+                    return new.consim()
 
 
 
+
+        #Collapsing towers
         if sb.expression_type == ExpressionType.EXPONENTIAL: 
             if sb.base.expression_type == ExpressionType.FRACTION:
                 if sb.base.num.value>0:
@@ -133,7 +155,7 @@ class Exponential(Expression):
                         pass
             # else:
 
-
+        return(old)
     
     def pfsf(self):
         from Model.logarithm import Logarithm

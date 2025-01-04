@@ -2,6 +2,7 @@ from Model.expression import Expression
 from Model.expression_type import ExpressionType
 from Model.sum import Sum
 from Model.integer import Integer
+from Model.vartocon import Vartocon
 
 
 
@@ -165,52 +166,56 @@ class Product(Expression):
         #asking Alec to simplify the expression with variables  
         alecsim = AskAlec(Product(varfactors + (fracprod,)))
 
-        if alecsim.expression_type == ExpressionType.SUM:
-            alecterms = alecsim.terms
-        elif alecsim.expression_type == ExpressionType.PRODUCT:
-            alecterms = (alecsim,)
-        else:
-            alecterms = (alecsim,)
-
-        # if alecsim.expression_type == ExpressionType.PRODUCT:
-        #     alecfactors = alecsim.factors
-        # else: #if alecsim.expression_type != ExpressionType.SUM:
-        #     alecfactors = (alecsim,)
-
-        def kicks(expo): #to keep the inception terminology concistent. A kick gets people one dream level lower (I am not a nerd, I googled this).
-            if expo.base.expression_type == ExpressionType.VARIABLE:
-                return Exponential(expo.base.index, expo.argument)
-            elif expo.base.expression_type == ExpressionType.EXPONENTIAL:
-                return Exponential( kicks(expo.base), expo.argument )
+        we_want_to_be_efficient_but_neglect_hypervariables = False
+        if we_want_to_be_efficient_but_neglect_hypervariables:
+            if alecsim.expression_type == ExpressionType.SUM:
+                alecterms = alecsim.terms
+            elif alecsim.expression_type == ExpressionType.PRODUCT:
+                alecterms = (alecsim,)
             else:
-                return expo
+                alecterms = (alecsim,)
 
-        nonvarterms = ()
-        for term in alecterms:
-            alecfactors = ()
-            if term.expression_type == ExpressionType.PRODUCT:
-                alecfactors = term.factors
-            else:
-                alecfactors = (term,)
+            # if alecsim.expression_type == ExpressionType.PRODUCT:
+            #     alecfactors = alecsim.factors
+            # else: #if alecsim.expression_type != ExpressionType.SUM:
+            #     alecfactors = (alecsim,)
 
-            nonvarfactors = ()
-            
-            for factor in alecfactors:
-                if factor.expression_type == ExpressionType.VARIABLE:
-                    factor = factor.index
-                elif factor.expression_type == ExpressionType.EXPONENTIAL:
-                    factor = kicks(factor)
-                nonvarfactors += (factor,)
+            def kicks(expo): #to keep the inception terminology concistent. A kick gets people one dream level lower (I am not a nerd, I googled this).
+                if expo.base.expression_type == ExpressionType.VARIABLE:
+                    return Exponential(expo.base.index, expo.argument)
+                elif expo.base.expression_type == ExpressionType.EXPONENTIAL:
+                    return Exponential( kicks(expo.base), expo.argument )
+                else:
+                    return expo
 
-            if len(nonvarfactors) > 1:
-                nonvarterms += (Product(nonvarfactors),)
+            nonvarterms = ()
+            for term in alecterms:
+                alecfactors = ()
+                if term.expression_type == ExpressionType.PRODUCT:
+                    alecfactors = term.factors
+                else:
+                    alecfactors = (term,)
+
+                nonvarfactors = ()
+                
+                for factor in alecfactors:
+                    if factor.expression_type == ExpressionType.VARIABLE:
+                        factor = factor.index
+                    elif factor.expression_type == ExpressionType.EXPONENTIAL:
+                        factor = kicks(factor)
+                    nonvarfactors += (factor,)
+
+                if len(nonvarfactors) > 1:
+                    nonvarterms += (Product(nonvarfactors),)
+                else: #==0
+                    nonvarterms += (nonvarfactors[0],)
+                
+            if len(nonvarterms) > 1:
+                return Sum(nonvarterms)
             else: #==0
-                nonvarterms += (nonvarfactors[0],)
-            
-        if len(nonvarterms) > 1:
-            return Sum(nonvarterms)
-        else: #==0
-            return nonvarterms[0]
+                return nonvarterms[0]
+        else:
+            return Vartocon(alecsim)
 
 
 

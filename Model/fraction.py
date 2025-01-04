@@ -63,9 +63,9 @@ class Frac(Expression):
         return Integer(self.num.value // self.den.value)
 
     def __str__(self):
-        if self.den.value==1:
-            return f"{self.num}"
-        else:
+        # if self.den.value==1:
+        #     return f"{self.num}"
+        # else:
             return f"{self.num}/{self.den}"#does put_brackets like this? a^(b/c) would become what?
     
     def __add__(self, other):
@@ -95,11 +95,18 @@ class Frac(Expression):
 
     
     def __eq__(self, other):
-        selfsimp = self.simplify()#maybe it is more efficient to check whether the numerator of the difference is zero
+        #equality in terms of representation(?)
         if other.expression_type == ExpressionType.INTEGER:
-            othersimp = Frac(other)
-        else:
-            othersimp = other.simplify()
+            other = Frac(other)
+        if other.expression_type != ExpressionType.FRACTION:
+            return False
+
+        #equality in terms of mathematical equality(?)
+        selfsimp = self.simplify()#maybe it is more efficient to check whether the numerator of the difference is zero
+        # if other.expression_type == ExpressionType.INTEGER:
+        #     othersimp = Frac(other)
+        # else:
+        othersimp = other.simplify()
         
         if selfsimp.num == othersimp.num and selfsimp.den == othersimp.den:
             return True
@@ -109,6 +116,10 @@ class Frac(Expression):
     def __gt__(self,other):
         if other.expression_type == ExpressionType.INTEGER: #not sure if this is necessairy
             other = Frac(other)
+
+        if other.expression_type != ExpressionType.INTEGER: #now we use > in the sence of complexity
+            return False
+
         dif = self + Frac(-1)*other
         if dif.num.value > 0:
             return True

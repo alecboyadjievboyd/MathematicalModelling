@@ -3,6 +3,7 @@ from Model.expression_type import ExpressionType
 from Model.make_expression import MakeExpression
 from Model.variable import Variable
 from Model.integer import Integer
+from Model.vartocon import Vartocon
 
 
 
@@ -116,6 +117,10 @@ class Sum(Expression):
         #     else: 
         #         fracsum += term
 
+
+
+
+
         #replacing stuff with variables, but now (hopefully) correctly. (as the above was incorrect)
         varterms = () # replace expressions by variables
         fracsum = Frac(0)
@@ -133,61 +138,67 @@ class Sum(Expression):
                 else:
                     varterms += (Variable(term),)
 
-        # print(Sum(varterms))
-        # return Sum(varterms)
+
 
 
             
 
         #asking Alec to simplify the expression with variables  
         alecsim = AskAlec(Sum(varterms + (fracsum,)))
-        if alecsim.expression_type == ExpressionType.SUM:
-            alecterms = alecsim.terms
-        else: #if alecsim.expression_type != ExpressionType.SUM:
-            alecterms = (alecsim,)
-        # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
-        
-        # #wrong:
-        # #we substitute the values that the variables hold, and simplify each term after substitution:
-        # nonvarterms = ()
-        # for term in alecterms:
-        #     if term.expression_type != ExpressionType.FRACTION:
-        #         if term.expression_type == ExpressionType.VARIABLE:
-        #             term = term.index
-        #         else:
-        #             termargs = ()
-        #             for arg in term.genarg():
-        #                 if arg.expression_type == ExpressionType.VARIABLE:
-        #                     arg = arg.index
-        #                 termargs += (arg,)
-        #             term = MakeExpression(term.expression_type, termargs)
-        #     term = term.consim()
-        #     nonvarterms += (term,)
 
-        #correct:
-        #we substitute the values that the variables hold, and simplify each term after substitution:
-        nonvarterms = () # replace variables by expressions
-        for term in alecterms:
-            if term.expression_type != ExpressionType.FRACTION:
-                if term.expression_type == ExpressionType.PRODUCT: 
-                    nonvarfactors = ()
-                    for factor in term.factors:
-                        if factor.expression_type == ExpressionType.VARIABLE:
-                            factor = factor.index
-                        nonvarfactors += (factor,)
-                    nonvarterms += (Product(nonvarfactors),)
+
+        we_want_to_be_efficient_but_neglect_hypervariables = False
+        if we_want_to_be_efficient_but_neglect_hypervariables:
+            if alecsim.expression_type == ExpressionType.SUM:
+                alecterms = alecsim.terms
+            else: #if alecsim.expression_type != ExpressionType.SUM:
+                alecterms = (alecsim,)
+            # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
+            
+            # #wrong:
+            # #we substitute the values that the variables hold, and simplify each term after substitution:
+            # nonvarterms = ()
+            # for term in alecterms:
+            #     if term.expression_type != ExpressionType.FRACTION:
+            #         if term.expression_type == ExpressionType.VARIABLE:
+            #             term = term.index
+            #         else:
+            #             termargs = ()
+            #             for arg in term.genarg():
+            #                 if arg.expression_type == ExpressionType.VARIABLE:
+            #                     arg = arg.index
+            #                 termargs += (arg,)
+            #             term = MakeExpression(term.expression_type, termargs)
+            #     term = term.consim()
+            #     nonvarterms += (term,)
+
+            #correct:
+            #we substitute the values that the variables hold, and simplify each term after substitution:
+            nonvarterms = () # replace variables by expressions
+            for term in alecterms:
+                if term.expression_type != ExpressionType.FRACTION:
+                    if term.expression_type == ExpressionType.PRODUCT: 
+                        nonvarfactors = ()
+                        for factor in term.factors:
+                            if factor.expression_type == ExpressionType.VARIABLE:
+                                factor = factor.index
+                            nonvarfactors += (factor,)
+                        nonvarterms += (Product(nonvarfactors),)
+                    else:
+                        if term.expression_type == ExpressionType.VARIABLE:
+                            term = term.index
+                        nonvarterms += (term,)
+                        
                 else:
-                    if term.expression_type == ExpressionType.VARIABLE:
-                        term = term.index
-                    nonvarterms += (term,)
-                    
+                    nonvarterms += (term,) #are we sure this term (fraction) is simplified?
+        
+            if len(nonvarterms) > 1:
+                new = Sum(nonvarterms)
             else:
-                nonvarterms += (term,) #are we sure this term (fraction) is simplified?
-
-        if len(nonvarterms) > 1:
-            new = Sum(nonvarterms)
+                new = nonvarterms[0]
+        
         else:
-            new = nonvarterms[0]
+            new = Vartocon(alecsim)
         
         #why would the output not be simplified after running through here once? (Except for the poor implimentation of consolidation)
         if old == new: 

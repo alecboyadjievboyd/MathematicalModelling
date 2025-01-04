@@ -71,3 +71,5 @@ class Sine(Expression):
 
         # Otherwise, ignore for now as we are not doing identities
 
+    def consim(self):
+        return Sine(self.argument.consim())

@@ -1,6 +1,6 @@
 from Model.integer import Integer
 from Model.sine import Sine
-from Model.variable import Variable
+from Model.variable import Variable, Hypervariable
 from Model.sum import Sum
 from Model.product import Product
 from Model.exponential import Exponential
@@ -13,6 +13,7 @@ from Model.make_expression import MakeExpression
 from Model.expression_type import ExpressionType
 from Model.fraction import Frac
 from Model.simplifying_fractions import frac_constant_simplify
+from Model.vartocon import Vartocon
 
 
 def rt(x,n=2):
@@ -21,16 +22,35 @@ def rt(x,n=2):
 def x(n=1):
     return Variable(n)
 
+def h(n=-1):
+    return Hypervariable(n)
+
 def C(x):
     return Integer(x)
 
-rtx = Exponential(x(), Exponential( C(2), C(-1)))
+# rtx = Exponential(x(), Exponential( C(2), C(-1)))
+
+# print(
+#     Product((
+#         Exponential(rt(2), rt(3)), 
+#     )).consim()
+# )
 
 print(
-    Product((
-        Exponential(rt(2), rt(3)), 
-    )).consim()
+    Exponential(Sum((C(1),h(C(2)))), Frac(7,3)).consim()
 )
+
+# print(
+#     Exponential(Sum((C(1),Hypervariable(C(3)))), C(2)).consim()
+# )
+
+# print(
+#     Exponential(Sum((Sine(C(1)),C(1))), Frac(2)).consim()
+# )
+
+# print(
+#     Exponential( Sum((x(h(1)), x(Frac(1)))), C(2)).pfsf()
+# )
 
 # print("xxxxxxx")
 # print(
