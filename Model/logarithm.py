@@ -59,6 +59,9 @@ class Logarithm(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.argument)
     
+    def consim(self):
+        return Logarithm(self.base.consim(), self.argument.consim())
+    
     def pfsf(self):
         # We want to do the following:
         # Consolidate if arg is an exponent with the same base.

@@ -72,4 +72,10 @@ class Sine(Expression):
         # Otherwise, ignore for now as we are not doing identities
 
     def consim(self):
-        return Sine(self.argument.consim())
+
+        sa = self.argument.consim()
+
+        if sa.expression_type == ExpressionType.ARCSINE:
+            return sa.argument
+        else:
+            return Sine(sa)

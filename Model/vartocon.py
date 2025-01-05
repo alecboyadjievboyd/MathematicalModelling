@@ -7,7 +7,6 @@ from Model.expression_type import ExpressionType
 from Model.make_expression import MakeExpression
 
 def Vartocon(expr: Expression):
-    print(f"Vartocon({expr})")
     # try:
     if True:
         if expr.expression_type == ExpressionType.VARIABLE:

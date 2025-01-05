@@ -107,9 +107,13 @@ class Exponential(Expression):
                 else: # se.quo().value > 0:
                     return Product((sb**(se.quo()), Exponential(sb, Frac(se.rem(), se.den))  ))
 
+        if se.expression_type == ExpressionType.LOGARITHM:
+            if se.base == sb:
+                return se.argument.consim() #consim maybe not necessary if logarithm consims its arguments
         
-        #sums to integer or frac power
+
         if sb.expression_type == ExpressionType.SUM:
+            #sums to integer or frac power
             if se.expression_type == ExpressionType.FRACTION:
                 varterms = ()
                 for term in sb.terms:
@@ -139,8 +143,21 @@ class Exponential(Expression):
                 else:
                     return new.consim()
 
-
-
+            #generalisation of sum^frac: sum^(frac + stuff) -> sum^frac * sum^stuff
+            if se.expression_type == ExpressionType.SUM:
+                print("sum^sum")
+                fracsum = Frac(0) #There should be at most one fraction in the sum though.
+                nonfracterms = ()
+                for term in se.terms:
+                    if term.expression_type == ExpressionType.FRACTION:
+                        fracsum += term
+                    else:
+                        nonfracterms += (term, )
+                print(f"hi{ Product((  Exponential(sb, fracsum), Exponential(sb, Sum(nonfracterms)) )) }")
+                return Product((  Exponential(sb, fracsum), Exponential(sb, Sum(nonfracterms)) )).consim() #is this a desirable form?
+                        
+        # if se.expression_type == ExpressionType.SUM:
+            
 
         #Collapsing towers
         if sb.expression_type == ExpressionType.EXPONENTIAL: 
