@@ -64,12 +64,58 @@ print(constFrac1 ** 4)
 
 # Examples of polynomials
 print()
-poly1 = Polynomial([2, 0, 3, 0, 0])
+# 1/2x^3 + 3x^2 + 2
+poly1 = Polynomial([2, 0, 3, ConstantFraction(1, 2), 0])
 print(poly1)
-print(poly1.get_value(3))
-print(poly1.get_value(ConstantFraction(2, 7)))
+# -x^2 + x + 6
 poly2 = Polynomial([6, 1, -1], ConstantFraction(1))
 print(poly2)
-print(poly2.check_root(2))
-print(poly2.check_root(3))
-print(poly2.check_root(-2))
+# 4x^2 - 1
+poly3 = Polynomial([-1, 0, 4])
+print(poly3)
+# 2x^2 + 2x + 2
+poly4 = Polynomial([2, 2, 2])
+print(poly4)
+# x + 3
+poly5 = Polynomial([ConstantFraction(3, 2), ConstantFraction(1, 2)], 2)
+print(poly5)
+# 0
+poly6 = Polynomial([1, 2, 3], 0)
+print(poly6)
+# 2/3
+poly7 = Polynomial([ConstantFraction(2, 3)], 1)
+print(poly7)
+# -x^2 - 7
+poly8 = Polynomial([ConstantFraction(-1), 0, ConstantFraction(-7)], 1)
+print(poly8)
+
+
+#Working with polynomials
+print()
+print(poly1.get_value(3))
+print(poly1.get_value(ConstantFraction(2, 7)))
+
+print(poly2.is_root(2))
+print(poly2.is_root(3))
+print(poly2.is_root(-2))
+for i in poly2.find_rational_roots():
+    print(i, end=' ')
+print()
+for i in poly3.find_rational_roots():
+    print(i, end=' ')
+print()
+
+# Algebraic operations on polynomials
+print()
+print(poly1 + poly2)
+print(poly1 - poly2)
+print(poly1 * poly2)
+quot, rem = poly2.divide_with_remainder(Polynomial([-3, 1]))
+print(quot, rem, sep=', ')
+quot, rem = poly2.divide_with_remainder(Polynomial([2, 1]))
+print(quot, rem, sep=', ')
+quot, rem = poly1.divide_with_remainder(poly4)
+print(quot, rem, sep=', ')
+
+# Factorization
+print(poly2.factorize())
