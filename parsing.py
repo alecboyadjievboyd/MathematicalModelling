@@ -13,6 +13,7 @@ from Model.logarithm import Logarithm
 from Model.arccosine import Arccosine
 from Model.arcsine import Arcsine
 from Model.arctangent import Arctangent
+from Model.pi import Pi
 
 
 def const(input):
@@ -92,6 +93,12 @@ def factor(input):
             
         elif (input[start] == 'a'):
             start += 6
+
+        elif (input[start] == 'e'):
+            start += 1
+        
+        elif (input[start] == 'p'):
+            start += 2
                  
     return exp(input)
 
@@ -130,6 +137,11 @@ def unit(input):
         return expression(input[1:len(input)-1])
     elif (input[0] == 'x'):
         return Variable(input[2])
+    elif (input[0] == 'e'):
+        return Integer('e')  # saw this in the exp.py file not exactly sure how this works looking at the integer.py file  
+                             # This does not work Integer throws error saying 'e' is not the right type.
+    elif (input[0] == 'p'):
+        return Pi
     else:
         return Integer(int(input))
 
