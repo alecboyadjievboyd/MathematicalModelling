@@ -27,19 +27,22 @@ class ConstantFraction:
         gcd = math.gcd(self.numerator, self.denominator)
         self.numerator //= gcd
         self.denominator //= gcd
+    
+    def get_numerator(self):
+        return self.numerator
+    
+    def get_denominator(self):
+        return self.denominator
 
     def __str__(self):
         if self.denominator == 1:
-            if self.numerator < 0:
-                return f'({self.numerator})'
-            else:
-                return str(self.numerator)
+            return str(self.numerator)
         else:
-            return f'({self.numerator}/{self.denominator})'
+            return f'{self.numerator}/{self.denominator}'
 
-    # Comparing
+    # Comparing two constants or a constant with an integer
     def __eq__(self, other):
-        if type(other) != ConstantFraction and type(other) != int:
+        if not isinstance(other, ConstantFraction) and not isinstance(other, int):
             return NotImplemented
 
         if type(other) == int:
@@ -47,22 +50,53 @@ class ConstantFraction:
         else:
             return self.numerator == other.numerator and self.denominator == other.denominator
 
-    # Add two constants
+    def __lt__(self, other):
+        if isinstance(other, int):
+            return self.numerator < other * self.denominator
+        elif isinstance(other, ConstantFraction):
+            return self.numerator * other.denominator < other.numerator * self.denominator
+        else:
+            return NotImplemented
+
+    def __le__(self, other):
+        if not(isinstance(other, ConstantFraction) or isinstance(other, int)):
+            return NotImplemented
+
+        return self.__lt__(other) or self.__eq__(other)
+
+    def __gt__(self, other):
+        if not (isinstance(other, ConstantFraction) or isinstance(other, int)):
+            return NotImplemented
+
+        return not self.__lt__(other)
+
+    def __ge__(self, other):
+        if not (isinstance(other, ConstantFraction) or isinstance(other, int)):
+            return NotImplemented
+
+        return not self.__gt__(other) or self.__eq__(other)
+
+    # Add a constant or an integer to the constant
     def __add__(self, other):
-        # Raise an error if adding non-constant to a constant is attempted
-        if type(other) == int:
+        # Convert integer into a constant
+        if isinstance(other, int):
+            # Convert integer into a constant
             other = ConstantFraction(other)
-        elif type(other) != ConstantFraction:
+        elif not isinstance(other, ConstantFraction):
+            # Only an integer or a constant can be added to a constant
             return NotImplemented
 
         numerator = self.numerator * other.denominator + self.denominator * other.numerator
         denominator = self.denominator * other.denominator
         return ConstantFraction(numerator, denominator)
 
-    # Subtract constant from a constant
+    # Subtract a constant or an integer from the constant
     def __sub__(self, other):
-        # Raise an error if adding non-constant to a constant is attempted
-        if type(other) != ConstantFraction:
+        if isinstance(other, int):
+            # Convert integer into a constant
+            other = ConstantFraction(other)
+        elif not isinstance(other, ConstantFraction):
+            # Only an integer or a constant can be added to a constant
             return NotImplemented
 
         numerator = self.numerator * other.denominator - self.denominator * other.numerator
@@ -83,14 +117,13 @@ class ConstantFraction:
             return NotImplemented
 
     def __rmul__(self, other):
-        if type(other) != int:
-            return NotImplemented
-
-        return ConstantFraction(self.numerator * other, self.denominator)
+        return self.__mul__(other)
 
     # Divide a constant by a constant
     def __truediv__(self, other):
-        if type(other) != ConstantFraction:
+        if isinstance(other, int):
+            other = ConstantFraction(other)
+        elif not isinstance(other, ConstantFraction):
             return NotImplemented
 
         numerator = self.numerator * other.denominator
@@ -105,3 +138,5 @@ class ConstantFraction:
         numerator = self.numerator ** other
         denominator = self.denominator ** other
         return ConstantFraction(numerator, denominator)
+
+    #

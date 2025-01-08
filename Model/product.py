@@ -292,7 +292,7 @@ class Product(Expression):
             return Sum(newSumTerms)
 
     # We now define PFSF
-    def pfsf(self):
+    def pfsf(self, safeMode = False):
      
         from Model.exponential import Exponential
         
@@ -301,7 +301,7 @@ class Product(Expression):
         factorsPfsf = []
 
         for factor in self.factors:
-            factorsPfsf.append(factor.pfsf()) # Simplify all the terms
+            factorsPfsf.append(factor.pfsf(safeMode)) # Simplify all the terms
 
         factorsPfsf = Product(factorsPfsf).consolidate().factors 
 
@@ -314,7 +314,7 @@ class Product(Expression):
                 sumContained = True
 
         if sumContained == True: # At least one factor is a sum
-            return Product(factorsPfsf).multOut([]).pfsf() # Will turn it into a sum and then call pfsf on it, meaning that each internal (sum free) product will then be simplified
+            return Product(factorsPfsf).multOut([]).pfsf(safeMode) # Will turn it into a sum and then call pfsf on it, meaning that each internal (sum free) product will then be simplified
         
         if sumContained == False:
 
@@ -362,7 +362,7 @@ class Product(Expression):
                 for index, factor in enumerate(orderedFactors):
 
                     if factor.argument.expression_type == ExpressionType.SUM: # If not a sum, it was not joined and thus there is no need to simplify as it is already pfsf (for efficiency) THIS ALSO WILL DEAL WITH CONSTANT SIMP
-                        factor.argument = factor.argument.pfsf() # Simplify the exp
+                        factor.argument = factor.argument.pfsf(safeMode) # Simplify the exp
 
                     if factor.argument == Integer(1): # If it is a 1
                         orderedFactors[index] = factor.base # no need for an exponent
@@ -372,8 +372,6 @@ class Product(Expression):
 
                     
                     # if neither of these hold, the arg is not zero or one, so we leave it as is
-
-            # WHEN SIMPLIFIER EXISTS <3 DO THE FOLLOWING orderedFactors.insert(0, Product(constList).consim()) # Adding the simplified sum of constants to the sum
 
             if len(constList) > 0:
                 if len(constList) == 1:

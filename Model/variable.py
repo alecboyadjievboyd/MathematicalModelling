@@ -41,7 +41,7 @@ class Variable(Expression):
     def isConstant(self):
         return False
         
-    def pfsf(self):
+    def pfsf(self, safeMode = False):
         return Variable(self.index) 
 
     def genarg(self):#needed for constant simplification (consim)
@@ -89,7 +89,7 @@ class Hypervariable(Expression):
     def isConstant(self):
         return False
         
-    def pfsf(self):
+    def pfsf(self, safeMode = False):
         return Variable(self.index) 
 
     def genarg(self):#needed for constant simplification (consim)

@@ -23,3 +23,6 @@ class Pi(Expression):
 
     def genarg(self):
         return 'pi'
+    
+    def pfsf(self, safeMode = False):
+        return 'pi'

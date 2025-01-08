@@ -185,7 +185,7 @@ class Exponential(Expression):
         #if nothing is returned yet
         return(Exponential(sb, se))
     
-    def pfsf(self):
+    def pfsf(self, safeMode = False):
         from Model.logarithm import Logarithm
         # Possible rules
         # If the exponent is a logarithm with the same base, consolidate
@@ -195,28 +195,8 @@ class Exponential(Expression):
 
         # Simplify innards first
 
-        argPfsf = self.argument.pfsf()
-        basePfsf = self.base.pfsf()
-
-        # Logarithm case
-        if argPfsf.expression_type == ExpressionType.LOGARITHM:
-            if basePfsf == argPfsf.base: #bases are the same
-                return argPfsf.argument
-            
-            # If the bases are not the same, it is trickier
-            else: 
-                if argPfsf.argument > basePfsf: 
-                    # if the argument inside the upper logarithm is more complex, 
-                    # swap the base and that argument
-                    return Exponential(argPfsf.argument, Logarithm(argPfsf.base, basePfsf)) 
-                    # This essentially is y^log_b(x) -> x^log_b(y) iff x is more compelex than y
-
-                # If the argument is less complex or identical, we do nothing
- 
-        # Exponential case
-        if basePfsf.expression_type == ExpressionType.EXPONENTIAL:
-            return Exponential(basePfsf.base, Product([argPfsf, basePfsf.argument]).pfsf()) # (y^a)^b = y^ba
-            # Note that here we pfsf the product after creating it to ensure that the order is good. 
+        argPfsf = self.argument.pfsf(safeMode)
+        basePfsf = self.base.pfsf(safeMode)
 
         # Exponent one case nad 0 case
         if argPfsf.expression_type == ExpressionType.INTEGER:
@@ -225,14 +205,36 @@ class Exponential(Expression):
         
             if (argPfsf.value == 0):
                 return Integer(1)
-        
+            
         # Integer Exponent case
         if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == ExpressionType.INTEGER and isinstance(argPfsf.value, int)): # will always be a sum with one or more terms because it has been pfsf iffied
             terms = []
             for i in range(0, argPfsf.value, 1): 
                 terms.append(basePfsf) # Should work even though they are duplicates? I cannot forsee issues
 
-            return Product(terms).pfsf()
+            return Product(terms).pfsf(safeMode)
+
+        # THE FOLLOWING CAUSE DOMAIN ISSUES
+        if(not safeMode): 
+            # Logarithm case
+            if argPfsf.expression_type == ExpressionType.LOGARITHM:
+                if basePfsf == argPfsf.base: #bases are the same
+                    return argPfsf.argument
+                
+                # If the bases are not the same, it is trickier
+                else: 
+                    if argPfsf.argument > basePfsf: 
+                        # if the argument inside the upper logarithm is more complex, 
+                        # swap the base and that argument
+                        return Exponential(argPfsf.argument, Logarithm(argPfsf.base, basePfsf)) 
+                        # This essentially is y^log_b(x) -> x^log_b(y) iff x is more compelex than y
+
+                    # If the argument is less complex or identical, we do nothing
+    
+            # Exponential case
+            if basePfsf.expression_type == ExpressionType.EXPONENTIAL:
+                return Exponential(basePfsf.base, Product([argPfsf, basePfsf.argument]).pfsf(safeMode)) # (y^a)^b = y^ba
+                # Note that here we pfsf the product after creating it to ensure that the order is good.         
         
         # If none of these hold, simply return itself with simplified base and argument
         return Exponential(basePfsf, argPfsf)

@@ -62,9 +62,9 @@ class Tangent(Expression):
         else:
             return Tangent(sa) 
     
-    def pfsf(self): #simplified form
+    def pfsf(self, safeMode = False): #simplified form
 
-        argPfsf = self.argument.pfsf() #simplify the arg first
+        argPfsf = self.argument.pfsf(safeMode) #simplify the arg first
 
         if argPfsf.expression_type == ExpressionType.ARCTANGENT:
             return argPfsf.argument # tan(arctan(f(x))) = f(x)

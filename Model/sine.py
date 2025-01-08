@@ -60,9 +60,9 @@ class Sine(Expression):
         
     #     simvar = AskAlec(Sine(simarg))
 
-    def pfsf(self): #simplified form
+    def pfsf(self, safeMode = False): #simplified form
 
-        argPfsf = self.argument.pfsf() #simplify the arg first
+        argPfsf = self.argument.pfsf(safeMode) #simplify the arg first
 
         if argPfsf.expression_type == ExpressionType.ARCSINE:
             return argPfsf.argument # sin(arcsin(f(x))) = f(x)

@@ -60,9 +60,9 @@ class Cosine(Expression):
         else:
             return Cosine(sa)         
 
-    def pfsf(self): #simplified form
+    def pfsf(self, safeMode = False): #simplified form
 
-        argPfsf = self.argument.pfsf()
+        argPfsf = self.argument.pfsf(safeMode)
 
         if argPfsf.expression_type == ExpressionType.ARCCOSINE:
             return argPfsf.argument # cos(arccos(f(x))) = f(x)

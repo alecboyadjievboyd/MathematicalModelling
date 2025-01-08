@@ -5,7 +5,9 @@ from Algebraic_model.constant_fraction import ConstantFraction
 
 # Abstract class of expression
 def put_brackets(expression):
-    if expression.expression_type == AlgebraicExpressionType.SUM or expression.expression_type == AlgebraicExpressionType.PRODUCT:
+    if (expression.expression_type == AlgebraicExpressionType.SUM
+            or expression.expression_type == AlgebraicExpressionType.PRODUCT
+            or expression.expression_type == AlgebraicExpressionType.POLYNOMIAL):
         return "(" + str(expression) + ")"
     else:
         return str(expression)

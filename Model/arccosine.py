@@ -54,9 +54,9 @@ class Arccosine(Expression):
     def genarg(self): #needed for constant simplification (consim)
         return (self.argument,)
 
-    def pfsf(self): #simplified form
+    def pfsf(self, safeMode = False): #simplified form
 
-        argPfsf = self.argument.pfsf()
+        argPfsf = self.argument.pfsf(safeMode)
 
         #if argPfsf.expression_type == ExpressionType.COSINE:
             #return argPfsf.argument # arccos(cos(f(x))) = f(x)
