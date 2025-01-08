@@ -1,6 +1,5 @@
 # Parser
 
-# made for polynomials and integer coefficients
 from Model.integer import Integer
 from Model.variable import Variable
 from Model.exponential import Exponential
@@ -14,6 +13,7 @@ from Model.arccosine import Arccosine
 from Model.arcsine import Arcsine
 from Model.arctangent import Arctangent
 from Model.pi import Pi
+from Model.euler import Euler
 
 
 def const(input):
@@ -69,7 +69,7 @@ def factor(input):
         elif (start != 0 and input[start-2] == 'g'):
             start += log(input[start:])
 
-        elif (start != 0 and not (input[start-1] == 'n' or input[start-1] == 's' or input[start-1] == 'g')):
+        elif (start != 0 and not (input[start-1] == 'n' or input[start-1] == 's')):
             return Product([exp(input[:start]), factor(input[start:])])
         
         # This part is to check what kind of thing we have    
@@ -77,6 +77,12 @@ def factor(input):
         if (input[start] >= '0' and input[start] <= '9'):
 
             start +=  const(input[start:]) 
+
+        elif (input[start] == 'e'):
+            start += 1
+        
+        elif (input[start] == 'p'):
+            start += 2
         
         elif (input[start] == '('):
 
@@ -93,12 +99,6 @@ def factor(input):
             
         elif (input[start] == 'a'):
             start += 6
-
-        elif (input[start] == 'e'):
-            start += 1
-        
-        elif (input[start] == 'p'):
-            start += 2
                  
     return exp(input)
 
@@ -138,10 +138,9 @@ def unit(input):
     elif (input[0] == 'x'):
         return Variable(input[2])
     elif (input[0] == 'e'):
-        return Integer('e')  # saw this in the exp.py file not exactly sure how this works looking at the integer.py file  
-                             # This does not work Integer throws error saying 'e' is not the right type.
+        return  Euler()
     elif (input[0] == 'p'):
-        return Pi
+        return Pi()
     else:
         return Integer(int(input))
 
@@ -200,7 +199,7 @@ def term(input):
     return factor(input)
 
 
-# make sure input has no spaces use input = input.replace(" ", "")
+
 
 def expression(input): 
     c = 0
@@ -225,6 +224,7 @@ def expression(input):
     return term(input)
 
 
+# make sure input has no spaces use input = input.replace(" ", "")
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
 x = expression(user_input)

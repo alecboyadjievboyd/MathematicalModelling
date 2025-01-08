@@ -3,12 +3,13 @@ from Model.expression_type import ExpressionType
 from Model.product import Product
 from Model.integer import Integer
 from Model.exponential import Exponential
+from Model.euler import Euler
 
 
 # Exp (e^x)
 class Exp(Exponential):
     def __init__(self, argument):
-        super().__init__(Integer('e'), argument)
+        super().__init__(Euler(), argument)
         
     def __str__(self):
         return f'exp({self.argument})'
