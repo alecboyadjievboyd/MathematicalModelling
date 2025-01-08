@@ -263,13 +263,13 @@ class Sum(Expression):
 
         return Sum(terms)
 
-    def pfsf(self):   
+    def pfsf(self, safeMode = False):   
 
         from Model.product import Product
 
         termsPfsf = []
         for term in self.terms:
-            termsPfsf.append(term.pfsf()) # Simplify all the terms
+            termsPfsf.append(term.pfsf(safeMode)) # Simplify all the terms
 
         # termsPsfs is now a simplified terms list that is entirely seperate from the original sum (deep copy + simplify)
 

@@ -42,7 +42,7 @@ class Integer(Expression):
     def derivative(self, differential):
         return Integer(0)
 
-    def pfsf(self):
+    def pfsf(self, safeMode = False):
         return Integer(self.value)
 
     def genarg(self):#needed for constant simplification (consim)

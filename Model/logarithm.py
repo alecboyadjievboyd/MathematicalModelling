@@ -62,7 +62,7 @@ class Logarithm(Expression):
     def consim(self):
         return Logarithm(self.base.consim(), self.argument.consim())
     
-    def pfsf(self):
+    def pfsf(self, safeMode = False):
         # We want to do the following:
         # Consolidate if arg is an exponent with the same base.
         # move y to the front if arg is an exponent with not the same base (log(x^y) = ylog(x))
@@ -70,21 +70,23 @@ class Logarithm(Expression):
 
         # Simplify innards first
 
-        argPfsf = self.argument.pfsf()
-        basePfsf = self.base.pfsf()
+        argPfsf = self.argument.pfsf(safeMode)
+        basePfsf = self.base.pfsf(safeMode)
 
-        if argPfsf == basePfsf: # If the argument is exactly the base
-            return Integer(1)
+        # All of these break if base is negative
+        if (not safeMode):
+            if argPfsf == basePfsf: # If the argument is exactly the base
+                return Integer(1)
 
-        if argPfsf.expression_type == ExpressionType.EXPONENTIAL: # If the argument is an exponential 
-            
-            # If bases are the same
-            if argPfsf.base == basePfsf:
-                return argPfsf.argument # Return just the argument of the exponential 
-            
-            # If bases are not the same # NOTE might want to check if this is always preferable in complexity. IT IS NOT BECAUSE PROD FUCNTIONS IS MORE COMPLEX THAN SINGLE FUCNTION
-            #else: 
-                #return Product(argPfsf.argument, Logarithm(basePfsf, argPfsf.base)).pfsf() # To make sure that it is simplified
+            if argPfsf.expression_type == ExpressionType.EXPONENTIAL: # If the argument is an exponential 
+                
+                # If bases are the same
+                if argPfsf.base == basePfsf:
+                    return argPfsf.argument # Return just the argument of the exponential 
+                
+                # If bases are not the same # NOTE might want to check if this is always preferable in complexity. IT IS NOT BECAUSE PROD FUCNTIONS IS MORE COMPLEX THAN SINGLE FUCNTION
+                #else: 
+                    #return Product(argPfsf.argument, Logarithm(basePfsf, argPfsf.base)).pfsf() # To make sure that it is simplified
             
         # If none of these hold
         return Logarithm(basePfsf, argPfsf)

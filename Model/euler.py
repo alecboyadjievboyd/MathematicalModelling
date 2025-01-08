@@ -23,3 +23,6 @@ class Euler(Expression):
 
     def genarg(self):
         return 'e'
+    
+    def pfsf(self, safeMode = False):
+        return 'e'
