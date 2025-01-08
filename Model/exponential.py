@@ -65,13 +65,13 @@ class Exponential(Expression):
     
     def consim(self):
         def AskAlec(x):
-            print(f"Exponential.consim asks Alec: {x}")
+            # print(f"Exponential.consim asks Alec: {x}")
             try:
                 y = x.pfsf()
-                print(f"Alec says: {y}")
+                # print(f"Alec says: {y}")
                 return y
             except:
-                print("Alec doesn't know")
+                # print("Alec doesn't know")
                 return x
         
         # return (self)
@@ -93,26 +93,14 @@ class Exponential(Expression):
 
         #simplifying frac^frac
         if sb.expression_type == se.expression_type == ExpressionType.FRACTION:
-            if se.den == Integer(1):
-                return sb**se #recall that Frac.__pow__ outputs simplified fraction.
-            else:
-                if se.num.value < 0:
-                    sb = Frac(sb.den, sb.num)
-                    se = Frac(- se.num.value, se.den)
-                #if se.num.value==0, then se.den would have been 1 and we would have not gotten here
-                # se.num.value is now > 0
-
-                if se.quo() == Integer(0):
-                    return Exponential(sb, se) #sb**(Frac(se.srem(),se.den))
-                else: # se.quo().value > 0:
-                    return Product((sb**(se.quo()), Exponential(sb, Frac(se.rem(), se.den))  ))
-
-        if se.expression_type == ExpressionType.LOGARITHM:
+            return sb.fracpow(se)
+        
+        elif se.expression_type == ExpressionType.LOGARITHM:
             if se.base == sb:
                 return se.argument.consim() #consim maybe not necessary if logarithm consims its arguments
         
 
-        if sb.expression_type == ExpressionType.SUM:
+        elif sb.expression_type == ExpressionType.SUM:
             #sums to integer or frac power
             if se.expression_type == ExpressionType.FRACTION:
                 varterms = ()
@@ -146,18 +134,40 @@ class Exponential(Expression):
             #generalisation of sum^frac: sum^(frac + stuff) -> sum^frac * sum^stuff
             if se.expression_type == ExpressionType.SUM:
                 print("sum^sum")
-                fracsum = Frac(0) #There should be at most one fraction in the sum though.
+                fracsum = Frac(0) 
                 nonfracterms = ()
                 for term in se.terms:
-                    if term.expression_type == ExpressionType.FRACTION:
+                    if term.expression_type == ExpressionType.FRACTION: #There should be at most one fraction in the sum though.
                         fracsum += term
                     else:
                         nonfracterms += (term, )
-                print(f"hi{ Product((  Exponential(sb, fracsum), Exponential(sb, Sum(nonfracterms)) )) }")
-                return Product((  Exponential(sb, fracsum), Exponential(sb, Sum(nonfracterms)) )).consim() #is this a desirable form?
+                if fracsum.squo() == Integer(0):
+                    return Exponential(sb, se)
+                else:
+                    return Product((
+                        Exponential(sb, fracsum.squo()),
+                        Exponential(sb, Sum(  (Frac(fracsum.srem(), fracsum.den), ) + nonfracterms  ))
+                    )).consim()
                         
-        # if se.expression_type == ExpressionType.SUM:
-            
+        elif se.expression_type == ExpressionType.SUM:
+            #as we are here, we know sb.expression_type != ExpressionType.SUM
+            if sb.expression_type == ExpressionType.FRACTION:
+                fracsum = Frac(0) 
+                nonfracterms = ()
+                for term in se.terms:
+                    if term.expression_type == ExpressionType.FRACTION: #There should be at most one fraction in the sum though.
+                        fracsum += term
+                    else:
+                        nonfracterms += (term, )
+                if fracsum == Frac(0):
+                    return Exponential(sb, se)
+                else:
+                    return Product((
+                        sb**(fracsum.squo()), 
+                        Exponential(sb, Sum( (Frac(fracsum.srem(), fracsum.den),) + nonfracterms ))
+                    ))
+
+          
 
         #Collapsing towers
         if sb.expression_type == ExpressionType.EXPONENTIAL: 
@@ -171,8 +181,9 @@ class Exponential(Expression):
                     else: #
                         pass
             # else:
-
-        return(old)
+            
+        #if nothing is returned yet
+        return(Exponential(sb, se))
     
     def pfsf(self):
         from Model.logarithm import Logarithm

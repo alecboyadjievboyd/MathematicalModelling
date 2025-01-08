@@ -89,17 +89,17 @@ class Product(Expression):
         from Model.fraction import Frac
 
         def AskAlec(x):
-            print(f"Product.consim asks Alec: {x}")
+            # print(f"Product.consim asks Alec: {x}")
             try:
                 y = x.pfsf()
-                print(f"Alec says: {y}")
+                # print(f"Alec says: {y}")
                 return y
             except:
-                print("Alec doesn't know")
+                # print("Alec doesn't know")
                 return x
 
-
-        #expanting inner products, i.e. (a*b)*c -> a*b*c. In case of products in producs in products (nesting with more than two products), this doesn't work unless we loop a few times by recalling consim, but they will eventually, inefficiently, be expanded. We don't have this implemented though.
+        old = self
+        #expanting inner products, i.e. (a*b)*c -> a*b*c. In case of products in producs in products (nesting with more than two products), this doesn't work unless we loop a few times by recalling consim, but they will eventually, inefficiently, be expanded. We have the old-new construction for this.
         expandfactors = () 
         for factor in self.factors:
             if factor.expression_type == ExpressionType.PRODUCT:
@@ -111,13 +111,19 @@ class Product(Expression):
         #simplifying the factors of the product (bottom up)
         simfactors = () #simplified factors
         for factor in expandfactors:
+            print(f"{factor} simplifies to {factor.consim()}")
             simfactors += (factor.consim(),)
         
         def expception(expo): #exponentiation + inception(going down the layers)
-            #If we have something like (2^3)^4, I think this would return 8^4 instead of whatever that is. Similarly, (2^3)^sin(1) returns 8^sin(1) instead of the required (?) x_8 ^sin(1)
+            #If we have something like (2^3)^4, I think this would return 8^4 instead of whatever that is. Similarly, (2^3)^sin(1) returns 8^sin(1) instead of the required (?) x_8 ^sin(1). This is indeed the case, but due to the old-new construction we eventually get there. Or is it that we get there due to the consim of the factors, which consim their bases
             if expo.base.expression_type == ExpressionType.FRACTION:
                 if expo.argument.expression_type == ExpressionType.INTEGER:
                     return expo.base**expo.argument
+                elif expo.argument.expression_type == ExpressionType.FRACTION:
+                    if expo.den == Integer(1):
+                        return expo.base**expo.argument
+                    else:
+                        return Exponential(Variable(expo.base), expo.argument) 
                 else:
                     return Exponential(Variable(expo.base), expo.argument)
             else:
@@ -180,6 +186,7 @@ class Product(Expression):
             # else: #if alecsim.expression_type != ExpressionType.SUM:
             #     alecfactors = (alecsim,)
 
+            #equivalent to Vartocon:
             def kicks(expo): #to keep the inception terminology concistent. A kick gets people one dream level lower (I am not a nerd, I googled this).
                 if expo.base.expression_type == ExpressionType.VARIABLE:
                     return Exponential(expo.base.index, expo.argument)
@@ -211,11 +218,16 @@ class Product(Expression):
                     nonvarterms += (nonvarfactors[0],)
                 
             if len(nonvarterms) > 1:
-                return Sum(nonvarterms)
+                new =  Sum(nonvarterms)
             else: #==0
-                return nonvarterms[0]
+                new = nonvarterms[0]
         else:
-            return Vartocon(alecsim)
+            new = Vartocon(alecsim)
+
+        if old==new: #this is at least necessary for nested products. Also for expception
+            return new
+        else:
+            return new.consim()
 
 
 

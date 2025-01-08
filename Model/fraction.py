@@ -57,7 +57,7 @@ class Frac(Expression):
             squo = self.num.value // self.den.value
         else: # self.num.value<0:
             squo = - ( (-self.num.value) // self.den.value)
-        return Integer(self.num.value // self.den.value)
+        return Integer(squo)
     
     def quo(self): #quo = quotient
         return Integer(self.num.value // self.den.value)
@@ -132,8 +132,15 @@ class Frac(Expression):
     def simplify(self): #probably more efficent ways exist
         num=self.num.value
         den=self.den.value
-        if num ==0:
+        if num == 0:
             return Frac(0)
+        
+        if num<0:
+            sgn = -1
+            num = - num
+        else:
+            sgn = 1
+
         small=min(num, den)
         i=2
         while i <= small:#could restict this to only primes.
@@ -142,7 +149,7 @@ class Frac(Expression):
                 den = den//i
                 small = min(num, den)
             i+=1
-        return Frac(num, den)
+        return Frac(sgn*num, den)
     
     def derivative(self, differential):
         return Integer(0)
@@ -155,3 +162,104 @@ class Frac(Expression):
     
     def pfsf(self):
         return Frac(self.num, self.den).simplify()
+    
+    def primefac(self, AsExpr = True):
+        npf = self.num.primefac(False) #numerator prime factorisation
+        dpf = self.den.primefac(False) #denominator prime factorisation
+
+        UnionOfPrimes = ()
+        for prime in npf:
+            UnionOfPrimes += (prime,)
+        for prime in dpf:
+            if prime not in UnionOfPrimes:
+                UnionOfPrimes += (prime,)
+        UnionOfPrimes = sorted(UnionOfPrimes)
+
+        fpf = {} #factor prime factorisation
+        for prime in UnionOfPrimes:
+            a = npf.setdefault(prime, 0)
+            b = dpf.setdefault(prime, 0)
+            c = a-b
+            if c != 0:
+                fpf[prime] = a-b
+        
+        if AsExpr:
+            if len(fpf)==0:
+                return Integer(1)
+            elif len(fpf)==1:
+                for prime in fpf:
+                    return Exponential(Integer(prime), Integer(fpf[prime]))
+            else:
+                factors = ()
+                for prime in fpf:
+                    factors += (Exponential(Integer(prime), Integer(fpf[prime])), )
+                return Product(factors)
+        else:
+            return fpf
+    
+
+
+    def root(self, n, AsExpr=True): #self^(1/n)
+        if type(n) != int:
+            if n.expression_type == ExpressionType.FRACTION:
+                if n.den.value != 1:
+                    raise "n needs to be an integer"
+                n = n.num.value
+            elif n.expression_type == ExpressionType.INTEGER:
+                n = n.value
+            else:
+                raise "n needs to be an integer"
+
+        primedic = self.primefac(False)
+
+        powerdic = {}
+        for prime in primedic:
+            f = Frac(primedic[prime], n).simplify()
+            powerdic[prime] = f
+
+        takeoutdic = {}
+        for prime in powerdic:
+            a = Frac(prime) ** powerdic[prime].squo()
+            b = Frac(prime) ** powerdic[prime].srem()
+            m = powerdic[prime].den.value
+            takeoutdic[prime] = (a, b, m)
+
+        coefficient = Frac(1)
+        mdic = {}
+        for prime in takeoutdic: #this defines the ordering: m associated to the first prime comes first, then m associated to the second prime with different m, etc.
+            mdic.setdefault(takeoutdic[prime][2], Frac(1))
+            mdic[takeoutdic[prime][2]] *= takeoutdic[prime][1]
+            coefficient *= takeoutdic[prime][0] 
+
+        d = {}
+        for m in mdic:
+            if mdic[m] != Frac(1):
+                d[m] = mdic[m]
+        
+
+        if AsExpr:
+            if len(d) == 0:
+                return coefficient
+            elif len(d) == 1:
+                if coefficient == Frac(1):
+                    for m in d:
+                        return Exponential(d[m], Frac(1,m))
+                else:
+                    for m in d:
+                        return Product((coefficient, Exponential(d[m], Frac(1,m))))
+            else:
+                factors = ()
+                if coefficient != Frac(1):
+                    factors += (coefficient, )
+                for m in d:
+                    factors += ( Exponential(d[m], Frac(1,m)) ,)
+                return Product(factors)
+        return (coefficient, d)
+
+    def fracpow(self, power): #self^power
+        if power.expression_type == ExpressionType.INTEGER:
+            power = Frac(power)
+        elif power.expression_type != ExpressionType.FRACTION:
+            raise "power needs to be a fraction"
+        power = power.simplify()
+        return (self**power.num).root(power.den) #it would probably be more efficient to first take the root and then the power, but that takes more time to code
