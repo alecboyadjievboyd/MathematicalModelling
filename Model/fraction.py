@@ -160,7 +160,7 @@ class Frac(Expression):
     def consim(self):
         return self.simplify()
     
-    def pfsf(self):
+    def pfsf(self, safeMode=False):
         return Frac(self.num, self.den).simplify()
     
     def primefac(self, AsExpr = True):
