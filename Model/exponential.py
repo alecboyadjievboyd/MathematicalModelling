@@ -52,13 +52,13 @@ class Exponential(Expression):
                 self.isconstant = False
         return self.isconstant
     
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode = False):
         from Model.natural_logarithm import NaturalLogarithm
         return Product((self, 
                       Sum(( Product((self.argument.derivative(differential), NaturalLogarithm(self.base))),
                           Product((self.argument, Exponential(self.base, Integer(-1)), self.base.derivative(differential)))
                          ))
-                      ))
+                      )).pfsf(safeMode)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.argument) #return (self.base, self.exponent)

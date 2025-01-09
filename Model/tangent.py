@@ -47,8 +47,8 @@ class Tangent(Expression):
                 self.isconstant = False
         return self.isconstant
     
-    def derivative(self, differential):
-        return Product({Exponential(Cosine(self.argument), Integer(-2)), self.argument.derivative(differential)})
+    def derivative(self, differential, safeMode = False):
+        return Product({Exponential(Cosine(self.argument), Integer(-2)), self.argument.derivative(differential)}).pfsf(safeMode)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

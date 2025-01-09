@@ -39,8 +39,8 @@ class Sum(Expression):
                 string_expression += " + " + str(term)
         return string_expression
     
-    def derivative(self, differential):   
-        return Sum( tuple(term.derivative(differential) for term in self.terms) )    
+    def derivative(self, differential, safeMode = False):   
+        return Sum( tuple(term.derivative(differential) for term in self.terms) ).pfsf(safeMode)    
     
     # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):

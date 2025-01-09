@@ -39,9 +39,7 @@ def C(x):
 print(
     Exponential(Exponential(x(), C(2)), Exponential(C(2), C(-1))).derivative(x())
 )
-print(
-    Exponential(Exponential(x(), C(2)), Exponential(C(2), C(-1))).derivative(x()).pfsf()
-    )
+
 # print(
 #     Exponential(Sum((C(1),Hypervariable(C(3)))), C(2)).consim()
 # )
