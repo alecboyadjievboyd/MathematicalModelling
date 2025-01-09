@@ -8,6 +8,8 @@ class Euler(Expression):
 
     def __init__(self):
         super().__init__(ExpressionType.EULER)
+        self.primaryOrder = 1
+        self.secondaryOrder = None
 
     def __str__(self):
         return 'e'
