@@ -45,9 +45,9 @@ class Sine(Expression):
                 self.isconstant = False
         return self.isconstant
     
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode = False):
         from Model.cosine import Cosine
-        return Product({Cosine(self.argument), self.argument.derivative(differential)})
+        return Product({Cosine(self.argument), self.argument.derivative(differential)}).pfsf(safeMode)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

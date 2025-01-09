@@ -45,11 +45,11 @@ class Arcsine(Expression):
                 self.isconstant = False
         return self.isconstant
 
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode = False):
         return Product((
             Exponential(Sum((Integer(1), Product((Integer(-1), Exponential(self.argument, Integer(2))))))
                         , Product((Integer(-1), Exponential(Integer(2), Integer(-1))))),
-                           self.argument.derivative(differential)))
+                           self.argument.derivative(differential))).pfsf(safeMode)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

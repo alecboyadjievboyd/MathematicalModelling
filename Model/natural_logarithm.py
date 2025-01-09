@@ -1,11 +1,12 @@
 from Model.integer import Integer
 from Model.product import Product
 from Model.logarithm import Logarithm
+from Model.euler import Euler
 
 
 class NaturalLogarithm(Logarithm):
     def __init__(self, argument):
-        super().__init__(Integer('e'), argument)
+        super().__init__(Euler(), argument)
         
     def __str__(self):
         return f'ln({self.argument})'
@@ -20,12 +21,12 @@ class NaturalLogarithm(Logarithm):
       
     # Should pull __gt__ and __eq__ from super
     
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode = False):
         from Model.exponential import Exponential
         return Product([
             Exponential(self.argument, Integer(-1)),
             self.argument.derivative(differential)
-        ])
+        ]).pfsf(safeMode)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

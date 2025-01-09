@@ -14,6 +14,9 @@ class Euler(Expression):
 
     def __eq__(self, other):
         return self.expression_type == other.expression_type
+    
+    def __gt__(self, other):
+        return False ##euler is least complex
 
     def isConstant(self):
         return True
@@ -25,4 +28,5 @@ class Euler(Expression):
         return 'e'
     
     def pfsf(self, safeMode = False):
-        return 'e'
+        return Euler()
+    

@@ -3,6 +3,7 @@ from Model.expression_type import ExpressionType
 from Model.exponential import Exponential
 from Model.product import Product
 from Model.integer import Integer
+from Model.euler import Euler
 
 
 class Logarithm(Expression):
@@ -49,12 +50,12 @@ class Logarithm(Expression):
         else: 
             return self.primaryOrder > other.primaryOrder # Ordering classes
 
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode = False):
         return Product([
             self.argument.derivative(differential),
-            Exponential(Logarithm(Integer('e'), self.base), -1),
+            Exponential(Logarithm(Euler(), self.base), -1),
             Exponential(self, -1)
-        ])
+        ]).pfsf(safeMode)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.argument)
