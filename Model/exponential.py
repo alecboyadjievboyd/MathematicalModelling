@@ -67,14 +67,14 @@ class Exponential(Expression):
         def AskAlec(x):
             # print(f"Exponential.consim asks Alec: {x}")
             try:
-                y = x.pfsf()
+                # y = x.pfsf()
                 # print(f"Alec says: {y}")
-                return y
+                # return y
+                return x.pfsf()
             except:
                 # print("Alec doesn't know")
                 return x
         
-        # return (self)
         from Model.fraction import Frac
 
         old = self #not sure if this is necessary
@@ -87,8 +87,9 @@ class Exponential(Expression):
             return Frac(1) 
         elif sb == Frac(0):#0^a=0, but undefined for a<0
             if se.expression_type == ExpressionType.FRACTION:
-                if se.num.value < 0:
-                    raise Exception("Zero to negative power")
+                if se.num.value < 0: #
+                    # print(f"MATH ERROR: Zero to negative power: {Exponential(sb, se)}")
+                    raise Exception(f"MATH ERROR: Zero to negative power: {Exponential(sb, se)}")
             return Frac(0) #0^(negative function) returns 0
 
         #simplifying frac^frac

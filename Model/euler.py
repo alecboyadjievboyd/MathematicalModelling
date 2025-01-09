@@ -27,7 +27,10 @@ class Euler(Expression):
         return Integer(0)
 
     def genarg(self):
-        return 'e'
+        return None
+    
+    def consim(self):
+        return Euler()
     
     def pfsf(self, safeMode = False):
         return Euler()

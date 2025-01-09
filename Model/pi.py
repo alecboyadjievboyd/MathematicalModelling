@@ -29,7 +29,7 @@ class Pi(Expression):
         return Integer(0)
 
     def genarg(self):
-        return 'pi'
+        return None
     
     def pfsf(self, safeMode = False):
-        return 'pi'
+        return Pi()

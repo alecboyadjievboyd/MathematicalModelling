@@ -111,7 +111,7 @@ class Product(Expression):
         #simplifying the factors of the product (bottom up)
         simfactors = () #simplified factors
         for factor in expandfactors:
-            print(f"{factor} simplifies to {factor.consim()}")
+            # print(f"{factor} simplifies to {factor.consim()}")
             simfactors += (factor.consim(),)
         
         def expception(expo): #exponentiation + inception(going down the layers)
@@ -162,67 +162,62 @@ class Product(Expression):
                 else:
                     varfactors += (Variable(factor),)
 
-        #temporarily to see what is happening
-        # print(Product(varfactors + (fracprod,))) #notice that this + is tuple appending, not number addition
-        # return Product(varfactors + (fracprod,))
-
-
-        #Below is still in the "sum" terminoligy
 
         #asking Alec to simplify the expression with variables  
         alecsim = AskAlec(Product(varfactors + (fracprod,)))
 
-        we_want_to_be_efficient_but_neglect_hypervariables = False
-        if we_want_to_be_efficient_but_neglect_hypervariables:
-            if alecsim.expression_type == ExpressionType.SUM:
-                alecterms = alecsim.terms
-            elif alecsim.expression_type == ExpressionType.PRODUCT:
-                alecterms = (alecsim,)
-            else:
-                alecterms = (alecsim,)
+        #commented section till new = Vartocon(alecsim) is one bit, that should be more efficient than Vartocon, but is a lot less clean.
+        # we_want_to_be_efficient_but_neglect_hypervariables = False
+        # if we_want_to_be_efficient_but_neglect_hypervariables:
+        #     if alecsim.expression_type == ExpressionType.SUM:
+        #         alecterms = alecsim.terms
+        #     elif alecsim.expression_type == ExpressionType.PRODUCT:
+        #         alecterms = (alecsim,)
+        #     else:
+        #         alecterms = (alecsim,)
 
-            # if alecsim.expression_type == ExpressionType.PRODUCT:
-            #     alecfactors = alecsim.factors
-            # else: #if alecsim.expression_type != ExpressionType.SUM:
-            #     alecfactors = (alecsim,)
+        #     # if alecsim.expression_type == ExpressionType.PRODUCT:
+        #     #     alecfactors = alecsim.factors
+        #     # else: #if alecsim.expression_type != ExpressionType.SUM:
+        #     #     alecfactors = (alecsim,)
 
-            #equivalent to Vartocon:
-            def kicks(expo): #to keep the inception terminology concistent. A kick gets people one dream level lower (I am not a nerd, I googled this).
-                if expo.base.expression_type == ExpressionType.VARIABLE:
-                    return Exponential(expo.base.index, expo.argument)
-                elif expo.base.expression_type == ExpressionType.EXPONENTIAL:
-                    return Exponential( kicks(expo.base), expo.argument )
-                else:
-                    return expo
+        #     #equivalent to Vartocon:
+        #     def kicks(expo): #to keep the inception terminology concistent. A kick gets people one dream level lower (I am not a nerd, I googled this).
+        #         if expo.base.expression_type == ExpressionType.VARIABLE:
+        #             return Exponential(expo.base.index, expo.argument)
+        #         elif expo.base.expression_type == ExpressionType.EXPONENTIAL:
+        #             return Exponential( kicks(expo.base), expo.argument )
+        #         else:
+        #             return expo
 
-            nonvarterms = ()
-            for term in alecterms:
-                alecfactors = ()
-                if term.expression_type == ExpressionType.PRODUCT:
-                    alecfactors = term.factors
-                else:
-                    alecfactors = (term,)
+        #     nonvarterms = ()
+        #     for term in alecterms:
+        #         alecfactors = ()
+        #         if term.expression_type == ExpressionType.PRODUCT:
+        #             alecfactors = term.factors
+        #         else:
+        #             alecfactors = (term,)
 
-                nonvarfactors = ()
+        #         nonvarfactors = ()
                 
-                for factor in alecfactors:
-                    if factor.expression_type == ExpressionType.VARIABLE:
-                        factor = factor.index
-                    elif factor.expression_type == ExpressionType.EXPONENTIAL:
-                        factor = kicks(factor)
-                    nonvarfactors += (factor,)
+        #         for factor in alecfactors:
+        #             if factor.expression_type == ExpressionType.VARIABLE:
+        #                 factor = factor.index
+        #             elif factor.expression_type == ExpressionType.EXPONENTIAL:
+        #                 factor = kicks(factor)
+        #             nonvarfactors += (factor,)
 
-                if len(nonvarfactors) > 1:
-                    nonvarterms += (Product(nonvarfactors),)
-                else: #==0
-                    nonvarterms += (nonvarfactors[0],)
+        #         if len(nonvarfactors) > 1:
+        #             nonvarterms += (Product(nonvarfactors),)
+        #         else: #==0
+        #             nonvarterms += (nonvarfactors[0],)
                 
-            if len(nonvarterms) > 1:
-                new =  Sum(nonvarterms)
-            else: #==0
-                new = nonvarterms[0]
-        else:
-            new = Vartocon(alecsim)
+        #     if len(nonvarterms) > 1:
+        #         new =  Sum(nonvarterms)
+        #     else: #==0
+        #         new = nonvarterms[0]
+        # else:
+        new = Vartocon(alecsim)
 
         if old==new: #this is at least necessary for nested products. Also for expception
             return new

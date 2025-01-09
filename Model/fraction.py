@@ -117,10 +117,10 @@ class Frac(Expression):
         if other.expression_type == ExpressionType.INTEGER: #not sure if this is necessairy
             other = Frac(other)
 
-        if other.expression_type != ExpressionType.INTEGER: #now we use > in the sence of complexity
+        if other.expression_type != ExpressionType.FRACTION: #now we use > in the sence of complexity
             return False
 
-        dif = self + Frac(-1)*other
+        dif = self + Frac(-1)*other #now in the sence of math
         if dif.num.value > 0:
             return True
         else:
@@ -210,7 +210,20 @@ class Frac(Expression):
             else:
                 raise "n needs to be an integer"
 
-        primedic = self.primefac(False)
+        a = self
+
+        if a == Frac(0):
+            return Frac(0)
+        elif a < Frac(0):
+            if n%2 == 0:
+                raise "Cannot take even root of negative value"
+            else:
+                sgn = -1
+                a = Frac(-1)*a
+        else:
+            sgn = 1
+
+        primedic = a.primefac(False)
 
         powerdic = {}
         for prime in primedic:
@@ -236,7 +249,7 @@ class Frac(Expression):
             if mdic[m] != Frac(1):
                 d[m] = mdic[m]
         
-
+        coefficient = Frac(sgn)*coefficient
         if AsExpr:
             if len(d) == 0:
                 return coefficient
