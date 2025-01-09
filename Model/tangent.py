@@ -53,9 +53,9 @@ class Tangent(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)
     
-    def consim(self): #simplified form
+    def consim(self, safeMode = False): #simplified form
 
-        sa = self.argument.consim() #simplify the arg first
+        sa = self.argument.consim(safeMode) #simplify the arg first
 
         if sa.expression_type == ExpressionType.ARCTANGENT:
             return sa.argument # tan(arctan(f(x))) = f(x)

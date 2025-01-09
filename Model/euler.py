@@ -29,7 +29,7 @@ class Euler(Expression):
     def genarg(self):
         return None
     
-    def consim(self):
+    def consim(self, safeMode = False):
         return Euler()
     
     def pfsf(self, safeMode = False):

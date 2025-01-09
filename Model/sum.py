@@ -73,14 +73,14 @@ class Sum(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return self.terms
     
-    def consim(self): #constant simplify
+    def consim(self, safeMode = False): #constant simplify
         from Model.fraction import Frac
         from Model.product import Product
 
         def AskAlec(x):
             print(f"Sum.consim asks Alec: {x}")
             try:
-                y = x.pfsf()
+                y = x.pfsf(safeMode)
                 print(f"Alec says: {y}")
                 return y
             except:
@@ -101,7 +101,7 @@ class Sum(Expression):
         #simplifying the terms of the sum (bottom up)
         simterms = () #simplified terms
         for term in expandterms:
-            simterms += (term.consim(),)
+            simterms += (term.consim(safeMode),)
         
         # #replacing anything but fractions with variables, sum the fractions.
         # varterms = () #replace expressions by variables 
@@ -147,64 +147,64 @@ class Sum(Expression):
         alecsim = AskAlec(Sum(varterms + (fracsum,)))
 
 
-        we_want_to_be_efficient_but_neglect_hypervariables = False
-        if we_want_to_be_efficient_but_neglect_hypervariables:
-            if alecsim.expression_type == ExpressionType.SUM:
-                alecterms = alecsim.terms
-            else: #if alecsim.expression_type != ExpressionType.SUM:
-                alecterms = (alecsim,)
-            # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
+        # we_want_to_be_efficient_but_neglect_hypervariables = False
+        # if we_want_to_be_efficient_but_neglect_hypervariables:
+        #     if alecsim.expression_type == ExpressionType.SUM:
+        #         alecterms = alecsim.terms
+        #     else: #if alecsim.expression_type != ExpressionType.SUM:
+        #         alecterms = (alecsim,)
+        #     # simvarterms = alecsim.terms #= AskAlec(Sum(varterms)).terms # Does the simplification of a sum always return a sum? is AskAlec(Sum((x, (-1)x))) equal to a sum with one argument, Sum(( (1-1)x )), or to the single_sum_argument, the product (1-1)*x ?: the argument
             
-            # #wrong:
-            # #we substitute the values that the variables hold, and simplify each term after substitution:
-            # nonvarterms = ()
-            # for term in alecterms:
-            #     if term.expression_type != ExpressionType.FRACTION:
-            #         if term.expression_type == ExpressionType.VARIABLE:
-            #             term = term.index
-            #         else:
-            #             termargs = ()
-            #             for arg in term.genarg():
-            #                 if arg.expression_type == ExpressionType.VARIABLE:
-            #                     arg = arg.index
-            #                 termargs += (arg,)
-            #             term = MakeExpression(term.expression_type, termargs)
-            #     term = term.consim()
-            #     nonvarterms += (term,)
+        #     # #wrong:
+        #     # #we substitute the values that the variables hold, and simplify each term after substitution:
+        #     # nonvarterms = ()
+        #     # for term in alecterms:
+        #     #     if term.expression_type != ExpressionType.FRACTION:
+        #     #         if term.expression_type == ExpressionType.VARIABLE:
+        #     #             term = term.index
+        #     #         else:
+        #     #             termargs = ()
+        #     #             for arg in term.genarg():
+        #     #                 if arg.expression_type == ExpressionType.VARIABLE:
+        #     #                     arg = arg.index
+        #     #                 termargs += (arg,)
+        #     #             term = MakeExpression(term.expression_type, termargs)
+        #     #     term = term.consim()
+        #     #     nonvarterms += (term,)
 
-            #correct:
-            #we substitute the values that the variables hold, and simplify each term after substitution:
-            nonvarterms = () # replace variables by expressions
-            for term in alecterms:
-                if term.expression_type != ExpressionType.FRACTION:
-                    if term.expression_type == ExpressionType.PRODUCT: 
-                        nonvarfactors = ()
-                        for factor in term.factors:
-                            if factor.expression_type == ExpressionType.VARIABLE:
-                                factor = factor.index
-                            nonvarfactors += (factor,)
-                        nonvarterms += (Product(nonvarfactors),)
-                    else:
-                        if term.expression_type == ExpressionType.VARIABLE:
-                            term = term.index
-                        nonvarterms += (term,)
+        #     #correct:
+        #     #we substitute the values that the variables hold, and simplify each term after substitution:
+        #     nonvarterms = () # replace variables by expressions
+        #     for term in alecterms:
+        #         if term.expression_type != ExpressionType.FRACTION:
+        #             if term.expression_type == ExpressionType.PRODUCT: 
+        #                 nonvarfactors = ()
+        #                 for factor in term.factors:
+        #                     if factor.expression_type == ExpressionType.VARIABLE:
+        #                         factor = factor.index
+        #                     nonvarfactors += (factor,)
+        #                 nonvarterms += (Product(nonvarfactors),)
+        #             else:
+        #                 if term.expression_type == ExpressionType.VARIABLE:
+        #                     term = term.index
+        #                 nonvarterms += (term,)
                         
-                else:
-                    nonvarterms += (term,) #are we sure this term (fraction) is simplified?
+        #         else:
+        #             nonvarterms += (term,) #are we sure this term (fraction) is simplified?
         
-            if len(nonvarterms) > 1:
-                new = Sum(nonvarterms)
-            else:
-                new = nonvarterms[0]
+        #     if len(nonvarterms) > 1:
+        #         new = Sum(nonvarterms)
+        #     else:
+        #         new = nonvarterms[0]
         
-        else:
-            new = Vartocon(alecsim)
+        # else:
+        new = Vartocon(alecsim)
         
         #why would the output not be simplified after running through here once? (Except for the poor implimentation of consolidation)
         if old == new: 
             return new
         else:
-            return new.consim()
+            return new.consim(safeMode)
 
         #did this already ealier:
         # #the only things that are not simplified now should be the original fractions
@@ -338,7 +338,7 @@ class Sum(Expression):
             popList =  []
 
             for index, term in enumerate(orderedTerms):
-                term.factors[0] = term.factors[0].consim() # Simplify the front constant 
+                term.factors[0] = term.factors[0].consim(safeMode) # Simplify the front constant 
                 if term.factors[0] == Integer(1): # If it is a 1
                     term.factors.pop(0) # Remove the front factor
                 elif term.factors[0] == Integer(0): # If it is a zero
@@ -361,7 +361,7 @@ class Sum(Expression):
             if len(constList) == 1:
                 orderedTerms.append(constList[0])
             else:
-                orderedTerms.append(Sum(constList).consim())
+                orderedTerms.append(Sum(constList).consim(safeMode))
                 #orderedTerms.append(Sum(constList))
 
         # we are finally done (please save me). We just need to do a quick return check

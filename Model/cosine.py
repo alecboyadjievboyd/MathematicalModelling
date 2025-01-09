@@ -52,8 +52,8 @@ class Cosine(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)
     
-    def consim(self):
-        sa = self.argument.consim()
+    def consim(self, safeMode = False):
+        sa = self.argument.consim(safeMode)
 
         if sa.expression_type == ExpressionType.ARCCOSINE:
             return sa.argument # cos(arccos(f(x))) = f(x)

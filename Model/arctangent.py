@@ -52,7 +52,11 @@ class Arctangent(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)
     
+    def consim(self, safeMode):
+        return Arctangent(self.argument.consim(safeMode))
+    
     def pfsf(self, safeMode = False): #simplified form
+        #if this is updated, consim should probably also be updated
 
         argPfsf = self.argument.pfsf(safeMode) #simplify the arg first
 

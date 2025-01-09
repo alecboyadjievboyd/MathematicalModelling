@@ -80,7 +80,7 @@ class Product(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return self.factors
     
-    def consim(self):
+    def consim(self, safeMode = False):
 
         # return self #as it isn't finished yet
 
@@ -91,9 +91,10 @@ class Product(Expression):
         def AskAlec(x):
             # print(f"Product.consim asks Alec: {x}")
             try:
-                y = x.pfsf()
+                # y = x.pfsf(safeMode)
                 # print(f"Alec says: {y}")
-                return y
+                # return y
+                return x.pfsf(safeMode)
             except:
                 # print("Alec doesn't know")
                 return x
@@ -111,8 +112,8 @@ class Product(Expression):
         #simplifying the factors of the product (bottom up)
         simfactors = () #simplified factors
         for factor in expandfactors:
-            # print(f"{factor} simplifies to {factor.consim()}")
-            simfactors += (factor.consim(),)
+            # print(f"{factor} simplifies to {factor.consim(safeMode)}")
+            simfactors += (factor.consim(safeMode),)
         
         def expception(expo): #exponentiation + inception(going down the layers)
             #If we have something like (2^3)^4, I think this would return 8^4 instead of whatever that is. Similarly, (2^3)^sin(1) returns 8^sin(1) instead of the required (?) x_8 ^sin(1). This is indeed the case, but due to the old-new construction we eventually get there. Or is it that we get there due to the consim of the factors, which consim their bases
@@ -222,7 +223,7 @@ class Product(Expression):
         if old==new: #this is at least necessary for nested products. Also for expception
             return new
         else:
-            return new.consim()
+            return new.consim(safeMode)
 
 
 
@@ -372,7 +373,7 @@ class Product(Expression):
                 if len(constList) == 1:
                     orderedFactors.insert(0, constList[0])
                 else:
-                    orderedFactors.insert(0, Product(constList).consim())
+                    orderedFactors.insert(0, Product(constList).consim(safeMode))
             
             if len(orderedFactors) == 0: # only one term
                 return Integer(0)

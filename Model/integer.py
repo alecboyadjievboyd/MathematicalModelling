@@ -48,7 +48,7 @@ class Integer(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.value,)
         
-    def consim(self):
+    def consim(self, safeMode = False):
         from Model.fraction import Frac
         return Frac(self)
     

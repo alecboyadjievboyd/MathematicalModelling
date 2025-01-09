@@ -63,14 +63,15 @@ class Exponential(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.argument) #return (self.base, self.exponent)
     
-    def consim(self):
-        def AskAlec(x):
+    def consim(self, safeMode = False):
+        #todo: (ab)^c vs a^c * b^c.
+        def AskAlec(x, safeMode):
             # print(f"Exponential.consim asks Alec: {x}")
             try:
-                # y = x.pfsf()
+                # y = x.pfsf(safeMode)
                 # print(f"Alec says: {y}")
                 # return y
-                return x.pfsf()
+                return x.pfsf(safeMode)
             except:
                 # print("Alec doesn't know")
                 return x
@@ -80,8 +81,8 @@ class Exponential(Expression):
         old = self #not sure if this is necessary
 
         #simplifying the arguments
-        sb = self.base.consim() #sb = simplified base
-        se = self.argument.consim() #se = simplified exponent(somehow we use .argument instead of .exponent)
+        sb = self.base.consim(safeMode) #sb = simplified base
+        se = self.argument.consim(safeMode) #se = simplified exponent(somehow we use .argument instead of .exponent)
         
         if se == Frac(0):#a^0=0
             return Frac(1) 
@@ -90,7 +91,7 @@ class Exponential(Expression):
                 if se.num.value < 0: #
                     # print(f"MATH ERROR: Zero to negative power: {Exponential(sb, se)}")
                     raise Exception(f"MATH ERROR: Zero to negative power: {Exponential(sb, se)}")
-            return Frac(0) #0^(negative function) returns 0
+            return Frac(0) #0^(negative function) returns 0. If se<0, the original domain was the empty set and now is all of R.
 
         #simplifying frac^frac
         if sb.expression_type == se.expression_type == ExpressionType.FRACTION:
@@ -98,7 +99,7 @@ class Exponential(Expression):
         
         elif se.expression_type == ExpressionType.LOGARITHM:
             if se.base == sb:
-                return se.argument.consim() #consim maybe not necessary if logarithm consims its arguments
+                return se.argument.consim(safeMode) #consim maybe not necessary if logarithm consims its arguments
         
 
         elif sb.expression_type == ExpressionType.SUM:
@@ -124,16 +125,14 @@ class Exponential(Expression):
                     else:
                         return Frac(1)
                     
-
-                
                 new = Vartocon(varsim)
                 if old == new: #recall "old = Exponential(sb, se)"
                     return new
                 else:
-                    return new.consim()
+                    return new.consim(safeMode)
 
             #generalisation of sum^frac: sum^(frac + stuff) -> sum^frac * sum^stuff
-            if se.expression_type == ExpressionType.SUM:
+            elif se.expression_type == ExpressionType.SUM:
                 print("sum^sum")
                 fracsum = Frac(0) 
                 nonfracterms = ()
@@ -148,7 +147,7 @@ class Exponential(Expression):
                     return Product((
                         Exponential(sb, fracsum.squo()),
                         Exponential(sb, Sum(  (Frac(fracsum.srem(), fracsum.den), ) + nonfracterms  ))
-                    )).consim()
+                    )).consim(safeMode)
                         
         elif se.expression_type == ExpressionType.SUM:
             #as we are here, we know sb.expression_type != ExpressionType.SUM
@@ -171,20 +170,32 @@ class Exponential(Expression):
           
 
         #Collapsing towers
-        if sb.expression_type == ExpressionType.EXPONENTIAL: 
+        if sb.expression_type == ExpressionType.EXPONENTIAL:
+            #we could additionally check if sb.base is an exponential with base != 0 and power even (or even Frac), such that sb.base is positive and all other powers may be collapsed.
             if sb.base.expression_type == ExpressionType.FRACTION:
                 if sb.base.num.value>0:
-                    return Exponential(sb.base, Product((sb.argument,se)) ).consim() #(a^b)^c -> a^(b*c) but that only holds for a>=0
+                    return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode) #(a^b)^c -> a^(b*c) but that only holds for a>0
                 else: #sb.base.num.value <0: (if sb.base==0, then sb would have been simplified to Frac(0) and we wouldn't be here)
-                    #we need 
-                    if sb.argument.expression_type == ExpressionType.FRACTION:
-                        pass
-                    else: #
-                        pass
-            # else:
+                    if safeMode:
+                        return Exponential(sb, se)
+                    else:
+                        return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode)
+            elif sb.base.expression_type == ExpressionType.EULER or sb.base.expression_type == ExpressionType.PI:
+                return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode) #(a^b)^c -> a^(b*c) but that only holds for a>0
+            else:
+                if safeMode:
+                    return Exponential(sb, se)
+                else:
+                    return Exponential(
+                        sb.base,
+                        Product((
+                            sb.argument,
+                            se
+                        ))
+                    )
             
         #if nothing is returned yet
-        return(Exponential(sb, se))
+        return Exponential(sb, se)
     
     def pfsf(self, safeMode = False):
         from Model.logarithm import Logarithm

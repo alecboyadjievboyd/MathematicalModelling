@@ -31,5 +31,8 @@ class Pi(Expression):
     def genarg(self):
         return None
     
+    def consim(self, safeMode = False):
+        return self
+    
     def pfsf(self, safeMode = False):
         return Pi()

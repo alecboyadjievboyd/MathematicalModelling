@@ -157,7 +157,7 @@ class Frac(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.num, self.den)
     
-    def consim(self):
+    def consim(self, safemode = False):
         return self.simplify()
     
     def pfsf(self, safeMode=False):

@@ -1,5 +1,10 @@
 from Model.integer import Integer
 from Model.sine import Sine
+from Model.cosine import Cosine
+from Model.tangent import Tangent
+from Model.arcsine import Arcsine
+from Model.arccosine import Arccosine
+from Model.arctangent import Arctangent
 from Model.variable import Variable, Hypervariable
 from Model.sum import Sum
 from Model.product import Product
@@ -14,6 +19,8 @@ from Model.expression_type import ExpressionType
 from Model.fraction import Frac
 from Model.simplifying_fractions import frac_constant_simplify
 from Model.vartocon import Vartocon
+from Model.euler import Euler
+from Model.pi import Pi
 
 
 def rt(x,n=2):
@@ -28,17 +35,62 @@ def h(n=-1):
 def C(x):
     return Integer(x)
 
-# rtx = Exponential(x(), Exponential( C(2), C(-1)))
+
 
 # print(
 #     Product((
-#         Exponential(rt(2), rt(3)), 
+#         Euler(),
+#         Euler()
 #     )).consim()
 # )
 
+# print(
+#     Exponential(
+#         x(1),
+#         Sum((x(2), x(3)))
+#     ).pfsf()
+# )
+
 print(
-    Exponential(Exponential(x(), C(2)), Exponential(C(2), C(-1))).derivative(x())
+    Logarithm(C(2), C(8)).consim()
 )
+
+# print(
+#     Exponential(
+#         Product((
+#             x(1),
+#             x(2)
+#         )),
+#         x(3)
+#     ).pfsf()
+# )
+
+# print(
+#     Product((
+#         Exponential(x(1), x(3)),
+#         Exponential(x(2), x(3))
+#     )).pfsf()
+# )
+
+
+
+
+# print(
+#     x(1)
+# )
+
+# print(
+#     Vartocon(
+#         Sum((
+#             h(2),
+#             h(3)
+#         ))
+#     )
+# )
+
+# print(
+#     Exponential(Exponential(x(), C(2)), Exponential(C(2), C(-1))).derivative(x())
+# )
 
 # print(
 #     Exponential(Sum((C(1),Hypervariable(C(3)))), C(2)).consim()

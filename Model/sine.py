@@ -71,9 +71,9 @@ class Sine(Expression):
 
         # Otherwise, ignore for now as we are not doing identities
 
-    def consim(self):
+    def consim(self, safeMode = False):
 
-        sa = self.argument.consim()
+        sa = self.argument.consim(safeMode)
 
         if sa.expression_type == ExpressionType.ARCSINE:
             return sa.argument

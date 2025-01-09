@@ -51,7 +51,7 @@ class Variable(Expression):
 #useful for testing consim (I need terminal expressions which cannot be manipulated)
 class Hypervariable(Expression):
 
-    def consim(self):
+    def consim(self, safeMode = False):
         return self
 
     def __init__(self, index):
@@ -90,7 +90,7 @@ class Hypervariable(Expression):
         return False
         
     def pfsf(self, safeMode = False):
-        return Variable(self.index) 
+        return self
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.index,)

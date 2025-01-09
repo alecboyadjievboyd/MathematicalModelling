@@ -4,7 +4,7 @@ from Model.exponential import Exponential
 from Model.product import Product
 from Model.integer import Integer
 from Model.euler import Euler
-
+from Model.fraction import Frac
 
 class Logarithm(Expression):
     def __init__(self, base, argument):
@@ -60,8 +60,18 @@ class Logarithm(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.argument)
     
-    def consim(self):
-        return Logarithm(self.base.consim(), self.argument.consim())
+    def consim(self, safeMode = False):
+        #todo: find out if log_frac1(frac2) is an integer (or 1/integer) and if so, return that integer
+        sb = self.base.consim(safeMode)
+        sa = self.argument.consim(safeMode)
+
+        if sa==sb:
+            return Frac(1)
+        elif sa.expression_type == ExpressionType.EXPONENTIAL:
+            if sa.base == sb:
+                return sa.argument
+        
+        return Logarithm(sb, sa)
     
     def pfsf(self, safeMode = False):
         # We want to do the following:
