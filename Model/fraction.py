@@ -63,9 +63,9 @@ class Frac(Expression):
         return Integer(self.num.value // self.den.value)
 
     def __str__(self):
-        # if self.den.value==1:
-        #     return f"{self.num}"
-        # else:
+        if self.den.value==1:
+            return f"{self.num}"
+        else:
             return f"{self.num}/{self.den}"#does put_brackets like this? a^(b/c) would become what?
     
     def __add__(self, other):

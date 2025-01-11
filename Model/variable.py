@@ -13,7 +13,8 @@ class Variable(Expression):
         self.secondaryOrder = None
 
     def __str__(self):
-        return "x[" + str(self.index) +"]"
+        return "x" + str(self.index)
+        # return "x[" + str(self.index) +"]"
     
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
