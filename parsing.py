@@ -174,9 +174,6 @@ def fraction(input):
 
     if (input == ""):
         return
-    
-    if (input[0] == '('and input[-1] == ')'):
-        input = input[1:len(input)-1]
 
     bracket = 0 # we check brackets to ensure we are in the "top level" of the expression
 
@@ -195,9 +192,6 @@ def term(input):
 
     if (input == ""):
         return
-    
-    if (input[0] == '('and input[-1] == ')'):
-        input = input[1:len(input)-1]
 
     bracket = 0 # we check brackets to ensure we are in the "top level" of the expression
 
@@ -218,9 +212,6 @@ def expression(input):
     if (input == ""):
         return
     
-    if (input[0] == '(' and input[-1] == ')'):
-        input = input[1:len(input)-1]
-
     bracket = 0
     for i in range(len(input)):
         if (input[i] == '('):
@@ -236,6 +227,7 @@ def expression(input):
 
 
 #make sure input has no spaces use input = input.replace(" ", "")
+
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
 
@@ -244,13 +236,14 @@ print(x)
 
 
 # recursion depth tester before stack overflow
+
 """
-n = 165
+
+n = 141
 word = "x_1*x_2"
 for i in range(3, n+3):
     word = "("+ word+")*x_" + str(i)
 
-x = expression(word)
+x = term(word)
 print(x)
-
 """
