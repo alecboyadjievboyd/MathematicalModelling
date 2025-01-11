@@ -38,7 +38,10 @@ def monomial(input):
     if (input[0] == '(' and input[-1] == ')'):
         return expression(input[1:len(input)-1])
     elif (input[0] == 'x'):
-        numer, denom, i = constant(input[2:])
+        numer = 1
+        if (len(input) != 1):
+            numer, denom, i = constant(input[2:])
+        
         return make_monomial(numer)
 
 def fraction(input):
@@ -71,9 +74,9 @@ def term(input):
             numer,denom,i = constant(input)
 
             if (i < len(input)):
-                return Product([ConstantFraction(numer, denom),term(input[i:])])
+                return Product([Polynomial([ConstantFraction(numer, denom)]),term(input[i:])])
             else:
-                return ConstantFraction(numer,denom)
+                return Polynomial([ConstantFraction(numer,denom)])
             
     for i in range(len(input)):
         if (input[i] == '('):
@@ -102,14 +105,14 @@ def expression(input):
         elif (input[i] == ')'):
             bracket -= 1
         elif (input[i] == '+' and bracket == 0):
-            return Sum(term(input[:i]), expression[i+1:])
+            return Sum([term(input[:i]), expression(input[i+1:])])
         elif (input[i] == '-' and bracket == 0):
-            return Sum([term(input[:i]), Product([ConstantFraction(-1), expression(input[(i + 1):])])])
+            return Sum([term(input[:i]), Product([Polynomial([ConstantFraction(-1)]), expression(input[(i + 1):])])])
     
     return term(input)
 
 
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
-x = monomial(user_input)
+x = expression(user_input)
 print(x)
