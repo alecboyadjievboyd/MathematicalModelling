@@ -170,6 +170,27 @@ def elem(input, func):
         return
      
 
+def fraction(input):
+
+    if (input == ""):
+        return
+    
+    if (input[0] == '('and input[-1] == ')'):
+        input = input[1:len(input)-1]
+
+    bracket = 0 # we check brackets to ensure we are in the "top level" of the expression
+
+    for i in range(len(input)):
+        if (input[i] == '('):
+            bracket += 1
+        elif (input[i] == ')'):
+            bracket -= 1
+        elif (input[i] == '/' and bracket == 0):
+            return Product([factor(input[:i]), Exponential(fraction(input[(i+1):]), Integer(-1))])
+        
+    return factor(input)
+
+
 def term(input):
 
     if (input == ""):
@@ -186,23 +207,9 @@ def term(input):
         elif (input[i] == ')'):
             bracket -= 1
         elif (input[i] == '*' and bracket == 0):
-            return Product([factor(input[:i]), term(input[(i+1):])])
-        elif (input[i] == '/' and bracket == 0): # if we find a division sign at the top level, we split and check if we reach another multiplication sign at the top level
-            slash_index = i
-            factor1 = input[:slash_index]
-            input_rest = input[slash_index+1:]
-            for j in range(len(input_rest)):
-                if (input_rest[j] == '('):
-                    bracket += 1
-                elif (input_rest[j] == ')'):
-                    bracket -= 1
-                elif (input_rest[j] == '*' and bracket == 0):
-                    factor2 = input_rest[:j]
-                    term_last = input_rest[j+1:]
-                    return Product([factor(factor1), Exponential(factor(factor2), Integer(-1)), term(term_last)])
-            return Product([factor(input[:i]), Exponential(factor(input[(i+1):]), Integer(-1))]) # if we don't find another multiplication sign, we return the division of the two factors
-    
-    return factor(input)
+            return Product([fraction(input[:i]), term(input[(i+1):])])
+        
+    return fraction(input)
 
 
 def expression(input): 
