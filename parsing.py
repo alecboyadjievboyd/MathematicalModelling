@@ -27,6 +27,7 @@ def const(input):
 
     return j
 
+
 def bracket(input):
     bracket = 0
     j = 0
@@ -38,7 +39,8 @@ def bracket(input):
         elif (input[j] == ')'):
             bracket -= 1
         j += 1
-            
+
+
 def log(input):
     j = 0
 
@@ -50,6 +52,8 @@ def log(input):
         j += const(input)
     
     return j
+
+
 
 def factor(input):
 
@@ -118,7 +122,6 @@ def exp(input):
     return basic(input)
 
 
-
 def basic(input):
     func = input[:3]
     if (not (func == "sin" or func == "cos" or func == "tan" or func == "arc" or func == "log")):
@@ -129,11 +132,12 @@ def basic(input):
             return elem(input[6:], func)
         return elem(input[3:], func)
 
+
 def unit(input):
 
     if (input == ""):
         return
-    elif (input[0] == '('):
+    elif (input[0] == '(' and input[-1] == ')'):
         return expression(input[1:len(input)-1])
     elif (input[0] == 'x'):
         return Variable(input[2:])
@@ -143,6 +147,7 @@ def unit(input):
         return Pi()
     else:
         return Integer(int(input))
+
 
 def elem(input, func):
 
@@ -164,12 +169,13 @@ def elem(input, func):
     else:
         return
      
+
 def term(input):
 
     if (input == ""):
         return
     
-    if (input[0] == '('):
+    if (input[0] == '('and input[-1] == ')'):
         input = input[1:len(input)-1]
 
     bracket = 0 # we check brackets to ensure we are in the "top level" of the expression
@@ -199,15 +205,13 @@ def term(input):
     return factor(input)
 
 
-
-
 def expression(input): 
     c = 0
 
     if (input == ""):
         return
     
-    if (input[0] == '('):
+    if (input[0] == '(' and input[-1] == ')'):
         input = input[1:len(input)-1]
 
     bracket = 0
@@ -224,9 +228,22 @@ def expression(input):
     return term(input)
 
 
-# make sure input has no spaces use input = input.replace(" ", "")
+#make sure input has no spaces use input = input.replace(" ", "")
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
 
 x = expression(user_input)
 print(x)
+
+
+# recursion depth tester before stack overflow
+"""
+n = 165
+word = "x_1*x_2"
+for i in range(3, n+3):
+    word = "("+ word+")*x_" + str(i)
+
+x = expression(word)
+print(x)
+
+"""
