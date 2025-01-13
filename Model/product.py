@@ -121,7 +121,7 @@ class Product(Expression):
                 if expo.argument.expression_type == ExpressionType.INTEGER: #this won't happen. It would have already been simplified
                     return expo.base**expo.argument
                 elif expo.argument.expression_type == ExpressionType.FRACTION: #this won't happen. It would have already been simplified
-                    if expo.den == Integer(1):
+                    if expo.argument.den == Integer(1):
                         return expo.base**expo.argument
                     else:
                         return Exponential(Variable(expo.base), expo.argument) 

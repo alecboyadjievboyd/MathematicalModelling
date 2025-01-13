@@ -1,9 +1,12 @@
 from Model.expression import Expression
 from Model.expression_type import ExpressionType
+from Model.fraction import Frac
+from Model.pi import Pi
 from Model.product import Product
 from Model.cosine import Cosine
 from Model.exponential import Exponential
 from Model.integer import Integer
+from Model.sum import Sum
 
 
 # Tangent of an expression
@@ -56,6 +59,67 @@ class Tangent(Expression):
     def consim(self, safeMode = False): #simplified form
 
         sa = self.argument.consim(safeMode) #simplify the arg first
+
+
+        #cos(a pi) for some values of a.
+        evalexact = False
+        if sa == Frac(0):
+            return Frac(0)
+        elif sa.expression_type == ExpressionType.PI:
+            a = Frac(1)
+            evalexact = True
+        elif sa.expression_type == ExpressionType.PRODUCT:
+            if len(sa.factors) == 2:
+                if sa.factors[0].expression_type == ExpressionType.FRACTION:
+                    if sa.factors[1].expression_type == ExpressionType.PI:
+                        a = sa.factors[0]
+                        evalexact = True
+                elif sa.factors[0].expression_type == ExpressionType.PI:
+                    if sa.factors[1].expression_type == ExpressionType.FRACTION:
+                        a = sa.factors[1]
+                        evalexact = True
+
+        if evalexact:
+            a = Frac(-1)*( Frac(-1)*(a + Frac(1)) % Frac(2) ) + Frac(1) #this is a but with 2 added/subtracted to it until a is in (-1,1].
+            
+            if a<Frac(0):
+                a = a + Frac(1)
+
+            if a==Frac(0):
+                return Frac(0)
+            elif a==Frac(1,12):
+                return Sum((
+                    Product((
+                        Frac(-1), 
+                        Frac(3).root(2)
+                    )),
+                    Frac(2)
+                ))
+            elif a==Frac(1,6):
+                return Product((Frac(1,3), Exponential(Frac(3), Frac(1,2))))
+            elif a==Frac(1,4):
+                return Frac(1)
+            elif a==Frac(1,3):
+                return Frac(3).root(2)
+            elif a==Frac(5,12):
+                return Sum((
+                    Frac(3).root(2),
+                    Frac(2)
+                ))
+            elif a==Frac(1,2):
+                raise "MATH ERROR: tan(pi/2) is undefined (1/0)"
+            elif a==Frac(7,12):
+                return Product((Frac(-1), Tangent(Product((Frac(5,12), Pi()))))).consim()
+            elif a==Frac(2,3):
+                return Product((Frac(-1), Frac(3).root(2)))
+            elif a==Frac(3,4):
+                return Frac(-1)
+            elif a==Frac(5,6):
+                return Product((Frac(-1,3), Exponential(Frac(3), Frac(1,2))))
+            elif a==Frac(11,12):
+                return Product((Frac(-1), Tangent(Product((Frac(1,12), Pi()))))).consim()
+            elif a==Frac(1):
+                return Frac(0)        
 
         if sa.expression_type == ExpressionType.ARCTANGENT:
             return sa.argument # tan(arctan(f(x))) = f(x)

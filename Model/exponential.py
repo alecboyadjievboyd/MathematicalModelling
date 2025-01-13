@@ -65,6 +65,11 @@ class Exponential(Expression):
     
     def consim(self, safeMode = False):
         #todo: (ab)^c vs a^c * b^c. We want (ab)^c. Issue probably lies at Alec.
+        #todo: 
+        # Product((Frac(1,2), Frac(2).root(2))
+        # (Frac(1,2).root(2)
+        # do not consim to the same thing and their ratio does not consim to 1.
+
         def AskAlec(x, safeMode):
             # print(f"Exponential.consim asks Alec: {x}")
             try:

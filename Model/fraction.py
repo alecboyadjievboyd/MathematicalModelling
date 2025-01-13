@@ -125,6 +125,14 @@ class Frac(Expression):
             return True
         else:
             return False
+        
+    def __mod__(self, other): #necessary for sin, cos, tan .consim
+        if self > other or self == other:
+            return (self + Frac(-other.num.value, other.den.value)) % other
+        elif self < Frac(0):
+            return (self + other) % other
+        else:
+            return self
 
     def isConstant(self):
         return True
