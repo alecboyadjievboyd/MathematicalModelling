@@ -118,9 +118,9 @@ class Product(Expression):
         def expception(expo): #exponentiation + inception(going down the layers)
             #If we have something like (2^3)^4, I think this would return 8^4 instead of whatever that is. Similarly, (2^3)^sin(1) returns 8^sin(1) instead of the required (?) x_8 ^sin(1). This is indeed the case, but due to the old-new construction we eventually get there. Or is it that we get there due to the consim of the factors, which consim their bases
             if expo.base.expression_type == ExpressionType.FRACTION:
-                if expo.argument.expression_type == ExpressionType.INTEGER:
+                if expo.argument.expression_type == ExpressionType.INTEGER: #this won't happen. It would have already been simplified
                     return expo.base**expo.argument
-                elif expo.argument.expression_type == ExpressionType.FRACTION:
+                elif expo.argument.expression_type == ExpressionType.FRACTION: #this won't happen. It would have already been simplified
                     if expo.den == Integer(1):
                         return expo.base**expo.argument
                     else:
