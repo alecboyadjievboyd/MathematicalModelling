@@ -1,17 +1,10 @@
 import math
 
-from Algebraic_model.algebraic_expression import AlgebraicExpression
-from Algebraic_model.algebraic_expression_type import AlgebraicExpressionType
-from Algebraic_model.constant_fraction import ConstantFraction
-from Algebraic_model.monomial import Monomial
-from Algebraic_model.product import Product
-from Algebraic_model.sum import Sum
+from Rational_model.rational_expression import RationalExpression
+from Rational_model.rational_expression_type import RationalExpressionType
+from Rational_model.constant_fraction import ConstantFraction
+from Rational_model.product import Product
 
-
-def make_monomial(degree, coefficient = ConstantFraction(1)):
-    monomial_coefficients = [0] * degree
-    monomial_coefficients.append(1)
-    return Polynomial(monomial_coefficients, coefficient)
 
 def find_divisors(n):
     """
@@ -39,7 +32,7 @@ def find_divisors(n):
 
 # Polynomial expression with integer coefficients of monomials and constant fraction coefficient for the whole
 # polynomial
-class Polynomial(AlgebraicExpression):
+class Polynomial(RationalExpression):
     def __init__(self, monomial_coefficients, coefficient = ConstantFraction(1)):
         # Check that polynomial coefficient and each monomial coefficient is either integer or constant fraction
         if type(coefficient) != int and type(coefficient) != ConstantFraction:
@@ -55,7 +48,7 @@ class Polynomial(AlgebraicExpression):
             if type(coef) == int:
                 monomial_coefficients[i] = ConstantFraction(coef)
 
-        super().__init__(AlgebraicExpressionType.POLYNOMIAL, coefficient)
+        super().__init__(RationalExpressionType.POLYNOMIAL, coefficient)
         self.monomial_coefficients = monomial_coefficients
 
         self.normalize()
@@ -102,24 +95,6 @@ class Polynomial(AlgebraicExpression):
     # Get the degree of polynomial
     def degree(self):
         return len(self.monomial_coefficients) - 1
-
-    def to_monomial_sum(self):
-        """
-        Converts this polynomial to sum of monomials if there are at least two monomials
-        or to a monomial if there is at most one monomial
-        :return: object of class Sum or Monomial representing given polynomial
-        """
-        monomials = []
-        for i, coefficient in enumerate(self.monomial_coefficients):
-            if coefficient != 0:
-                monomials.append(Monomial(i, coefficient))
-
-        if len(monomials) >= 2:
-            return Sum(monomials, self.coefficient)
-        elif len(monomials) == 1:
-            return monomials[0]
-        else:
-            return Monomial(0, 0)
 
     # Converts polynomial into a string
     def __str__(self):
@@ -219,6 +194,15 @@ class Polynomial(AlgebraicExpression):
     def __rmul__(self, other):
         return self.__mul__(other)
 
+    def __truediv__(self, other):
+        if isinstance(other, int):
+            other = ConstantFraction(other)
+        elif not isinstance(other, ConstantFraction):
+            return NotImplemented
+
+        self.coefficient /= other
+        return self
+
     def copy(self):
         return Polynomial(self.monomial_coefficients.copy(), self.coefficient)
 
@@ -266,6 +250,7 @@ class Polynomial(AlgebraicExpression):
         quotient = Polynomial([0])
 
         while remainder.degree() >= dividend.degree():
+            from Rational_model.polynomial_utils import make_monomial
             multiplier = make_monomial(remainder.degree() - dividend.degree(),
                                         remainder.coefficient * remainder.monomial_coefficients[remainder.degree()]
                                        / dividend.coefficient / dividend.monomial_coefficients[dividend.degree()])
@@ -284,7 +269,6 @@ class Polynomial(AlgebraicExpression):
             factors.append(factor)
 
             quotient, remainder = polynomial.divide_with_remainder(factor)
-            print(polynomial, factor, quotient, remainder, sep=', ')
             if remainder != Polynomial([0]):
                 raise Exception("Division of polynomial by (x - [root]) gives nonzero remainder")
             polynomial = quotient

@@ -1,12 +1,12 @@
-from Algebraic_model.algebraic_expression_type import AlgebraicExpressionType
-from Algebraic_model.algebraic_expression import AlgebraicExpression
-from Algebraic_model.constant_fraction import ConstantFraction
+from Rational_model.rational_expression_type import RationalExpressionType
+from Rational_model.rational_expression import RationalExpression
+from Rational_model.constant_fraction import ConstantFraction
 
 
-class Monomial(AlgebraicExpression):
+class Monomial(RationalExpression):
 
     def __init__(self, exponent, coefficient = ConstantFraction(1)):
-        super().__init__(AlgebraicExpressionType.MONOMIAL, coefficient)
+        super().__init__(RationalExpressionType.MONOMIAL, coefficient)
         self.exponent = exponent
 
     def __str__(self):

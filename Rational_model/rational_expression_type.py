@@ -2,7 +2,7 @@ from enum import Enum
 
 
 # Enumerator for types of expressions
-class AlgebraicExpressionType(Enum):
+class RationalExpressionType(Enum):
     MONOMIAL = 1
     SUM = 2
     PRODUCT = 3

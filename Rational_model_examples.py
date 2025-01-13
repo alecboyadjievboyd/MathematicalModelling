@@ -1,9 +1,10 @@
-from Algebraic_model.constant_fraction import ConstantFraction
-from Algebraic_model.fraction import Fraction
-from Algebraic_model.polynomial import Polynomial
-from Algebraic_model.product import Product
-from Algebraic_model.monomial import Monomial
-from Algebraic_model.sum import Sum
+from Rational_model.constant_fraction import ConstantFraction
+from Rational_model.fraction import Fraction, polynomial_fraction_simplify, polynomial_fraction_factorize
+from Rational_model.polynomial import Polynomial
+from Rational_model.product import Product
+from Rational_model.monomial import Monomial
+from Rational_model.sum import Sum
+from Rational_model.polynomial_utils import polynomial_gcd
 
 # Examples of monomials
 mon1 = Monomial(3)
@@ -119,3 +120,21 @@ print(quot, rem, sep=', ')
 
 # Factorization
 print(poly2.factorize())
+print(poly1. factorize())
+
+# GCD
+print()
+gcd_poly1 = Polynomial([-6, -1, 1], ConstantFraction(4, 3))
+print(gcd_poly1)
+gcd_poly2 = Polynomial([-2, -3, -1])
+print(gcd_poly2)
+print(polynomial_gcd(gcd_poly1, gcd_poly2))
+
+#Simplification
+print()
+fr1 = Fraction(gcd_poly1, gcd_poly2, ConstantFraction(3, 5))
+print(fr1)
+print(polynomial_fraction_simplify(fr1))
+fr2 = Fraction(poly1, poly2)
+print(fr2)
+print(polynomial_fraction_factorize(fr2))

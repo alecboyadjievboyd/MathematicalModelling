@@ -1,19 +1,19 @@
 import abc
-from Algebraic_model.algebraic_expression_type import AlgebraicExpressionType
-from Algebraic_model.constant_fraction import ConstantFraction
+from Rational_model.rational_expression_type import RationalExpressionType
+from Rational_model.constant_fraction import ConstantFraction
 
 
 # Abstract class of expression
 def put_brackets(expression):
-    if (expression.expression_type == AlgebraicExpressionType.SUM
-            or expression.expression_type == AlgebraicExpressionType.PRODUCT
-            or expression.expression_type == AlgebraicExpressionType.POLYNOMIAL):
+    if (expression.expression_type == RationalExpressionType.SUM
+            or expression.expression_type == RationalExpressionType.PRODUCT
+            or expression.expression_type == RationalExpressionType.POLYNOMIAL):
         return "(" + str(expression) + ")"
     else:
         return str(expression)
 
 
-class AlgebraicExpression(abc.ABC):
+class RationalExpression(abc.ABC):
 
     def __init__(self, expression_type, coefficient = ConstantFraction(1)):
         if type(coefficient) == int:
@@ -35,7 +35,7 @@ class AlgebraicExpression(abc.ABC):
     def string_add_coefficient(self, string_expression):
         if self.coefficient == ConstantFraction(1):
             return string_expression
-        elif self.expression_type == AlgebraicExpressionType.MONOMIAL:
+        elif self.expression_type == RationalExpressionType.MONOMIAL:
             return f'{self.coefficient}{string_expression}'
         else:
             return f'{self.coefficient}({string_expression})'
