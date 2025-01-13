@@ -140,5 +140,15 @@ print(polynomial_fraction_factorize(fr2))
 
 fr3 = Fraction(fr1, fr2)
 print(fr3)
-fr3.simplify()
+fr3 = fr3.simplify()
 print(fr3)
+
+sum3 = Sum([fr1, poly1, make_monomial(0, 0), make_monomial(2, 2)], ConstantFraction(1, 7))
+print(sum3)
+sum3 = sum3.simplify()
+print(sum3)
+
+product3 = Product([fr1, poly1, make_monomial(0, ConstantFraction(4, 3)), make_monomial(2, 2)])
+print(product3)
+product3 = product3.simplify()
+print(product3)

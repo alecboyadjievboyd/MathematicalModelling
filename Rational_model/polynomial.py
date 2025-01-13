@@ -3,7 +3,6 @@ import math
 from Rational_model.rational_expression import RationalExpression
 from Rational_model.rational_expression_type import RationalExpressionType
 from Rational_model.constant_fraction import ConstantFraction
-from Rational_model.product import Product
 
 
 def find_divisors(n):
@@ -276,7 +275,9 @@ class Polynomial(RationalExpression):
 
         if polynomial.degree() > 0:
             factors.append(polynomial)
+        from Rational_model.product import Product
         return Product(factors, polynomial.coefficient)
 
+    # Polynomial is always stored in a standard form, so no simplification needed
     def simplify(self):
         pass

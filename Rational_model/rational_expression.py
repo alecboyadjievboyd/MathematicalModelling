@@ -41,4 +41,8 @@ class RationalExpression(abc.ABC):
             return f'{self.coefficient}({string_expression})'
 
     def simplify(self):
+        """
+        Simplifies any rational expression to a fraction of polynomials
+        :return: simplified expression
+        """
         return NotImplemented

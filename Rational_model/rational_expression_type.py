@@ -6,5 +6,5 @@ class RationalExpressionType(Enum):
     MONOMIAL = 1
     SUM = 2
     PRODUCT = 3
-    QUOTIENT = 4
+    FRACTION = 4
     POLYNOMIAL = 5
