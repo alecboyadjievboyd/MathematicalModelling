@@ -19,7 +19,7 @@ class Exponential(Expression):
         self.secondaryOrder = 8 # Exp (top priority) 
     
     def __str__(self):
-        return self.put_brackets(self.base) + "^" + self.put_brackets(self.argument)
+        return "(" + self.put_brackets(self.base) + "^" + self.put_brackets(self.argument) + ")"
     
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
