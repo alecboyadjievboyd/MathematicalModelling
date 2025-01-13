@@ -137,3 +137,8 @@ print(polynomial_fraction_simplify(fr1))
 fr2 = Fraction(poly1, poly2)
 print(fr2)
 print(polynomial_fraction_factorize(fr2))
+
+fr3 = Fraction(fr1, fr2)
+print(fr3)
+fr3.simplify()
+print(fr3)

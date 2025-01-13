@@ -92,7 +92,8 @@ class Polynomial(RationalExpression):
                                                   * (lcm // self.monomial_coefficients[i].denominator))
             self.coefficient /= lcm
 
-    # Get the degree of polynomial
+    # Get the degree of polynomial.
+    # Degree of a zero polynomial is defined 0
     def degree(self):
         return len(self.monomial_coefficients) - 1
 
@@ -249,7 +250,7 @@ class Polynomial(RationalExpression):
         remainder = self.copy()
         quotient = Polynomial([0])
 
-        while remainder.degree() >= dividend.degree():
+        while remainder.degree() >= dividend.degree() and remainder != Polynomial([0]):
             from Rational_model.polynomial_utils import make_monomial
             multiplier = make_monomial(remainder.degree() - dividend.degree(),
                                         remainder.coefficient * remainder.monomial_coefficients[remainder.degree()]
@@ -276,3 +277,6 @@ class Polynomial(RationalExpression):
         if polynomial.degree() > 0:
             factors.append(polynomial)
         return Product(factors, polynomial.coefficient)
+
+    def simplify(self):
+        pass

@@ -39,3 +39,6 @@ class RationalExpression(abc.ABC):
             return f'{self.coefficient}{string_expression}'
         else:
             return f'{self.coefficient}({string_expression})'
+
+    def simplify(self):
+        return NotImplemented

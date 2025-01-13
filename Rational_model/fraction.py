@@ -1,7 +1,7 @@
 from Rational_model.rational_expression import RationalExpression, put_brackets
 from Rational_model.rational_expression_type import RationalExpressionType
 from Rational_model.constant_fraction import ConstantFraction
-from Rational_model.polynomial_utils import polynomial_gcd
+from Rational_model.polynomial_utils import polynomial_gcd, make_monomial
 
 
 # Simplifies
@@ -16,9 +16,7 @@ def polynomial_fraction_simplify(fraction):
     quotient, remainder = fraction.denominator.divide_with_remainder(gcd)
     fraction.denominator = quotient
 
-    fraction.coefficient *= fraction.numerator.coefficient * fraction.denominator.coefficient
-    fraction.numerator.coefficient = ConstantFraction(1)
-    fraction.denominator.coefficient = ConstantFraction(1)
+    fraction.pull_out_constant()
 
     return fraction
 
@@ -41,3 +39,40 @@ class Fraction(RationalExpression):
     def __str__(self):
         string_expression = f'{put_brackets(self.numerator)}/{put_brackets(self.denominator)}'
         return self.string_add_coefficient(string_expression)
+
+    def pull_out_constant(self):
+        self.coefficient *= self.numerator.coefficient / self.denominator.coefficient
+        self.numerator.coefficient = ConstantFraction(1)
+        self.denominator.coefficient = ConstantFraction(1)
+
+    def simplify(self):
+        if (self.numerator.expression_type == RationalExpressionType.POLYNOMIAL
+                and self.denominator.expression_type == RationalExpressionType.POLYNOMIAL):
+            return
+
+        self.numerator.simplify()
+        self.denominator.simplify()
+
+        self.pull_out_constant()
+
+        p1 = None
+        q1 = None
+        if self.numerator.expression_type == RationalExpressionType.POLYNOMIAL:
+            p1 = self.numerator
+            q1 = make_monomial(0, 1)
+        else:
+            p1 = self.numerator.numerator
+            q1 = self.numerator.denominator
+
+        p2 = None
+        q2 = None
+        if self.denominator.expression_type == RationalExpressionType.POLYNOMIAL:
+            p2 = self.denominator
+            q2 = make_monomial(0, 1)
+        else:
+            p2 = self.denominator.numerator
+            q2 = self.denominator.denominator
+
+        self.numerator = p1 * q2
+        self.denominator = q1 * p2
+        polynomial_fraction_simplify(self)
