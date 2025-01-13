@@ -2,24 +2,23 @@ from Rational_model.constant_fraction import ConstantFraction
 from Rational_model.fraction import Fraction, polynomial_fraction_simplify, polynomial_fraction_factorize
 from Rational_model.polynomial import Polynomial
 from Rational_model.product import Product
-from Rational_model.monomial import Monomial
 from Rational_model.sum import Sum
-from Rational_model.polynomial_utils import polynomial_gcd
+from Rational_model.polynomial_utils import polynomial_gcd, make_monomial
 
 # Examples of monomials
-mon1 = Monomial(3)
+mon1 = make_monomial(3)
 print(mon1)
-mon2 = Monomial(1)
+mon2 = make_monomial(1)
 print(mon2)
-mon3 = Monomial(2, 7)
+mon3 = make_monomial(2, 7)
 print(mon3)
-mon4 = Monomial(0)
+mon4 = make_monomial(0, 0)
 print(mon4)
-mon5 = Monomial(0, 4)
+mon5 = make_monomial(0, 4)
 print(mon5)
-mon6 = Monomial(18, 0)
+mon6 = make_monomial(18, 0)
 print(mon6)
-mon7 = Monomial(2, ConstantFraction(15, -7))
+mon7 = make_monomial(2, ConstantFraction(15, -7))
 print(mon7)
 
 # Examples of sums and products
