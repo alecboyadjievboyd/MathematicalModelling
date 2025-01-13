@@ -1,6 +1,5 @@
 import math
 
-from Rational_model.polynomial_utils import make_monomial
 from Rational_model.rational_expression import RationalExpression
 from Rational_model.rational_expression_type import RationalExpressionType
 from Rational_model.constant_fraction import ConstantFraction
@@ -243,8 +242,13 @@ class Polynomial(RationalExpression):
         if self.is_root(0):
             rational_roots.append(ConstantFraction(0))
 
+        first_coefficient = 0
+        while self.monomial_coefficients[first_coefficient] == 0:
+            first_coefficient += 1
+
         divisors_leading_coefficient = find_divisors(self.monomial_coefficients[self.degree()])
-        divisors_constant_term = find_divisors(self.monomial_coefficients[0])
+        divisors_constant_term = find_divisors(self.monomial_coefficients[first_coefficient])
+
 
         for p in divisors_constant_term:
             for q in divisors_leading_coefficient:
