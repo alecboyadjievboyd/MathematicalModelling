@@ -64,7 +64,7 @@ class Exponential(Expression):
         return (self.base, self.argument) #return (self.base, self.exponent)
     
     def consim(self, safeMode = False):
-        #todo: (ab)^c vs a^c * b^c.
+        #todo: (ab)^c vs a^c * b^c. We want (ab)^c. Issue probably lies at Alec.
         def AskAlec(x, safeMode):
             # print(f"Exponential.consim asks Alec: {x}")
             try:
