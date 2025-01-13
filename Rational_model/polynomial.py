@@ -1,5 +1,6 @@
 import math
 
+from Rational_model.polynomial_utils import make_monomial
 from Rational_model.rational_expression import RationalExpression
 from Rational_model.rational_expression_type import RationalExpressionType
 from Rational_model.constant_fraction import ConstantFraction
@@ -7,11 +8,15 @@ from Rational_model.constant_fraction import ConstantFraction
 
 def find_divisors(n):
     """
-    Finds all positive integer divisors of n.
+    Finds all positive integer divisors of n != 0
 
     :param n: integer to find divisors for.
     :return: list of divisors of n.
     """
+
+    # Every natural number is divisor of zero, so can't return all divisors
+    if n == 0:
+        raise ValueError("Can't list divisors of 0")
 
     # Check if n is integer
     if not isinstance(n, int):
@@ -232,10 +237,15 @@ class Polynomial(RationalExpression):
         Computes all rational roots of this polynomial.
         :return: list of rational roots of this polynomial.
         """
+
+        rational_roots = []
+
+        if self.is_root(0):
+            rational_roots.append(ConstantFraction(0))
+
         divisors_leading_coefficient = find_divisors(self.monomial_coefficients[self.degree()])
         divisors_constant_term = find_divisors(self.monomial_coefficients[0])
 
-        rational_roots = []
         for p in divisors_constant_term:
             for q in divisors_leading_coefficient:
                 candidate_root = ConstantFraction(p, q)

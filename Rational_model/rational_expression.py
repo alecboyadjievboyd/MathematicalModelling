@@ -1,4 +1,5 @@
 import abc
+
 from Rational_model.rational_expression_type import RationalExpressionType
 from Rational_model.constant_fraction import ConstantFraction
 
@@ -46,3 +47,15 @@ class RationalExpression(abc.ABC):
         :return: simplified expression
         """
         return NotImplemented
+
+    def get_standard_form(self):
+        """
+        Returns the standard form of the rational expression - fraction of simplified and factorized polynomials
+        in numerator and denominator
+        :return: exression in the standard form
+        """
+
+        simplified_expression = self.simplify()
+        from Rational_model.fraction import polynomial_fraction_factorize
+        factorized_expression = polynomial_fraction_factorize(simplified_expression)
+        return factorized_expression
