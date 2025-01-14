@@ -112,6 +112,7 @@ def express_alg(input):
     return term(input)
 
 #input
+
 """
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
