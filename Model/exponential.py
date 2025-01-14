@@ -236,11 +236,13 @@ class Exponential(Expression):
             # Logarithm case
             if argPfsf.expression_type == ExpressionType.LOGARITHM:
                 if basePfsf == argPfsf.base: #bases are the same
+                    print("Warning: Safe Mode Off! Applying b^(log_b(a)) = a, Domain Issues May Emerge")
                     return argPfsf.argument
                 
                 # If the bases are not the same, it is trickier
                 else: 
                     if argPfsf.argument > basePfsf: 
+                        print("Warning: Safe Mode Off! Applying y^log_b(x) -> x^log_b(y), Domain Issues May Emerge")
                         # if the argument inside the upper logarithm is more complex, 
                         # swap the base and that argument
                         return Exponential(argPfsf.argument, Logarithm(argPfsf.base, basePfsf)) 
@@ -250,6 +252,7 @@ class Exponential(Expression):
     
             # Exponential case
             if basePfsf.expression_type == ExpressionType.EXPONENTIAL:
+                print("Warning: Safe Mode Off! Applying (y^a)^b = y^ba, Domain Issues May Emerge")
                 return Exponential(basePfsf.base, Product([argPfsf, basePfsf.argument]).pfsf(safeMode)) # (y^a)^b = y^ba
                 # Note that here we pfsf the product after creating it to ensure that the order is good.
         
