@@ -63,10 +63,10 @@ class Sum(Expression):
 
     def isConstant(self):
         if self.isconstant is None: 
-            self.isconstant == True
+            self.isconstant = True
             for term in self.terms:
                 if term.isConstant() == False:
-                    self.isconstant == False
+                    self.isconstant = False
                     break
         return self.isconstant
     

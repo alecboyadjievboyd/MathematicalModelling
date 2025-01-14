@@ -55,10 +55,10 @@ class Product(Expression):
 
     def isConstant(self):
         if self.isconstant is None: 
-            self.isconstant == True
+            self.isconstant = True
             for factor in self.factors:
                 if factor.isConstant() == False:
-                    self.isconstant == False
+                    self.isconstant = False
                     break
         return self.isconstant
     
@@ -331,7 +331,14 @@ class Product(Expression):
             
             orderedFactors = []
 
+            repeat = False
+
             if len(factorsPfsf) > 0: # there is at least one non-constant
+
+                for factor in factorsPfsf:
+                    if factor.base.expression_type == ExpressionType.EXPONENTIAL:
+                        repeat = True # Make sure to repeat in case consolidation occurs
+
                 # Now, without constants, all that is left to do is join like terms and order. 
                 orderedFactors.append(factorsPfsf[0])      
 
@@ -375,10 +382,13 @@ class Product(Expression):
                 else:
                     orderedFactors.insert(0, Product(constList).consim(safeMode))
             
+                       
             if len(orderedFactors) == 0: # only one term
                 return Integer(0)
             if len(orderedFactors) == 1: # only one term
                 return orderedFactors[0]
             else:
+                if repeat:
+                    return Product(orderedFactors).pfsf(safeMode)
                 return Product(orderedFactors)
     

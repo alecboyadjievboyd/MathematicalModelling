@@ -251,7 +251,7 @@ class Exponential(Expression):
             # Exponential case
             if basePfsf.expression_type == ExpressionType.EXPONENTIAL:
                 return Exponential(basePfsf.base, Product([argPfsf, basePfsf.argument]).pfsf(safeMode)) # (y^a)^b = y^ba
-                # Note that here we pfsf the product after creating it to ensure that the order is good.         
+                # Note that here we pfsf the product after creating it to ensure that the order is good.
         
         # If none of these hold, simply return itself with simplified base and argument
         return Exponential(basePfsf, argPfsf)
