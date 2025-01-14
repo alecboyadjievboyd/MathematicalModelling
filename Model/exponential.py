@@ -91,6 +91,8 @@ class Exponential(Expression):
         
         if se == Frac(0):#a^0=0
             return Frac(1) 
+        elif sb == Frac(1):
+            return Frac(1)
         elif sb == Frac(0):#0^a=0, but undefined for a<0
             if se.expression_type == ExpressionType.FRACTION:
                 if se.num.value < 0: #
