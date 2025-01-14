@@ -1,11 +1,11 @@
 #Algebraic Parser
 
-from Algebraic_model.polynomial import Polynomial
-from Algebraic_model.constant_fraction import ConstantFraction
-from Algebraic_model.fraction import Fraction
-from Algebraic_model.product import Product
-from Algebraic_model.sum import Sum
-from Algebraic_model.polynomial import make_monomial
+from Rational_model.polynomial import Polynomial
+from Rational_model.constant_fraction import ConstantFraction
+from Rational_model.fraction import Fraction
+from Rational_model.product import Product
+from Rational_model.sum import Sum
+from Rational_model.polynomial import make_monomial
 
 def constant(input):
     numer = 1
@@ -111,8 +111,10 @@ def express_alg(input):
     
     return term(input)
 
-
+#input
+"""
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
 x = express_alg(user_input)
 print(x)
+"""

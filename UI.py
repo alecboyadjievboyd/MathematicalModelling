@@ -13,8 +13,10 @@ if (model == 1):
     print("1. Differentiate  2. Simplify")
     option = int(input())
     print("Enter the expression")
+    
     user_input = input()
     parsed_input = expression(input)
+    parsed_input = user_input.replace(" ", "")
 
     if (option == 1):
         pass
