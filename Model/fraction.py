@@ -282,5 +282,14 @@ class Frac(Expression):
             power = Frac(power)
         elif power.expression_type != ExpressionType.FRACTION:
             raise "power needs to be a fraction"
-        power = power.simplify()
-        return (self**power.num).root(power.den) #it would probably be more efficient to first take the root and then the power, but that takes more time to code
+        power = power.simplify()   
+        # return (self**power.num).root(power.den) #it would probably be more efficient to first take the root and then the power, but that takes more time to code
+
+        #to increase efficiency as compared to the above:
+        if power.squo() == Integer(0):
+            return (self**power.num).root(power.den)
+        else:
+            return Product((
+                self**(power.squo()),
+                (self**power.srem()).root(power.den)
+            )).consim(True) #consim to do the multiplication of self**(power.squo()) with the coefficient of the root

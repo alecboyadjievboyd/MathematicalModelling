@@ -100,13 +100,14 @@ class Exponential(Expression):
                     raise Exception(f"MATH ERROR: Zero to negative power: {Exponential(sb, se)}")
             return Frac(0) #0^(negative function) returns 0. If se<0, the original domain was the empty set and now is all of R.
 
+
+        if se.expression_type == ExpressionType.LOGARITHM:
+            if se.base == sb:
+                return se.argument#.consim(safeMode) #consim maybe not necessary if logarithm consims its arguments
+
         #simplifying frac^frac
         if sb.expression_type == se.expression_type == ExpressionType.FRACTION:
-            return sb.fracpow(se)
-        
-        elif se.expression_type == ExpressionType.LOGARITHM:
-            if se.base == sb:
-                return se.argument.consim(safeMode) #consim maybe not necessary if logarithm consims its arguments
+            return sb.fracpow(se) #this can quickly blow up.
         
 
         elif sb.expression_type == ExpressionType.SUM:
@@ -140,7 +141,7 @@ class Exponential(Expression):
 
             #generalisation of sum^frac: sum^(frac + stuff) -> sum^frac * sum^stuff
             elif se.expression_type == ExpressionType.SUM:
-                print("sum^sum")
+                # print("sum^sum")
                 fracsum = Frac(0) 
                 nonfracterms = ()
                 for term in se.terms:
@@ -153,7 +154,7 @@ class Exponential(Expression):
                 else:
                     return Product((
                         Exponential(sb, fracsum.squo()),
-                        Exponential(sb, Sum(  (Frac(fracsum.srem(), fracsum.den), ) + nonfracterms  ))
+                        Exponential(sb, Sum( nonfracterms + (Frac(fracsum.srem(), fracsum.den), ) ))
                     )).consim(safeMode)
                         
         elif se.expression_type == ExpressionType.SUM:
@@ -169,10 +170,13 @@ class Exponential(Expression):
                 if fracsum == Frac(0):
                     return Exponential(sb, se)
                 else:
-                    return Product((
-                        sb**(fracsum.squo()), 
-                        Exponential(sb, Sum( (Frac(fracsum.srem(), fracsum.den),) + nonfracterms ))
-                    ))
+                    if fracsum.squo() == Integer(0):
+                        return Exponential(sb, se)
+                    else:
+                        return Product((
+                            sb**(fracsum.squo()), 
+                            Exponential(sb, Sum( nonfracterms + (Frac(fracsum.srem(), fracsum.den),) ))
+                        )).consim(safeMode)
 
           
 
