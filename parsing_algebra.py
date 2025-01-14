@@ -36,7 +36,7 @@ def constant(input):
 
 def monomial(input):
     if (input[0] == '(' and input[-1] == ')'):
-        return expression(input[1:len(input)-1])
+        return express_alg(input[1:len(input)-1])
     elif (input[0] == 'x'):
         numer = 1
         if (len(input) != 1):
@@ -89,7 +89,7 @@ def term(input):
     return fraction(input)
 
 
-def expression(input):
+def express_alg(input):
     
     c = 1
     i = 0
@@ -105,14 +105,14 @@ def expression(input):
         elif (input[i] == ')'):
             bracket -= 1
         elif (input[i] == '+' and bracket == 0):
-            return Sum([term(input[:i]), expression(input[i+1:])])
+            return Sum([term(input[:i]), express_alg(input[i+1:])])
         elif (input[i] == '-' and bracket == 0):
-            return Sum([term(input[:i]), Product([Polynomial([ConstantFraction(-1)]), expression(input[(i + 1):])])])
+            return Sum([term(input[:i]), Product([Polynomial([ConstantFraction(-1)]), express_alg(input[(i + 1):])])])
     
     return term(input)
 
 
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
-x = expression(user_input)
+x = express_alg(user_input)
 print(x)
