@@ -113,7 +113,7 @@ class Sine(Expression):
                         a*Frac(-1),
                         Pi()
                     )))
-                )).consim()
+                )).consim(safeMode)
 
             if a==Frac(0):
                 return Frac(0)

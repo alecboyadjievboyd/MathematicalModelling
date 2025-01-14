@@ -109,7 +109,7 @@ class Tangent(Expression):
             elif a==Frac(1,2):
                 raise "MATH ERROR: tan(pi/2) is undefined (1/0)"
             elif a==Frac(7,12):
-                return Product((Frac(-1), Tangent(Product((Frac(5,12), Pi()))))).consim()
+                return Product((Frac(-1), Tangent(Product((Frac(5,12), Pi()))))).consim(safeMode)
             elif a==Frac(2,3):
                 return Product((Frac(-1), Frac(3).root(2)))
             elif a==Frac(3,4):
@@ -117,7 +117,7 @@ class Tangent(Expression):
             elif a==Frac(5,6):
                 return Product((Frac(-1,3), Exponential(Frac(3), Frac(1,2))))
             elif a==Frac(11,12):
-                return Product((Frac(-1), Tangent(Product((Frac(1,12), Pi()))))).consim()
+                return Product((Frac(-1), Tangent(Product((Frac(1,12), Pi()))))).consim(safeMode)
             elif a==Frac(1):
                 return Frac(0)        
 

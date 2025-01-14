@@ -184,6 +184,7 @@ class Exponential(Expression):
                     if safeMode:
                         return Exponential(sb, se)
                     else:
+                        print(f"Warning: Safe Mode Off! Applying (a^b)^c -> a^(bc), Expression May no longer be well defined. Simplifying {Exponential(sb, se)} into {Exponential(sb.base, Product((sb.argument, se)))}")
                         return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode)
             elif sb.base.expression_type == ExpressionType.EULER or sb.base.expression_type == ExpressionType.PI:
                 return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode) #(a^b)^c -> a^(b*c) but that only holds for a>0
@@ -191,13 +192,14 @@ class Exponential(Expression):
                 if safeMode:
                     return Exponential(sb, se)
                 else:
+                    print(f"Warning: Safe Mode Off! Applying (a^b)^c -> a^(bc), Expression May no longer be well defined. Simplifying {Exponential(sb, se)} into {Exponential(sb.base, Product((sb.argument, se)))}")
                     return Exponential(
                         sb.base,
                         Product((
                             sb.argument,
                             se
                         ))
-                    )
+                    ).consim(safeMode)
             
         #if nothing is returned yet
         return Exponential(sb, se)
