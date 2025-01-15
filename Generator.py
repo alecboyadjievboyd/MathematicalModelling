@@ -19,58 +19,87 @@ from Model.expression_type import ExpressionType
 
 def generate(depth, maxElements):
 
-    if (depth == 0):
-        num = random.randint(0, 3)
-        if num == 0:
+    if depth == 0:
+        num = random.randint(0, 11)
+        if num < 5:
             return Variable(1)
-        if num == 1:
+        if num > 7:
             return Integer(random.randint(0,9))
-        if num == 2:
+        if num == 6:
             return Euler()
-        if num == 3:
+        if num == 7:
             return Pi()
 
-    operation = random.choice([
-    "Product",
-    "Sum",
-    "Exponential",
-    "Logarithm",
-    "Exp",
-    "Arctangent",
-    "Tangent",
-    "Sine",
-    "Arcsine",
-    "Cosine",
-    "Arccosine",
-    "Variable",
-    "Integer"
-    ])
+    tryy = random.randint(0, 10)
+    if tryy < 8:
+        operation = random.choice([
+            "Product",
+            "Sum",
+            "Exponential",
+            "Logarithm"
+            ])
+    else:
+        operation = random.choice([ 
+            "Arctangent",
+            "Tangent",
+            "Sine",
+            "Arcsine",
+            "Cosine",
+            "Arccosine"
+        ])
 
-    depth2 = random.randint(0, n)
+    elementNum = random.randint(2, maxElements)
+
+    if depth == 0:
+        depth = 1
 
     if operation == "Product":
-        obj = Product([...])  # Replace [...] with appropriate arguments
+        factors = []
+        i = 1
+        while i <= elementNum:
+            factors.append(generate(random.randint(0, depth - 1), maxElements)) 
+            i = i+1
+        
+        return Product(factors)  # Replace [...] with appropriate arguments
+
     elif operation == "Sum":
-        obj = Sum([...])  # Replace [...] with appropriate arguments
+        terms = []
+        i = 1
+        while i <= elementNum:
+            terms.append(generate(random.randint(0, depth - 1), maxElements))
+            i = i+1
+
+        return Sum(terms)  # Replace [...] with appropriate arguments
+
     elif operation == "Exponential":
-        obj = Exponential(base, exponent)  # Replace base, exponent with actual values
+        return Exponential(generate(random.randint(0, depth - 1), maxElements), generate(random.randint(0, depth - 1), maxElements))  # Replace base, exponent with actual values
+
     elif operation == "Logarithm":
-        obj = Logarithm(base, argument)  # Replace base, argument with actual values
-    elif operation == "Exp":
-        obj = Exp(argument)  # Replace argument with actual value
+        return Logarithm(generate(random.randint(0, depth - 1), maxElements), generate(random.randint(0, depth - 1), maxElements))  # Replace base, argument with actual values
+
     elif operation == "Arctangent":
-        obj = Arctangent(argument)  # Replace argument with actual value
+        return Arctangent(generate(random.randint(0, depth - 1), maxElements))  # Replace argument with actual value
+
     elif operation == "Tangent":
-        obj = Tangent(argument)  # Replace argument with actual value
+        return Tangent(generate(random.randint(0, depth - 1), maxElements))  # Replace argument with actual value
+
     elif operation == "Sine":
-        obj = Sine(argument)  # Replace argument with actual value
+        return Sine(generate(random.randint(0, depth - 1), maxElements))  # Replace argument with actual value
+
     elif operation == "Arcsine":
-        obj = Arcsine(argument)  # Replace argument with actual value
+        return Arcsine(generate(random.randint(0, depth - 1), maxElements))  # Replace argument with actual value
+
     elif operation == "Cosine":
-        obj = Cosine(argument)  # Replace argument with actual value
+        return Cosine(generate(random.randint(0, depth - 1), maxElements))  # Replace argument with actual value
+
     elif operation == "Arccosine":
-        obj = Arccosine(argument)  # Replace argument with actual value
-    elif operation == "Variable":
-        obj = Variable(name)  # Replace name with the variable's name
-    elif operation == "Integer":
-        obj = Integer(value)  # Replace value with the integer's value
+        return Arccosine(generate(random.randint(0, depth - 1), maxElements))  # Replace argument with actual value
+    
+while True:
+    obj = generate(4,3)
+    print("NOW TESTING: " + str(obj))
+    print("Simplified safe mode: " + str(obj.pfsf(True)))
+    print("Simplified not safe mode: " + str(obj.pfsf()))
+    print(" ")
+    print(" ")
+    print(" ")
