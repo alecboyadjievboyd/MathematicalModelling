@@ -70,6 +70,9 @@ def factor(input):
         if (input[start] == '^'): 
             start += 1 
 
+        elif (input[start] == '-'):
+            start += 1
+
         elif (start != 0 and input[start-2] == 'g'):
             start += log(input[start:])
 
@@ -108,6 +111,7 @@ def factor(input):
 
     
 def exp(input):
+
     bracket = 0
     if (input == ""):
         return
@@ -123,6 +127,10 @@ def exp(input):
 
 
 def basic(input):
+
+    if (input[0] == "-"):
+        return Product([Integer(-1), expression(input[1:])])
+
     func = input[:3]
     if (not (func == "sin" or func == "cos" or func == "tan" or func == "arc" or func == "log")):
         return unit(input)
@@ -135,9 +143,7 @@ def basic(input):
 
 def unit(input):
 
-    if (input == ""):
-        return
-    elif (input[0] == '(' and input[-1] == ')'):
+    if (input[0] == '(' and input[-1] == ')'):
         return expression(input[1:len(input)-1])
     elif (input[0] == 'x'):
         return Variable(int(input[2:]))
@@ -172,9 +178,6 @@ def elem(input, func):
 
 def fraction(input):
 
-    if (input == ""):
-        return
-
     bracket = 0 # we check brackets to ensure we are in the "top level" of the expression
 
     for i in range(len(input)):
@@ -189,12 +192,6 @@ def fraction(input):
 
 
 def term(input):
-
-    if (input == ""):
-        return
-    
-    if (input[0] == "-"):
-        return Product([Integer(-1), expression(input[1:])])
 
     bracket = 0 # we check brackets to ensure we are in the "top level" of the expression
 
@@ -211,9 +208,6 @@ def term(input):
 
 def expression(input): 
     c = 0
-
-    if (input == ""):
-        return
     
     bracket = 0
     for i in range(len(input)):
