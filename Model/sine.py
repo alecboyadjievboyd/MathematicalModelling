@@ -50,7 +50,7 @@ class Sine(Expression):
     
     def derivative(self, differential, safeMode = False):
         from Model.cosine import Cosine
-        return Product({Cosine(self.argument), self.argument.derivative(differential)}).pfsf(safeMode)
+        return Product([Cosine(self.argument), self.argument.derivative(differential)]).pfsf(safeMode)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

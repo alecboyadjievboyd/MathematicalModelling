@@ -35,8 +35,8 @@ class Product(RationalExpression):
     # Simplifies a product of rational expressions to a fraction of polynomials
     def simplify(self):
 
-        for factor in self.factors:
-            factor.simplify()
+        for i, factor in enumerate(self.factors):
+            self.factors[i] = factor.simplify()
         self.pull_out_constants()
 
         numerator = Polynomial([1])

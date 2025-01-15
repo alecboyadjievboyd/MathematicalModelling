@@ -6,9 +6,6 @@ from Model.integer import Integer
 from Model.vartocon import Vartocon
 
 
-
-
-
 # Sum of at least two expressions (terms)
 class Sum(Expression):
 
@@ -288,7 +285,7 @@ class Sum(Expression):
 
         # After consolidated, combine like terms and order
 
-        # We first remove and arrange all of the constants + turn everything into the form product(c, stuff)
+        # We first remove and arrange all the constants + turn everything into the form product(c, stuff)
         for index, term in enumerate(termsPfsf):
             if term.isConstant():
                 constList.append(term)
@@ -310,7 +307,7 @@ class Sum(Expression):
             # Now, without constants, all that is left to do is join like terms and order.
             orderedTerms.append(termsPfsf[0])
 
-            # Remember greatest complexity goes first
+            # Remember the greatest complexity goes first
             for term in termsPfsf[1:]: # all remaining terms
                 added = False
                 for index, termComp in enumerate(orderedTerms):
@@ -343,7 +340,7 @@ class Sum(Expression):
                 if term.factors[0] == Integer(1): # If it is a 1
                     term.factors.pop(0) # Remove the front factor
                 elif term.factors[0] == Integer(0): # If it is a zero
-                    popList.append[index] # we will remove it
+                    popList.append(index) # we will remove it
                 
                 # if neither of these hold, the front is a constant that is not zero or one, so we leave it as is
 

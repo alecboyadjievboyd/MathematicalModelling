@@ -51,6 +51,5 @@ class RationalExpression(abc.ABC):
         """
 
         simplified_expression = self.simplify()
-        from Rational_model.fraction import polynomial_fraction_factorize
-        factorized_expression = polynomial_fraction_factorize(simplified_expression)
+        factorized_expression = simplified_expression.factorize()
         return factorized_expression

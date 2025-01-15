@@ -140,7 +140,7 @@ def unit(input):
     elif (input[0] == '(' and input[-1] == ')'):
         return expression(input[1:len(input)-1])
     elif (input[0] == 'x'):
-        return Variable(input[2:])
+        return Variable(int(input[1:]))
     elif (input[0] == 'e'):
         return  Euler()
     elif (input[0] == 'p'):

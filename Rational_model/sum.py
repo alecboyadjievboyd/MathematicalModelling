@@ -38,8 +38,8 @@ class Sum(RationalExpression):
     # Simplifies a sum of rational expressions to a fraction of polynomials
     def simplify(self):
         # Simplify every term of the sum to a polynomial fraction first
-        for term in self.terms:
-            term.simplify()
+        for i, term in enumerate(self.terms):
+            self.terms[i] = term.simplify()
 
         # Construct denominator of the simplified expression
         denominator = make_monomial(0, 1)

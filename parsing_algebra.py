@@ -26,7 +26,7 @@ def constant(input):
         else: 
             break
 
-    if (bool_num):
+    if bool_num:
         denom = input[numer_index:i]
     else:
         numer = input[:i]            
@@ -113,8 +113,8 @@ def express_alg(input):
 
 #input
 
-
-user_input = str(input("please input in ASCII math "))
-user_input = user_input.replace(" ", "")
-x = express_alg(user_input)
-print(x)
+if __name__ == '__main__':
+    user_input = str(input("please input in ASCII math "))
+    user_input = user_input.replace(" ", "")
+    x = express_alg(user_input)
+    print(x)

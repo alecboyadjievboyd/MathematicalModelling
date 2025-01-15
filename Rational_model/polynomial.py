@@ -285,7 +285,7 @@ class Polynomial(RationalExpression):
         factors = []
 
         for root in rational_roots:
-            factor = Polynomial([(-1) * root, 1])
+            factor = Polynomial([(-1) * root.numerator, root.denominator])
 
             multiplicity = 0
             while polynomial.is_root(root):
@@ -306,6 +306,7 @@ class Polynomial(RationalExpression):
         if len(factors) == 0:
             return make_monomial(0, self.coefficient)
         elif len(factors) == 1:
+            factors[0].coefficient *= polynomial.coefficient
             return factors[0]
         else:
             from Rational_model.product import Product

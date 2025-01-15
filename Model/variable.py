@@ -14,7 +14,6 @@ class Variable(Expression):
 
     def __str__(self):
         return "x" + str(self.index)
-        # return "x[" + str(self.index) +"]"
     
     def __eq__(self, other):
         if (self.expression_type != other.expression_type):
@@ -49,7 +48,7 @@ class Variable(Expression):
         return (self.index,)
     
 
-#useful for testing consim (I need terminal expressions which cannot be manipulated)
+# Useful for testing consim (I need terminal expressions which cannot be manipulated)
 class Hypervariable(Expression):
 
     def consim(self, safeMode = False):
@@ -93,5 +92,5 @@ class Hypervariable(Expression):
     def pfsf(self, safeMode = False):
         return self
 
-    def genarg(self):#needed for constant simplification (consim)
+    def genarg(self): # needed for constant simplification (consim)
         return (self.index,)

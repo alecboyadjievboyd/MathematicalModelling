@@ -86,8 +86,17 @@ class Fraction(RationalExpression):
         result = self.copy()
         polynomial_fraction_simplify(result)
 
+
         # Remove the denominator if it is 1
-        if self.denominator == make_monomial(0, 1):
+        if result.denominator == make_monomial(0, 1):
             result = result.numerator * result.coefficient
 
+        return result
+
+    def factorize(self):
+        if (self.numerator.expression_type != RationalExpressionType.POLYNOMIAL
+                or self.denominator.expression_type != RationalExpressionType.POLYNOMIAL):
+            raise TypeError('Given fraction is not a fraction of polynomials')
+
+        result = Fraction(self.numerator.factorize(), self.denominator.factorize(), self.coefficient)
         return result

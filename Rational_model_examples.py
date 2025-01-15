@@ -1,6 +1,6 @@
 from Rational_model.constant_fraction import ConstantFraction
 from Rational_model.exponential import Exponential
-from Rational_model.fraction import Fraction, polynomial_fraction_simplify, polynomial_fraction_factorize
+from Rational_model.fraction import Fraction, polynomial_fraction_simplify
 from Rational_model.polynomial import Polynomial
 from Rational_model.product import Product
 from Rational_model.sum import Sum
@@ -139,7 +139,7 @@ print(fr1)
 print(polynomial_fraction_simplify(fr1))
 fr2 = Fraction(poly1, poly2)
 print(fr2)
-print(polynomial_fraction_factorize(fr2))
+print(fr2.factorize())
 
 fr3 = Fraction(fr1, fr2)
 print(fr3)
