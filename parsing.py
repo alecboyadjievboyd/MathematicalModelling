@@ -231,7 +231,7 @@ def expression(input):
 
 
 #make sure input has no spaces use input = input.replace(" ", "")
-
+"""
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
 
@@ -239,7 +239,7 @@ user_input = user_input.replace(" ", "")
 x = expression(user_input)
 print(x)
 
-
+"""
 
 # recursion depth tester before stack overflow
 

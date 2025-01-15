@@ -117,8 +117,8 @@ def express_alg(input):
 
 #input
 
-#if __name__ == '__main__':
-user_input = str(input("please input in ASCII math "))
-user_input = user_input.replace(" ", "")
-x = express_alg(user_input)
-print(x)
+if __name__ == '__main__':
+    user_input = str(input("please input in ASCII math "))
+    user_input = user_input.replace(" ", "")
+    x = express_alg(user_input)
+    print(x)
