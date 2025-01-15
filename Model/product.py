@@ -164,6 +164,9 @@ class Product(Expression):
                     varfactors += (Variable(factor),)
 
 
+        if fracprod == Frac(0):
+            return Frac(0)
+
         #asking Alec to simplify the expression with variables  
         alecsim = AskAlec(Product(varfactors + (fracprod,)))
 

@@ -52,7 +52,7 @@ def C(x):
 # )
 
 print(
-    Logarithm(C(2), C(8)).consim()
+    Exponential(C(2), C(8)).derivative(x())
 )
 
 # print(
