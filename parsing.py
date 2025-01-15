@@ -225,21 +225,20 @@ def expression(input):
             return Sum([term(input[:i]), expression(input[(i+1):])])
         elif (input[i] == '-' and bracket == 0):
             if (i != 0):
-                return Sum([term(input[:i]), expression(input[i:])])          
+                if (input[i-1] != '/' and input[i-1] != '*' and input[i-1] != '^'):
+                    return Sum([term(input[:i]), expression(input[i:])])          
     
     return term(input)
 
 
 #make sure input has no spaces use input = input.replace(" ", "")
-"""
-user_input = str(input("please input in ASCII math "))
-user_input = user_input.replace(" ", "")
+if __name__ == '__main__':
+    
+    user_input = str(input("please input in ASCII math "))
+    user_input = user_input.replace(" ", "")
+    x = expression(user_input)
+    print(x)
 
-
-x = expression(user_input)
-print(x)
-
-"""
 
 # recursion depth tester before stack overflow
 

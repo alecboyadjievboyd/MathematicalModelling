@@ -67,10 +67,6 @@ def monomial(input):
             numer, denom, i = constant(input[2:])
         
         return make_monomial(numer)
-    
-
-def implicit(input):
-    return
 
 def fraction(input):
 
