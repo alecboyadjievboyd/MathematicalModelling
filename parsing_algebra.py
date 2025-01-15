@@ -107,14 +107,18 @@ def express_alg(input):
         elif (input[i] == '+' and bracket == 0):
             return Sum([term(input[:i]), express_alg(input[i+1:])])
         elif (input[i] == '-' and bracket == 0):
-            return Sum([term(input[:i]), Product([Polynomial([ConstantFraction(-1)]), express_alg(input[(i + 1):])])])
+            if (i == 0):
+                return Product([Polynomial([ConstantFraction(-1)]), express_alg(input[(i + 1):])])
+                
+            else:
+                return Sum([term(input[:i]), Product([Polynomial([ConstantFraction(-1)]), express_alg(input[(i + 1):])])])
     
     return term(input)
 
 #input
 
-if __name__ == '__main__':
-    user_input = str(input("please input in ASCII math "))
-    user_input = user_input.replace(" ", "")
-    x = express_alg(user_input)
-    print(x)
+#if __name__ == '__main__':
+user_input = str(input("please input in ASCII math "))
+user_input = user_input.replace(" ", "")
+x = express_alg(user_input)
+print(x)
