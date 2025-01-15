@@ -11,7 +11,7 @@ class Product(Expression):
 
     def __init__(self, factors):
         super().__init__(ExpressionType.PRODUCT)
-        self.factors = factors
+        self.factors = list(factors)
         self.isconstant = None
 
         self.primaryOrder = 4 # Monomial Product
@@ -89,14 +89,14 @@ class Product(Expression):
         from Model.fraction import Frac
 
         def AskAlec(x):
-            # print(f"Product.consim asks Alec: {x}")
+            #print(f"Product.consim asks Alec: {x}")
             try:
                 # y = x.pfsf(safeMode)
                 # print(f"Alec says: {y}")
                 # return y
                 return x.pfsf(safeMode)
             except:
-                # print("Alec doesn't know")
+                #print("Alec doesn't know")
                 return x
 
         old = self

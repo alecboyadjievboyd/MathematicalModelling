@@ -11,7 +11,7 @@ class Sum(Expression):
 
     def __init__(self, terms):
         super().__init__(ExpressionType.SUM)
-        self.terms = terms
+        self.terms = list(terms)
         self.isconstant = None
         self.primaryOrder = 3 # Monomial Sum
 
