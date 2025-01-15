@@ -1,7 +1,8 @@
-from Rational_model.rational_expression import RationalExpression, put_brackets
+from Rational_model.rational_expression import RationalExpression
 from Rational_model.rational_expression_type import RationalExpressionType
 from Rational_model.constant_fraction import ConstantFraction
 from Rational_model.polynomial_utils import polynomial_gcd, make_monomial
+from Rational_model.polynomial_utils import divide_with_remainder
 
 
 # Simplifies
@@ -11,9 +12,9 @@ def polynomial_fraction_simplify(fraction):
         raise TypeError('Given fraction is not a fraction of polynomials')
 
     gcd = polynomial_gcd(fraction.numerator, fraction.denominator)
-    quotient, remainder = fraction.numerator.divide_with_remainder(gcd)
+    quotient, remainder = divide_with_remainder(fraction.numerator, gcd)
     fraction.numerator = quotient
-    quotient, remainder = fraction.denominator.divide_with_remainder(gcd)
+    quotient, remainder = divide_with_remainder(fraction.denominator, gcd)
     fraction.denominator = quotient
 
     fraction.pull_out_constant()
@@ -37,8 +38,14 @@ class Fraction(RationalExpression):
         self.denominator = denominator
 
     def __str__(self):
-        string_expression = f'{put_brackets(self.numerator)}/{put_brackets(self.denominator)}'
+        string_expression = f'{self.numerator.put_brackets()} / {self.denominator.put_brackets()}'
         return self.string_add_coefficient(string_expression)
+
+    def put_brackets(self):
+        return str(self)
+
+    def copy(self):
+        return Fraction(self.numerator.copy(), self.denominator.copy(), self.coefficient.copy())
 
     def pull_out_constant(self):
         self.coefficient *= self.numerator.coefficient / self.denominator.coefficient
@@ -50,8 +57,8 @@ class Fraction(RationalExpression):
         if (self.numerator.expression_type != RationalExpressionType.POLYNOMIAL
                 or self.denominator.expression_type != RationalExpressionType.POLYNOMIAL):
 
-            self.numerator.simplify()
-            self.denominator.simplify()
+            self.numerator = self.numerator.simplify()
+            self.denominator = self.denominator.simplify()
 
             self.pull_out_constant()
 
@@ -76,6 +83,11 @@ class Fraction(RationalExpression):
             self.numerator = p1 * q2
             self.denominator = q1 * p2
 
-        polynomial_fraction_simplify(self)
+        result = self.copy()
+        polynomial_fraction_simplify(result)
 
-        return self
+        # Remove the denominator if it is 1
+        if self.denominator == make_monomial(0, 1):
+            result = result.numerator * result.coefficient
+
+        return result

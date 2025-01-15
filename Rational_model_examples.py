@@ -1,11 +1,13 @@
 from Rational_model.constant_fraction import ConstantFraction
+from Rational_model.exponential import Exponential
 from Rational_model.fraction import Fraction, polynomial_fraction_simplify, polynomial_fraction_factorize
 from Rational_model.polynomial import Polynomial
 from Rational_model.product import Product
 from Rational_model.sum import Sum
-from Rational_model.polynomial_utils import polynomial_gcd, make_monomial
+from Rational_model.polynomial_utils import polynomial_gcd, make_monomial, divide_with_remainder
 
 # Examples of monomials
+print('\nMonomials:')
 mon1 = make_monomial(3)
 print(mon1)
 mon2 = make_monomial(1)
@@ -22,7 +24,7 @@ mon7 = make_monomial(2, ConstantFraction(15, -7))
 print(mon7)
 
 # Examples of sums and products
-print()
+print('\nSums and products:')
 sum1 = Sum([mon2, mon3])
 print(sum1)
 sum2 = Sum([Sum([mon1, mon2]), mon4])
@@ -33,7 +35,7 @@ product2 = Product([mon1, mon2, mon3])
 print(product2)
 
 # Examples of fractions
-print()
+print('\nFractions:')
 frac1 = Fraction(sum1, sum2)
 print(frac1)
 frac2 = Fraction(Sum([sum1, product1]), product2)
@@ -42,7 +44,7 @@ expr1 = Sum([frac1, frac2, mon3, product1], ConstantFraction(6, 9))
 print(expr1)
 
 # Examples of constant fractions
-print()
+print('\nConstant fractions:')
 constFrac1 = ConstantFraction(1, 2)
 print(constFrac1)
 constFrac2 = ConstantFraction(8)
@@ -55,7 +57,7 @@ constFrac5 = ConstantFraction(-9, -3)
 print(constFrac5)
 
 # Examples of operations with constant fractions
-print()
+print('\nOperations with constants:')
 print(constFrac1 + constFrac2)
 print(constFrac1 - constFrac4)
 print(constFrac1 * constFrac4)
@@ -63,7 +65,7 @@ print(constFrac1 / constFrac5)
 print(constFrac1 ** 4)
 
 # Examples of polynomials
-print()
+print('\nPolynomials:')
 # 1/2x^3 + 3x^2 + 2
 poly1 = Polynomial([2, 0, 3, ConstantFraction(1, 2), 0])
 print(poly1)
@@ -91,7 +93,7 @@ print(poly8)
 
 
 #Working with polynomials
-print()
+print('\nWorking with polynomials:')
 print(poly1.get_value(3))
 print(poly1.get_value(ConstantFraction(2, 7)))
 
@@ -106,23 +108,24 @@ for i in poly3.find_rational_roots():
 print()
 
 # Algebraic operations on polynomials
-print()
+print('\nOperations on polynomials:')
 print(poly1 + poly2)
 print(poly1 - poly2)
 print(poly1 * poly2)
-quot, rem = poly2.divide_with_remainder(Polynomial([-3, 1]))
+quot, rem = divide_with_remainder(poly2, Polynomial([-3, 1]))
 print(quot, rem, sep=', ')
-quot, rem = poly2.divide_with_remainder(Polynomial([2, 1]))
+quot, rem = divide_with_remainder(poly2, Polynomial([2, 1]))
 print(quot, rem, sep=', ')
-quot, rem = poly1.divide_with_remainder(poly4)
+quot, rem = divide_with_remainder(poly1, poly4)
 print(quot, rem, sep=', ')
 
 # Factorization
+print('\nFactorization:')
 print(poly2.factorize())
 print(poly1. factorize())
 
 # GCD
-print()
+print('\nGCD:')
 gcd_poly1 = Polynomial([-6, -1, 1], ConstantFraction(4, 3))
 print(gcd_poly1)
 gcd_poly2 = Polynomial([-2, -3, -1])
@@ -130,7 +133,7 @@ print(gcd_poly2)
 print(polynomial_gcd(gcd_poly1, gcd_poly2))
 
 #Simplification
-print()
+print('\nSimplification:')
 fr1 = Fraction(gcd_poly1, gcd_poly2, ConstantFraction(3, 5))
 print(fr1)
 print(polynomial_fraction_simplify(fr1))
@@ -159,3 +162,14 @@ print(p.factorize())
 q = Polynomial([1, 3, 3, 1])
 print(q)
 print(q.factorize())
+
+print('\nExponentials:')
+exp1 = Exponential(make_monomial(0, 0), 30)
+print(exp1)
+print(exp1.simplify())
+exp2 = Exponential(make_monomial(1, 1), 2)
+print(exp2)
+print(exp2.simplify())
+exp3 = Exponential(Polynomial([3, 1]), -2)
+print(exp3)
+print(exp3.simplify())

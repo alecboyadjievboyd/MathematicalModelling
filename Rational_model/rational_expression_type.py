@@ -8,3 +8,4 @@ class RationalExpressionType(Enum):
     PRODUCT = 3
     FRACTION = 4
     POLYNOMIAL = 5
+    EXPONENTIAL = 6

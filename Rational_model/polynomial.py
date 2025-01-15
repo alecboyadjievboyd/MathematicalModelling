@@ -1,5 +1,7 @@
 import math
 
+from Rational_model.exponential import Exponential
+from Rational_model.polynomial_utils import divide_with_remainder, make_monomial
 from Rational_model.rational_expression import RationalExpression
 from Rational_model.rational_expression_type import RationalExpressionType
 from Rational_model.constant_fraction import ConstantFraction
@@ -44,6 +46,8 @@ class Polynomial(RationalExpression):
             if type(coef) != int and type(coef) != ConstantFraction:
                 raise TypeError("All monomial coefficients must be of type int or ConstantFraction")
 
+        super().__init__(RationalExpressionType.POLYNOMIAL, coefficient)
+
         # Turn integer coefficients into constant fractions
         if type(coefficient) == int:
             coefficient = ConstantFraction(coefficient)
@@ -51,10 +55,13 @@ class Polynomial(RationalExpression):
             if type(coef) == int:
                 monomial_coefficients[i] = ConstantFraction(coef)
 
-        super().__init__(RationalExpressionType.POLYNOMIAL, coefficient)
         self.monomial_coefficients = monomial_coefficients
 
         self.normalize()
+
+        for coef in self.monomial_coefficients:
+            if not isinstance(coef, int):
+                raise TypeError("All monomial coefficients must be of type int")
 
     # Polynomial is in the normal form when the coefficient of highest degree monomial is strictly positive and
     # coefficients of monomials are relatively prime integers
@@ -77,6 +84,7 @@ class Polynomial(RationalExpression):
         if self.degree() == 0 and self.monomial_coefficients[0] == 0:
             # Zero polynomial gets zero polynomial coefficient
             self.coefficient = ConstantFraction(0)
+            self.monomial_coefficients[0] = 0
         else:
             # Factoring out common divisor of numerators of monomial coefficients into the polynomial coefficient
             gcd = 0
@@ -146,6 +154,17 @@ class Polynomial(RationalExpression):
             return result
         else:
             return str(self.coefficient)
+
+    def put_brackets(self):
+        if self.coefficient == 1:
+            monomials = 0
+            for coefficients in self.monomial_coefficients:
+                if coefficients != 0:
+                    monomials += 1
+            if monomials > 1:
+                return f'({self})'
+
+        return str(self)
 
     def __eq__(self, other):
         if not isinstance(other, Polynomial):
@@ -259,39 +278,40 @@ class Polynomial(RationalExpression):
                     rational_roots.append(candidate_root * (-1))
         return rational_roots
 
-    def divide_with_remainder(self, dividend):
-        remainder = self.copy()
-        quotient = Polynomial([0])
-
-        while remainder.degree() >= dividend.degree() and remainder != Polynomial([0]):
-            from Rational_model.polynomial_utils import make_monomial
-            multiplier = make_monomial(remainder.degree() - dividend.degree(),
-                                        remainder.coefficient * remainder.monomial_coefficients[remainder.degree()]
-                                       / dividend.coefficient / dividend.monomial_coefficients[dividend.degree()])
-            quotient += multiplier
-            remainder -= dividend * multiplier
-
-        return [quotient, remainder]
-
     def factorize(self):
         rational_roots = self.find_rational_roots()
-        factors = []
+        rational_roots.sort()
         polynomial = self.copy()
+        factors = []
 
         for root in rational_roots:
             factor = Polynomial([(-1) * root, 1])
-            factors.append(factor)
 
-            quotient, remainder = polynomial.divide_with_remainder(factor)
-            if remainder != Polynomial([0]):
-                raise Exception("Division of polynomial by (x - [root]) gives nonzero remainder")
-            polynomial = quotient
+            multiplicity = 0
+            while polynomial.is_root(root):
+                quotient, remainder = divide_with_remainder(polynomial, factor)
+                if remainder != Polynomial([0]):
+                    raise Exception("Division of polynomial by (x - [root]) gives nonzero remainder")
+                polynomial = quotient
+                multiplicity += 1
+
+            if multiplicity == 1:
+                factors.append(factor)
+            else:
+                factors.append(Exponential(factor, multiplicity))
 
         if polynomial.degree() > 0:
             factors.append(polynomial)
-        from Rational_model.product import Product
-        return Product(factors, polynomial.coefficient)
+
+        if len(factors) == 0:
+            return make_monomial(0, self.coefficient)
+        elif len(factors) == 1:
+            return factors[0]
+        else:
+            from Rational_model.product import Product
+            return Product(factors, polynomial.coefficient)
+
 
     # Polynomial is always stored in a standard form, so no simplification needed
     def simplify(self):
-        pass
+        return self

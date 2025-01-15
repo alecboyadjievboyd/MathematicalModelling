@@ -27,6 +27,9 @@ class ConstantFraction:
         gcd = math.gcd(self.numerator, self.denominator)
         self.numerator //= gcd
         self.denominator //= gcd
+
+    def copy(self):
+        return ConstantFraction(self.numerator, self.denominator)
     
     def get_numerator(self):
         return self.numerator

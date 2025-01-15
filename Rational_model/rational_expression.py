@@ -5,15 +5,6 @@ from Rational_model.constant_fraction import ConstantFraction
 
 
 # Abstract class of expression
-def put_brackets(expression):
-    if (expression.expression_type == RationalExpressionType.SUM
-            or expression.expression_type == RationalExpressionType.PRODUCT
-            or expression.expression_type == RationalExpressionType.POLYNOMIAL):
-        return "(" + str(expression) + ")"
-    else:
-        return str(expression)
-
-
 class RationalExpression(abc.ABC):
 
     def __init__(self, expression_type, coefficient = ConstantFraction(1)):
@@ -30,6 +21,10 @@ class RationalExpression(abc.ABC):
     @abc.abstractmethod
     def __str__(self):
         # This method must be implemented in subclasses
+        pass
+
+    @abc.abstractmethod
+    def put_brackets(self):
         pass
 
     # Append coefficient to string representing the expression
