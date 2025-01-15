@@ -70,6 +70,9 @@ def term(input):
     bracket = 0 # we check brackets to ensure we are in the "top level" of the expression
     i = 0
 
+    if (input[0] == "-"):
+        return Product([Polynomial([ConstantFraction(-1)]), express_alg(input[1:])])
+
     if (input[0] >= '0' and input[0] <= '9' ):
             numer,denom,i = constant(input)
 
@@ -107,11 +110,8 @@ def express_alg(input):
         elif (input[i] == '+' and bracket == 0):
             return Sum([term(input[:i]), express_alg(input[i+1:])])
         elif (input[i] == '-' and bracket == 0):
-            if (i == 0):
-                return Product([Polynomial([ConstantFraction(-1)]), express_alg(input[(i + 1):])])
-                
-            else:
-                return Sum([term(input[:i]), Product([Polynomial([ConstantFraction(-1)]), express_alg(input[(i + 1):])])])
+            if (i != 0):
+                return Sum([term(input[:i]), express_alg(input[i:])])
     
     return term(input)
 

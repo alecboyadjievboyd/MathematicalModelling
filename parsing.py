@@ -140,7 +140,7 @@ def unit(input):
     elif (input[0] == '(' and input[-1] == ')'):
         return expression(input[1:len(input)-1])
     elif (input[0] == 'x'):
-        return Variable(int(input[1:]))
+        return Variable(int(input[2:]))
     elif (input[0] == 'e'):
         return  Euler()
     elif (input[0] == 'p'):
@@ -192,6 +192,9 @@ def term(input):
 
     if (input == ""):
         return
+    
+    if (input[0] == "-"):
+        return Product([Integer(-1), expression(input[1:])])
 
     bracket = 0 # we check brackets to ensure we are in the "top level" of the expression
 
@@ -221,10 +224,8 @@ def expression(input):
         elif (input[i] == '+' and bracket == 0):
             return Sum([term(input[:i]), expression(input[(i+1):])])
         elif (input[i] == '-' and bracket == 0):
-            if (i == 0):
-                return Product([Integer(-1), expression(input[(i + 1):])])
-            else:
-                return Sum([term(input[:i]), Product([Integer(-1), expression(input[(i + 1):])])])          
+            if (i != 0):
+                return Sum([term(input[:i]), expression(input[i:])])          
     
     return term(input)
 
