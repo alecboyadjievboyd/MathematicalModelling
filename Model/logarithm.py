@@ -70,6 +70,8 @@ class Logarithm(Expression):
         elif sa.expression_type == ExpressionType.EXPONENTIAL:
             if sa.base == sb:
                 return sa.argument
+        elif sa==Frac(1):
+            return Frac(0)
         
         return Logarithm(sb, sa)
     
