@@ -88,7 +88,7 @@ class Sum(Expression):
         old = self #we will need this at the end
 
         #expanting inner sums, i.e. (a+b)+c -> a+b+c. In case of sums in sums in sums (nesting with more than two sums), we will loop a few times by recalling consim, but they will eventually, inefficiently, be expanded.
-        expandterms = ()
+        expandterms = []
         for term in self.terms:
             if term.expression_type == ExpressionType.SUM:
                 expandterms += term.terms

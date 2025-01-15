@@ -101,7 +101,7 @@ class Product(Expression):
 
         old = self
         #expanting inner products, i.e. (a*b)*c -> a*b*c. In case of products in producs in products (nesting with more than two products), this doesn't work unless we loop a few times by recalling consim, but they will eventually, inefficiently, be expanded. We have the old-new construction for this.
-        expandfactors = () 
+        expandfactors = [] 
         for factor in self.factors:
             if factor.expression_type == ExpressionType.PRODUCT:
                 expandfactors += factor.factors
