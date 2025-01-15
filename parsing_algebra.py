@@ -7,6 +7,25 @@ from Rational_model.product import Product
 from Rational_model.sum import Sum
 from Rational_model.polynomial_utils import make_monomial
 
+def check_constant(input):
+    ans = True
+    i = 0
+    while (i < len(input)):
+        if (input[i] >='0' and input[i] <= '9'):
+            i += 1
+        elif (input[i] =='*'):
+            ans = False
+            break
+        elif (input[i] == '/'):
+            if (input[i+1] >= '0' and input[i+1] <= '9'):
+                break  
+            else:
+                ans = False
+                break        
+        else: 
+            break
+    
+
 def constant(input):
     numer = 1
     numer_index = 0
@@ -37,12 +56,21 @@ def constant(input):
 def monomial(input):
     if (input[0] == '(' and input[-1] == ')'):
         return express_alg(input[1:len(input)-1])
+    
+    if (input[0] >= '0' and input[0] <= '9'):
+        numer,denom,i = constant(input)
+        return Polynomial([ConstantFraction(numer, denom)])
+    
     elif (input[0] == 'x'):
         numer = 1
         if (len(input) != 1):
             numer, denom, i = constant(input[2:])
         
         return make_monomial(numer)
+    
+
+def implicit(input):
+    return
 
 def fraction(input):
 
@@ -73,14 +101,14 @@ def term(input):
     if (input[0] == "-"):
         return Product([Polynomial([ConstantFraction(-1)]), express_alg(input[1:])])
 
-    if (input[0] >= '0' and input[0] <= '9' ):
+    if ((input[0] >= '0' and input[0] <= '9') and check_constant(input)):
             numer,denom,i = constant(input)
 
             if (i < len(input)):
                 return Product([Polynomial([ConstantFraction(numer, denom)]),term(input[i:])])
             else:
                 return Polynomial([ConstantFraction(numer,denom)])
-            
+          
     for i in range(len(input)):
         if (input[i] == '('):
             bracket += 1
