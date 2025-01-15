@@ -70,7 +70,7 @@ class Exponential(Expression):
         # (Frac(1,2).root(2)
         # do not consim to the same thing and their ratio does not consim to 1.
 
-        def AskAlec(x, safeMode):
+        def AskAlec(x, safeMode = False):
             # print(f"Exponential.consim asks Alec: {x}")
             try:
                 # y = x.pfsf(safeMode)
@@ -124,12 +124,12 @@ class Exponential(Expression):
                     if se.srem() != Integer(0):
                         varsim = AskAlec(
                             Product(( Exponential(Sum(varterms), se.squo()), Exponential(Sum(varterms), Frac(se.srem(),se.den)) ))
-                        )
+                        , safeMode)
                     else:
-                        varsim = AskAlec(Exponential(Sum(varterms), se.squo()))
+                        varsim = AskAlec(Exponential(Sum(varterms), se.squo()), safeMode)
                 else:
                     if se.srem()!= Integer(0):
-                        varsim = AskAlec(Exponential(Sum(varterms), Frac(se.srem(),se.den)))
+                        varsim = AskAlec(Exponential(Sum(varterms), Frac(se.srem(),se.den)), safeMode)
                     else:
                         return Frac(1)
                     
@@ -232,7 +232,7 @@ class Exponential(Expression):
                 return Integer(1)
             
         # Integer Exponent case
-        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == ExpressionType.INTEGER and isinstance(argPfsf.value, int)): # will always be a sum with one or more terms because it has been pfsf iffied
+        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == ExpressionType.INTEGER and  argPfsf.value > 2): # will always be a sum with one or more terms because it has been pfsf iffied
             terms = []
             for i in range(0, argPfsf.value, 1): 
                 terms.append(basePfsf) # Should work even though they are duplicates? I cannot forsee issues

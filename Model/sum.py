@@ -74,7 +74,7 @@ class Sum(Expression):
         from Model.fraction import Frac
         from Model.product import Product
 
-        def AskAlec(x):
+        def AskAlec(x, safeMode = False):
             # print(f"Sum.consim asks Alec: {x}")
             try:
                 # y = x.pfsf(safeMode)
@@ -142,7 +142,7 @@ class Sum(Expression):
             
 
         #asking Alec to simplify the expression with variables  
-        alecsim = AskAlec(Sum(varterms + (fracsum,)))
+        alecsim = AskAlec(Sum(varterms + (fracsum,)), safeMode)
 
 
         # we_want_to_be_efficient_but_neglect_hypervariables = False
