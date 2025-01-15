@@ -384,7 +384,7 @@ class Product(Expression):
             
                        
             if len(orderedFactors) == 0: # only one term
-                return Integer(0)
+                return Integer(1)
             if len(orderedFactors) == 1: # only one term
                 return orderedFactors[0]
             else:
