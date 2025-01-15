@@ -1,4 +1,5 @@
 import random
+
 from Model.product import Product
 from Model.sum import Sum
 from Model.exponential import Exponential
@@ -15,6 +16,7 @@ from Model.euler import Euler
 from Model.pi import Pi
 from Model.integer import Integer
 from Model.expression_type import ExpressionType
+
 
 
 def generate(depth, maxElements):
@@ -95,11 +97,21 @@ def generate(depth, maxElements):
     elif operation == "Arccosine":
         return Arccosine(generate(random.randint(0, depth - 1), maxElements))  # Replace argument with actual value
     
+count = 0
 while True:
-    obj = generate(4,3)
-    print("NOW TESTING: " + str(obj))
-    print("Simplified safe mode: " + str(obj.pfsf(True)))
-    print("Simplified not safe mode: " + str(obj.pfsf()))
+    obj = generate(3,3)
+    count = count + 1
+    
+    try:
+        print("NOW TESTING: " + str(obj))
+        print("Simplified safe mode: " + str(obj.pfsf(True)))
+        print("Simplified not safe mode: " + str(obj.pfsf()))
+    except RecursionError:
+        print("Recursion Error, Skip")
     print(" ")
+    print(count)
     print(" ")
-    print(" ")
+
+x1 + cos(((7^pi)^((x1 + 6 + arcsin(1))^7))) + tan(x1)
+
+((0 * x1)^((x1 * (8 * 6 * pi))^x1))

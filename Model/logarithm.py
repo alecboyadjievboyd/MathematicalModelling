@@ -16,7 +16,7 @@ class Logarithm(Expression):
         self.secondaryOrder = 7 # Log
 
     def __str__(self):
-        return f'log_{self.base}({str(self.argument)})'
+        return f'log_({self.base})({str(self.argument)})'
     
     def isConstant(self):
         if self.isconstant is None:
@@ -87,16 +87,16 @@ class Logarithm(Expression):
         basePfsf = self.base.pfsf(safeMode)
 
         # All of these break if base is negative
-        if (not safeMode):
+        if (True):
             if argPfsf == basePfsf: # If the argument is exactly the base
-                print("Warning: Safe Mode Off! Applying log_b(b) -> 1, Domain Issues May Emerge")
+                
                 return Integer(1)
 
             if argPfsf.expression_type == ExpressionType.EXPONENTIAL: # If the argument is an exponential 
                 
                 # If bases are the same
                 if argPfsf.base == basePfsf:
-                    print("Warning: Safe Mode Off! Applying log_b(b^a) = a, Domain Issues May Emerge")
+                    
                     return argPfsf.argument # Return just the argument of the exponential 
                 
                 # If bases are not the same # NOTE might want to check if this is always preferable in complexity. IT IS NOT BECAUSE PROD FUCNTIONS IS MORE COMPLEX THAN SINGLE FUCNTION
