@@ -304,6 +304,10 @@ class Product(Expression):
 
         factorsPfsf = Product(factorsPfsf).consolidate().factors 
 
+        for factor in factorsPfsf:
+            if factor.expression_type == ExpressionType.INTEGER and factor.value == 0:
+                return Integer(0)
+
         # IF A FACTOR IS A SUM
 
         sumContained = False
