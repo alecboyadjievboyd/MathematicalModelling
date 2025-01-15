@@ -27,6 +27,11 @@ class Integer(Expression):
             return False
 
     def __gt__(self, other):
+        if other.expression_type == ExpressionType.FRACTION:
+            from Model.fraction import Frac
+            return Frac(self)>other
+
+
         if other.primaryOrder == self.primaryOrder: # Both simple constants
             return self.value > other.value # Compare based on value (NOTE: I AM NOT SURE IF THIS WILL WORK WIHT PI AND E)
         else:
