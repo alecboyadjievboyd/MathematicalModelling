@@ -221,20 +221,23 @@ def expression(input):
         elif (input[i] == '+' and bracket == 0):
             return Sum([term(input[:i]), expression(input[(i+1):])])
         elif (input[i] == '-' and bracket == 0):
-            return Sum([term(input[:i]), Product([Integer(-1), expression(input[(i + 1):])])])
+            if (i == 0):
+                return Product([Integer(-1), expression(input[(i + 1):])])
+            else:
+                return Sum([term(input[:i]), Product([Integer(-1), expression(input[(i + 1):])])])          
     
     return term(input)
 
 
 #make sure input has no spaces use input = input.replace(" ", "")
-"""
+
 user_input = str(input("please input in ASCII math "))
 user_input = user_input.replace(" ", "")
 
 
 x = expression(user_input)
 print(x)
-"""
+
 
 
 # recursion depth tester before stack overflow
