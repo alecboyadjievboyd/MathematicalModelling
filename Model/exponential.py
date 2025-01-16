@@ -71,13 +71,14 @@ class Exponential(Expression):
         # do not consim to the same thing and their ratio does not consim to 1.
 
         def AskAlec(x, safeMode = False):
-            # print(f"Exponential.consim asks Alec: {x}")
             try:
                 # y = x.pfsf(safeMode)
+                # print(f"Exponential.consim asks Alec: {x}")
                 # print(f"Alec says: {y}")
                 # return y
                 return x.pfsf(safeMode)
             except:
+                # print(f"Exponential.consim asks Alec: {x}")
                 # print("Alec doesn't know")
                 return x
         
@@ -107,7 +108,7 @@ class Exponential(Expression):
 
         #simplifying frac^frac
         if sb.expression_type == se.expression_type == ExpressionType.FRACTION:
-            return sb.fracpow(se) #this can quickly blow up.
+            return sb.fracpow(se)
         
 
         elif sb.expression_type == ExpressionType.SUM:
@@ -170,13 +171,20 @@ class Exponential(Expression):
                 if fracsum == Frac(0):
                     return Exponential(sb, se)
                 else:
-                    if fracsum.squo() == Integer(0):
+                    if fracsum == Frac(0):
                         return Exponential(sb, se)
                     else:
                         return Product((
-                            sb**(fracsum.squo()), 
-                            Exponential(sb, Sum( nonfracterms + (Frac(fracsum.srem(), fracsum.den),) ))
+                            sb.fracpow(fracsum),
+                            Exponential(sb, Sum(nonfracterms))#.consim(safeMode)
                         )).consim(safeMode)
+                    # if fracsum.squo() == Integer(0):
+                    #     return Exponential(sb, se)
+                    # else:
+                    #     return Product((
+                    #         sb**(fracsum.squo()), 
+                    #         Exponential(sb, Sum( nonfracterms + (Frac(fracsum.srem(), fracsum.den),) ))
+                    #     )).consim(safeMode)
 
           
 

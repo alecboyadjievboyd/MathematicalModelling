@@ -218,20 +218,20 @@ class Frac(Expression):
             else:
                 raise "n needs to be an integer"
 
-        a = self
+        S = self
 
-        if a == Frac(0):
+        if S == Frac(0):
             return Frac(0)
-        elif a < Frac(0):
+        elif S < Frac(0):
             if n%2 == 0:
                 raise "Cannot take even root of negative value"
             else:
                 sgn = -1
-                a = Frac(-1)*a
+                S = Frac(-1)*a
         else:
             sgn = 1
 
-        primedic = a.primefac(False)
+        primedic = S.primefac(False)
 
         powerdic = {}
         for prime in primedic:

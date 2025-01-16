@@ -75,13 +75,14 @@ class Sum(Expression):
         from Model.product import Product
 
         def AskAlec(x, safeMode = False):
-            # print(f"Sum.consim asks Alec: {x}")
             try:
                 # y = x.pfsf(safeMode)
+                # print(f"Sum.consim asks Alec: {x}")
                 # print(f"Alec says: {y}")
                 # return y
                 return x.pfsf(safeMode)
             except:
+                # print(f"Sum.consim asks Alec: {x}")
                 # print("Alec doesn't know")
                 return x
 
