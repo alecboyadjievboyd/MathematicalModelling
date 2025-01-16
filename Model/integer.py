@@ -30,7 +30,9 @@ class Integer(Expression):
         if other.expression_type == ExpressionType.FRACTION:
             from Model.fraction import Frac
             return Frac(self)>other
-
+        
+        if other.expression_type == ExpressionType.PI or other.expression_type == ExpressionType.EULER:
+            return True
 
         if other.primaryOrder == self.primaryOrder: # Both simple constants
             return self.value > other.value # Compare based on value (NOTE: I AM NOT SURE IF THIS WILL WORK WIHT PI AND E)
