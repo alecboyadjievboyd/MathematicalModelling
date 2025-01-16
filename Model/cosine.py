@@ -62,7 +62,7 @@ class Cosine(Expression):
         #cos(a pi) for some values of a.
         evalexact = False
         if sa == Frac(0):
-            return Frac(0)
+            return Frac(1)
         elif sa.expression_type == ExpressionType.PI:
             a = Frac(1)
             evalexact = True
