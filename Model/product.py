@@ -388,6 +388,14 @@ class Product(Expression):
                     orderedFactors.insert(0, constList[0])
                 else:
                     orderedFactors.insert(0, Product(constList).consim(safeMode))
+
+            for factor in orderedFactors:
+                if (type(factor) != int and factor.expression_type == ExpressionType.INTEGER and factor.value == 0):
+                    return Integer(0)
+                elif (type(factor) != int and factor.expression_type == ExpressionType.FRACTION and factor.num == Integer(0)):
+                    return Integer(0)
+                elif (type(factor) == int and factor == 0):
+                    return Integer(0)
             
                        
             if len(orderedFactors) == 0: # only one term

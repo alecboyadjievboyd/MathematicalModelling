@@ -1,5 +1,6 @@
 import random
 import math
+import multiprocessing
 
 from Model.product import Product
 from Model.sum import Sum
@@ -104,10 +105,10 @@ def evaluate(f, x):
         return f.value
     
     if f.expression_type == ExpressionType.EULER:
-        return 2.71828
+        return 2.7182818284590452353602874713526624977572470937
 
     if f.expression_type == ExpressionType.PI:
-        return 3.14159
+        return 3.1415926535897932384626433832795028841971693994
 
     if f.expression_type == ExpressionType.VARIABLE:
         return x
@@ -115,11 +116,14 @@ def evaluate(f, x):
     if f.expression_type == ExpressionType.FRACTION: # FRACTIONS ONLY CONTAIN INTEGERS
         from Model.fraction import Frac
 
-        if f.num == 'undefined' or f.den == 'undefined' or f.den == Integer(0):
+        num = evaluate(f.num, x)
+        den = evaluate(f.den, x)
+
+        if num == 'undefined' or den == 'undefined' or den == 0:
             return 'undefined'
 
         try:
-            return (f.num / f.den)
+            return (num / den)
         except Exception:
             return 'undefined'
 
@@ -223,33 +227,103 @@ def evaluate(f, x):
 
     else: 
         print("WHY THE FUCK")
+
+def safeModeTest(depth, maxElements): # Generates a test case for safe mode
     
+    obj = generate(depth, maxElements)
 
+    print("Original: " + str(obj))
 
-
-
-
-
-
-
-count = 0
-while True:
-    obj = generate(3,3)
-    count = count + 1
-    
     try:
-        print("NOW TESTING: " + str(obj))
-        print(evaluate(obj, 1))
-        '''print("Simplified safe mode: " + str(obj.pfsf(True)))
-        print("Simplified not safe mode: " + str(obj.pfsf()))'''
+        objPfsf = obj.pfsf(False) # Non Safe Mode Simplification
     except RecursionError:
-        print("Recursion Error, Skip")
-    except MathError:
-        print("Math Error, This Expression is Not Valid")
-    print(" ")
-    print(count)
-    print(" ")
+        print("Recursion Depth Error, Skipping...")
+        return # Cannot test here, skip
+    except Exception as e:
+        print(f"Exception {e} occured, enter to continue")
+        ignore = input()
+        return
+    
+    print("Simplified: " + str(objPfsf))
 
-(((3 + x1 + x1)^log_(arctan(x1))(x1))^(-3))
+    testValue = [random.uniform(-100, 100) for _ in range(10)] # A list of 10 test values between 1 and 100
+
+    passed = False
+
+    failValues = []
+
+    for value in testValue:
+
+        initValue = evaluate(obj, value)
+        pfsfValue = evaluate(objPfsf, value)
+
+        if initValue == 'undefined' and pfsfValue == 'undefined':
+            passed = True
+
+        elif initValue != 'undefined' and pfsfValue == 'undefined':
+            passed = False
+            failValues.append([value, initValue, pfsfValue])
+
+        elif initValue == 'undefined' and pfsfValue != 'undefined':
+            passed = True
+
+        elif initValue != 'undefined' and pfsfValue != 'undefined':
+            if initValue == 0:
+                if abs(initValue - pfsfValue) < 0.01:
+                    passed = True
+                else:
+                    passed = False
+
+            elif abs(initValue - pfsfValue) / initValue < 0.01: # if there is less than a 1% difference (rounding errors)
+                passed = True
+            else: 
+                passed = False # too big a difference to be accounted for in rounding errors
+                failValues.append([value, initValue, pfsfValue])
+    
+    if passed:
+        print("Trial Passed: These functions are numerically equivalent")
+    else:
+        print("Trial Failed: The following values were not equivalent")
+        for item in failValues:
+            print("For Value: " + str(item[0]) + ", the original function outputted '" + str(item[1]) + "' while the simplified function outputted '" + str(item[2]) + "'")
+        print(" ")
+        print("Continue with any character")
+        ignore = input()
+        print(" ")
+
+    return
+
+if __name__ == "__main__":
+    count = 0
+    failCount = 0
+    while True:
+        print(" ")
+        count = count + 1
+        print("RUNNING TEST NUMBER " + str(count))
+
+        process = multiprocessing.Process(target=safeModeTest, args=(4,3))
+        process.start()
+        process.join(timeout = 10)
+
+        if process.is_alive():
+            print(f"Process took too long. Skip with character")
+            ignore = input()
+            count -= 1            
+            process.terminate()  # Forcefully terminate the process
+            process.join()  # Ensure the process cleanup is completed
+
+        if process.exitcode != 0:
+            print(f"Process crashed with exit code {process.exitcode}.")
+            inp = 'bruh'
+            while inp != 'y' and inp != 'n' and inp != 'r':
+                print("Approve with 'y' reject with 'n', indicate recursion error with 'r")
+                inp = input()
+            if inp == 'n':
+                failCount += 1
+            if inp == 'r':
+                count -= 1 #this is not a real problem
+
+        
+        ##safeModeTest(4, 3)
 
 
