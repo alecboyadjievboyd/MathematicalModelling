@@ -273,6 +273,14 @@ class Exponential(Expression):
                 print("Warning: Safe Mode Off! Applying (y^a)^b = y^ba, Domain Issues May Emerge")
                 return Exponential(basePfsf.base, Product([argPfsf, basePfsf.argument]).pfsf(safeMode)) # (y^a)^b = y^ba
                 # Note that here we pfsf the product after creating it to ensure that the order is good.
+
+            # (ab)^c = (a)^c (b)^c case
+            if basePfsf.expression_type == ExpressionType.PRODUCT:
+                print("Warning: Safe Mode Off! Applying (ab)^c = a^c b^c, Domain Issues May Emerge")
+                newFactors = []
+                for factor in basePfsf.factors:
+                    newFactors.append(Exponential(factor, argPfsf))
+                return Product(newFactors)
         
         # If none of these hold, simply return itself with simplified base and argument
         return Exponential(basePfsf, argPfsf)
