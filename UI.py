@@ -20,7 +20,8 @@ if model == 1:
     parsed_input = expression(user_input.replace(" ", ""))
 
     if option == 1:
-        print(parsed_input.derivative(Variable(1)))
+        print("Enter the index variable to differentiate with respect to")
+        print(parsed_input.derivative(Variable(int(input()))))
 
     elif option == 2:
         print(parsed_input.pfsf())
