@@ -35,7 +35,137 @@ def h(n=-1):
 def C(x):
     return Integer(x)
 
+print(
+    Tangent(Product((Frac(4,6), Pi())))
+    .consim()
+)
 
+
+# print(
+#     Exponential(
+#         Frac(5,3),
+#         Sum((
+#             Frac(5,2),
+            
+#         ))
+#     ).consim()
+# )
+
+# print(
+#     Product((
+#         Exponential(
+#             Frac(5,3),
+#             Sum((
+#                 Frac(5,2),
+#                 h()
+#             ))
+#         ).consim(),
+#         Exponential(
+#             Exponential(
+#                 Frac(5,3),
+#                 Sum((
+#                     Frac(5,2),
+                    
+#                 ))
+#             ).consim(),
+#             C(-1)
+#         )
+
+#     )).consim()
+# )
+
+# print(
+#     Product((
+#         Exponential(
+#             h(1),
+#             Sum((
+#                 C(2),
+#                 h(2)
+#             ))
+#         ),
+#         Exponential(
+#             Exponential(h(1), C(-1)),
+#             C(1)
+#         )
+#     )).consim(True)
+# )
+
+# print(
+#     Product((
+#         Frac(25,9),
+#         Exponential(
+#             Frac(5,3),
+#             Sum((
+#                 Sine(C(1)),
+#                 Frac(1,2)
+#             ))
+#         ),
+#         Exponential(
+#             Frac(25,9),
+#             C(-1)
+#         )
+#     )).consim()
+# )
+
+# print(
+#     Product((
+#         Frac(2),
+#         Exponential(
+#             Product((
+#                 Frac(2),
+#                 Exponential(Frac(3), Frac(1,4))
+#             )),
+#             C(-1)
+#         )
+#     )).consim()
+# )
+
+# print(
+#     Product((
+#         x(1),
+#         Exponential(
+#             Product((
+#                 x(1),
+#                 x(2)
+#             )),
+#             C(-1)
+#         )
+#     )).pfsf()
+# )
+
+# print(
+# Product((C(7), Exponential(Sum((x(), C(1))), C(-2)))).pfsf()
+# )
+
+# print(Sum((x(), C(1))).pfsf())
+
+# print(
+#     Exponential(x(), C(-1)).pfsf()
+# )
+
+# print(
+#     Exponential(Sum((x(), x(2), C(4))), C(-1)).pfsf()
+# )
+
+# print(
+#     Exponential(C(0), x()).derivative(x())
+# )
+
+# print(
+#     Exponential(C(0), x()).pfsf()
+# )
+
+# log_(1 + arcsin(1) + x1)((arctan(x1)^arccos(x1)))
+
+
+# raise 'awareness'
+
+# print(
+# Product((
+#     Product((h(1), h(2))),
+#     h(3)
+# )).consim()
+# )
 
 # print(
 #     Product((
@@ -50,10 +180,6 @@ def C(x):
 #         Sum((x(2), x(3)))
 #     ).pfsf()
 # )
-
-print(
-    Exponential(C(2), C(8)).derivative(x())
-)
 
 # print(
 #     Exponential(
@@ -114,17 +240,17 @@ print(
 
 # print(
 #     Product((
-#         Exponential(rtx2, rt(3)), Exponential(Exponential(rtx2,rt(3)),rt(4))
+#         Exponential(rt(2), rt(3)), Exponential(Exponential(rt(2),rt(3)),rt(4))
 #     ))
 # .pfsf()
 # )
 
-# print( Sum((rt(3),Product((Constant(2),rt(3))))).consim() )
+# print( Sum((rt(3),Product((Integer(2),rt(3))))).consim() )
 
 # print( Sum(( Variable(Exponential(Frac(5), Frac(1,2))), Variable(Exponential(Frac(6),Frac(1,2))) )).pfsf() )
 
 # print(
-#     Product(( rt(2), Constant(1),Exponential( rt(2), rt(3))   )).consim()
+#     Product(( rt(2), Integer(1),Exponential( rt(2), rt(3))   )).consim()
 #     )
 
 # print(
@@ -141,10 +267,10 @@ print(
 
 # print( Sum((Variable(rt(3)), Product((Frac(2), Variable(rt(3)))))).pfsf() )
 
-# print((Product((Sum((Constant(3),)), Exponential(Constant(4),Constant(5))))))
+# print((Product((Sum((C(3),)), Exponential(C(4),C(5))))))
 
 
-# for arg in (Constant(1), Sum((Constant(2), Constant(4)))):
+# for arg in (C(1), Sum((C(2), C(4)))):
 #     print(arg)
 
 # for i in range(4):
@@ -154,7 +280,7 @@ print(
 
 
 
-# x = MakeExpression(ExpressionType.LOGARITHM, (Constant(4),Constant(3),Constant(4)))
+# x = MakeExpression(ExpressionType.LOGARITHM, (C(4),C(3),C(4)))
 # print(x)
 
 # def D(function, differential = Variable(1)):
@@ -163,15 +289,15 @@ print(
 # print(Sine(Variable(1)))
 
 
-# print(Exp(GeneralMultivar("f")).derivative(Variable(1)))
+# # print(Exp(GeneralMultivar("f")).derivative(Variable(1)))
 
 # print('Constants:')
 # # 8
-# expr1 = Constant(8)
+# expr1 = C(8)
 # # e
-# expr2 = Constant('e')
+# expr2 = Euler()
 # # pi
-# expr3 = Constant('pi')
+# expr3 = Pi()
 # print(expr1, expr2, expr3)
 
 # x
@@ -179,23 +305,23 @@ print(
 # print(expr2)
 
 # # 2x + 4
-# expr3 = Sum([Product([Constant(2), Variable(1)]), Constant(4)])
+# expr3 = Sum([Product([C(2), Variable(1)]), C(4)])
 # print(expr3)
 
 # # 3x * 2x
-# expr4 = Product([Product([Constant(3), Variable(1)]), Product([Constant(2), Variable(1)])])
+# expr4 = Product([Product([C(3), Variable(1)]), Product([C(2), Variable(1)])])
 # print(expr4)
 
 # # x^2
-# expr5 = Exponential(Variable(1), Constant(2))
+# expr5 = Exponential(Variable(1), C(2))
 # print(expr5)
 
 # # 0x^4
-# expr6 = Product([Constant(0), Exponential(Variable(1), Constant(4))])
+# expr6 = Product([C(0), Exponential(Variable(1), C(4))])
 # print(expr6)
 
 # # (8 + 7) * 3
-# expr7 = Product([Sum([Constant(8), Constant(7)]), Constant(3)])
+# expr7 = Product([Sum([C(8), C(7)]), C(3)])
 # print(expr7)
 
 # # x * ( x * (x * (x+1))) 
@@ -209,49 +335,49 @@ print(
 # print( Variable(1).derivative(Variable(1)))
 
 # # derivative of constant
-# print(Constant(23).derivative(Variable(1)))
+# print(C(23).derivative(Variable(1)))
 
-# # general multivariable functions
-# genf = GeneralMultivar('f')
-# geng = GeneralMultivar('g')
-# genh = GeneralMultivar('h')
-# print(genf)
-# print(Exponential(genf, Sum((geng, genh))))
-# print(genf.derivative(Variable(1)))
-# print(genf.derivative(Variable(1)).derivative(Variable(2)))
+# # # general multivariable functions
+# # genf = GeneralMultivar('f')
+# # geng = GeneralMultivar('g')
+# # genh = GeneralMultivar('h')
+# # print(genf)
+# # print(Exponential(genf, Sum((geng, genh))))
+# # print(genf.derivative(Variable(1)))
+# # print(genf.derivative(Variable(1)).derivative(Variable(2)))
 
-# # the function D
-# print(D(genf, Variable(1)))
-# print(D(D(genf, Variable(1)), Variable(2)))
-# print(D(genf))
+# # # the function D
+# # print(D(genf, Variable(1)))
+# # print(D(D(genf, Variable(1)), Variable(2)))
+# # print(D(genf))
 
 
-# # Derivative of sum
-# print(D(Sum((genf, geng, genh))))
+# # # Derivative of sum
+# # print(D(Sum((genf, geng, genh))))
 
-# # Derivative of Product
-# print(D(Product((genf, geng, genh))))
+# # # Derivative of Product
+# # print(D(Product((genf, geng, genh))))
 
-# # Derivative of Exponential
-# print(D(Exponential(genf, genh)))
-# print(D(Exponential(Variable(1), Constant(-1))))
+# # # Derivative of Exponential
+# # print(D(Exponential(genf, genh)))
+# print(D(Exponential(Variable(1), C(-1))))
 # print(D(Exponential(Variable(1),Variable(1))))
 
 # # Problem with derivative of exponential
-# print(D(Exponential(Constant(0), Variable(1))))
+# print(D(Exponential(C(0), Variable(1))))
 
 # # ln
 # print( NaturalLogarithm(Variable(1)) )
-# print( D(NaturalLogarithm(genf)))
+# # print( D(NaturalLogarithm(genf)))
 # print( D(NaturalLogarithm(Variable(1))))
 
 # print('Logarithm:')
 # # log_8((x+1)^2)
-# expr1 = Logarithm(Constant(8), Exponential(Sum([Variable(1), Constant(1)]), Constant(2)))
+# expr1 = Logarithm(C(8), Exponential(Sum([Variable(1), C(1)]), C(2)))
 # # log_e(pi)
-# expr2 = Logarithm(Constant('e'), Constant('pi'))
+# expr2 = Logarithm(Euler(), Pi())
 # print(expr1, expr2)
 
 # # general single variable function
-# print(GeneralSinglevar('cot', Variable(1)))
-# print(D(GeneralSinglevar('cot', genf)))
+# # print(GeneralSinglevar('cot', Variable(1)))
+# # print(D(GeneralSinglevar('cot', genf)))

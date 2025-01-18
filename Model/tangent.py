@@ -84,6 +84,15 @@ class Tangent(Expression):
             
             if a<Frac(0):
                 a = a + Frac(1)
+            
+            if a>Frac(1,2) or a==Frac(1,2):
+                return Product((
+                    Frac(-1),
+                    Tangent(Product((
+                        Frac(1)+(Frac(-1)*a),
+                        Pi()
+                    )))
+                    )).consim()
 
             if a==Frac(0):
                 return Frac(0)

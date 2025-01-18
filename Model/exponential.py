@@ -100,6 +100,7 @@ class Exponential(Expression):
                     # print(f"MATH ERROR: Zero to negative power: {Exponential(sb, se)}")
                     raise Exception(f"MATH ERROR: Zero to negative power: {Exponential(sb, se)}")
             return Frac(0) #0^(negative function) returns 0. If se<0, the original domain was the empty set and now is all of R.
+        #consider 0^a. Assuming a is not identified by us to be Frac(0), this returns 0. However, this assumes we can identify when a is equal to 0. 
 
 
         if se.expression_type == ExpressionType.LOGARITHM:
@@ -195,11 +196,12 @@ class Exponential(Expression):
                 if sb.base.num.value>0:
                     return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode) #(a^b)^c -> a^(b*c) but that only holds for a>0
                 else: #sb.base.num.value <0: (if sb.base==0, then sb would have been simplified to Frac(0) and we wouldn't be here)
-                    if safeMode:
-                        return Exponential(sb, se)
-                    else:
-                        print(f"Warning: Safe Mode Off! Applying (a^b)^c -> a^(bc), Expression May no longer be well defined. Simplifying {Exponential(sb, se)} into {Exponential(sb.base, Product((sb.argument, se)))}")
-                        return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode)
+                    # if safeMode:
+                    return Exponential(sb, se)
+                    # else:
+                    #     #shouldnt we do Exponential(sb, se) here as well? We know we cannot collapse the tower. Yes, implemented as of now
+                    #     print(f"Warning: Safe Mode Off! Applying (a^b)^c -> a^(bc), Expression May no longer be well defined. Simplifying {Exponential(sb, se)} into {Exponential(sb.base, Product((sb.argument, se)))}")
+                    #     return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode)
             elif sb.base.expression_type == ExpressionType.EULER or sb.base.expression_type == ExpressionType.PI:
                 return Exponential(sb.base, Product((sb.argument,se)) ).consim(safeMode) #(a^b)^c -> a^(b*c) but that only holds for a>0
             else:
