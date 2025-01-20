@@ -173,3 +173,7 @@ print(exp2.simplify())
 exp3 = Exponential(Polynomial([3, 1]), -2)
 print(exp3)
 print(exp3.simplify())
+
+print('\nShow representation:')
+print(expr1.show_representation())
+print(expr1)

@@ -44,6 +44,10 @@ class Fraction(RationalExpression):
     def put_brackets(self):
         return str(self)
 
+    def show_representation(self):
+        return (f'Fraction({self.coefficient}, {self.numerator.show_representation()}, '
+                f'{self.denominator.show_representation()})')
+
     def copy(self):
         return Fraction(self.numerator.copy(), self.denominator.copy(), self.coefficient.copy())
 

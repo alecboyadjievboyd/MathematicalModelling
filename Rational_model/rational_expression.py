@@ -25,7 +25,11 @@ class RationalExpression(abc.ABC):
 
     @abc.abstractmethod
     def put_brackets(self):
-        pass
+        raise TypeError("Put brackets not implemented")
+
+    @abc.abstractmethod
+    def show_representation(self):
+        raise TypeError("Show representation not implemented")
 
     # Append coefficient to string representing the expression
     def string_add_coefficient(self, string_expression):

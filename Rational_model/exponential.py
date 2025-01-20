@@ -22,6 +22,9 @@ class Exponential(RationalExpression):
     def put_brackets(self):
         return str(self)
 
+    def show_representation(self):
+        return f'Exponential({self.coefficient}, {self.base.show_representation()}), {self.exponent})'
+
     def simplify(self):
         from Rational_model.product import Product
 

@@ -166,6 +166,9 @@ class Polynomial(RationalExpression):
 
         return str(self)
 
+    def show_representation(self):
+        return f'Polynomial({self.coefficient}, {self.monomial_coefficients})'
+
     def __eq__(self, other):
         if not isinstance(other, Polynomial):
             return NotImplemented

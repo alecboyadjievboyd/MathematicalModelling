@@ -27,6 +27,12 @@ class Product(RationalExpression):
         else:
             return str(self)
 
+    def show_representation(self):
+        factor_representation = self.factors[0].show_representation()
+        for i in range(1, len(self.factors)):
+            factor_representation += ', ' + self.factors[i].show_representation()
+        return f'Product({factor_representation})'
+
     def pull_out_constants(self):
         for factor in self.factors:
             self.coefficient *= factor.coefficient
