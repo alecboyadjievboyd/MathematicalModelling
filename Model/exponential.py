@@ -54,11 +54,15 @@ class Exponential(Expression):
     
     def derivative(self, differential, safeMode = False):
         from Model.natural_logarithm import NaturalLogarithm
-        return Product((self, 
-                      Sum(( Product((self.argument.derivative(differential), NaturalLogarithm(self.base))),
-                          Product((self.argument, Exponential(self.base, Integer(-1)), self.base.derivative(differential)))
-                         ))
-                      )).pfsf(safeMode)
+        simpSelf = self.pfsf(safeMode)
+        if simpSelf == self: # if no change
+            return Product([self, 
+                        Sum(( Product([self.argument.derivative(differential), NaturalLogarithm(self.base)]),
+                            Product([self.argument, Exponential(self.base, Integer(-1)), self.base.derivative(differential)])
+                            ))
+                        ]).pfsf(safeMode)
+        else:
+            return simpSelf.derivative(differential, safeMode)
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.argument) #return (self.base, self.exponent)
@@ -242,7 +246,7 @@ class Exponential(Expression):
                 return Integer(1)
             
         # Integer Exponent case
-        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == ExpressionType.INTEGER and  argPfsf.value > 2): # will always be a sum with one or more terms because it has been pfsf iffied
+        if (basePfsf.expression_type == ExpressionType.SUM) and (argPfsf.expression_type == ExpressionType.INTEGER and  argPfsf.value >= 2): # will always be a sum with one or more terms because it has been pfsf iffied
             terms = []
             for i in range(0, argPfsf.value, 1): 
                 terms.append(basePfsf) # Should work even though they are duplicates? I cannot forsee issues

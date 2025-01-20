@@ -18,6 +18,7 @@ from Model.euler import Euler
 from Model.pi import Pi
 from Model.integer import Integer
 from Model.expression_type import ExpressionType
+from Model.fraction import Frac
 
 
 
@@ -114,7 +115,6 @@ def evaluate(f, x):
         return x
 
     if f.expression_type == ExpressionType.FRACTION: # FRACTIONS ONLY CONTAIN INTEGERS
-        from Model.fraction import Frac
 
         num = evaluate(f.num, x)
         den = evaluate(f.den, x)
@@ -325,5 +325,17 @@ if __name__ == "__main__":
 
         
         ##safeModeTest(4, 3)
+
+print(
+    Product((
+        Frac(2, 1),
+        Exponential(
+            Product((
+                Frac(2, 1),
+                Exponential(Frac(3, 1), Frac(1,4))
+            )),
+            Integer(-1)
+        ))).pfsf().consim()
+)
 
 

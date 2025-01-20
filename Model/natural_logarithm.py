@@ -23,10 +23,15 @@ class NaturalLogarithm(Logarithm):
     
     def derivative(self, differential, safeMode = False):
         from Model.exponential import Exponential
-        return Product([
-            Exponential(self.argument, Integer(-1)),
-            self.argument.derivative(differential)
-        ]).pfsf(safeMode)
+        simpSelf = self.pfsf(safeMode)
+        if simpSelf == self: # if no change
+            return Product([
+                Exponential(self.argument, Integer(-1)),
+                self.argument.derivative(differential)
+            ]).pfsf(safeMode)
+        else:
+            return simpSelf.derivative(differential, safeMode)
+        
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

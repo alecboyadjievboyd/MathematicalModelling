@@ -26,7 +26,12 @@ class Exp(Exponential):
     # Should pull GT and EQ from super
     
     def derivative(self, differential, safeMode = False):
-        return Product((Exp(self.argument), self.argument.derivative(differential))).pfsf(safeMode)
+        simpSelf = self.pfsf(safeMode)
+        if simpSelf == self: # if no change
+            return Product((Exp(self.argument), self.argument.derivative(differential))).pfsf(safeMode)
+        else:
+            return simpSelf.derivative(differential, safeMode)
+        
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

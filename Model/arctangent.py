@@ -46,8 +46,13 @@ class Arctangent(Expression):
         return self.isconstant
 
     def derivative(self, differential, safeMode = False):
-        return Product((
+        simpSelf = self.pfsf(safeMode)
+        if simpSelf == self: # if no change
+            return Product((
             Exponential(Sum((Integer(1), Exponential(self.argument, Integer(2)))), Integer(-1)), self.argument.derivative(differential))).pfsf(safeMode)
+        else:
+            return simpSelf.derivative(differential, safeMode)
+        
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)

@@ -51,11 +51,16 @@ class Logarithm(Expression):
             return self.primaryOrder > other.primaryOrder # Ordering classes
 
     def derivative(self, differential, safeMode = False):
-        return Product([
-            self.argument.derivative(differential),
-            Exponential(Logarithm(Euler(), self.base), -1),
-            Exponential(self, -1)
-        ]).pfsf(safeMode)
+        simpSelf = self.pfsf(safeMode)
+        if simpSelf == self: # if no change
+            return Product([
+                self.argument.derivative(differential),
+                Exponential(Logarithm(Euler(), self.base), -1),
+                Exponential(self, -1)
+            ]).pfsf(safeMode)
+        else:
+            return simpSelf.derivative(differential, safeMode)
+        
 
     def genarg(self):#needed for constant simplification (consim)
         return (self.base, self.argument)

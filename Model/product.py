@@ -68,14 +68,19 @@ class Product(Expression):
 #             for i in range(len(self.factors))
 #         ))
     def derivative(self, differential, safeMode = False): #outputs derivative of f*g*h as f'*g*h + f*g'*h + f*g*h'
-        return Sum(tuple(
-            Product(
-                tuple(self.factors[j] for j in range(len(self.factors)) if j<i) 
-                + (self.factors[i].derivative(differential),) 
-                + tuple(self.factors[j] for j in range(len(self.factors)) if j>i)
-            ) 
-            for i in range(len(self.factors))
-        )).pfsf(safeMode)
+        simpSelf = self.pfsf(safeMode)
+        if simpSelf == self: # if no change
+            return Sum(tuple(
+                Product(
+                    tuple(self.factors[j] for j in range(len(self.factors)) if j<i) 
+                    + (self.factors[i].derivative(differential),) 
+                    + tuple(self.factors[j] for j in range(len(self.factors)) if j>i)
+                ) 
+                for i in range(len(self.factors))
+            )).pfsf(safeMode)
+        else:
+            return simpSelf.derivative(differential, safeMode)
+        
 
     def genarg(self):#needed for constant simplification (consim)
         return self.factors

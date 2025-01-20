@@ -36,8 +36,12 @@ class Sum(Expression):
                 string_expression += " + " + str(term)
         return string_expression
     
-    def derivative(self, differential, safeMode = False):   
-        return Sum( tuple(term.derivative(differential) for term in self.terms) ).pfsf(safeMode)    
+    def derivative(self, differential, safeMode = False):  
+        simpSelf = self.pfsf(safeMode)
+        if simpSelf == self: # if no change
+            return Sum( tuple(term.derivative(differential) for term in self.terms) ).pfsf(safeMode)
+        else:
+            return simpSelf.derivative(differential, safeMode) 
     
     # THIS ONLY CHECKS PFSF FORM EQUIVALENCE
     def __eq__(self, other):
