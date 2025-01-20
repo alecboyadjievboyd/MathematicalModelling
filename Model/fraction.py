@@ -240,23 +240,28 @@ class Frac(Expression):
 
         takeoutdic = {}
         for prime in powerdic:
-            a = Frac(prime) ** powerdic[prime].squo()
-            b = Frac(prime) ** powerdic[prime].srem()
+            a = Frac(prime) ** powerdic[prime].quo()
+            b = Frac(prime) ** powerdic[prime].rem()
             m = powerdic[prime].den.value
             takeoutdic[prime] = (a, b, m)
 
         coefficient = Frac(1)
         mdic = {}
-        for prime in takeoutdic: #this defines the ordering: m associated to the first prime comes first, then m associated to the second prime with different m, etc.
+        for prime in takeoutdic: #this defines the ordering: m associated to the first prime comes first, then m associated to the second prime with different m, etc. That is quite silly, lets change that
             mdic.setdefault(takeoutdic[prime][2], Frac(1))
             mdic[takeoutdic[prime][2]] *= takeoutdic[prime][1]
             coefficient *= takeoutdic[prime][0] 
 
-        d = {}
+        nooned = {}
         for m in mdic:
             if mdic[m] != Frac(1):
-                d[m] = mdic[m]
-        
+                nooned[m] = mdic[m]
+
+        #sorted them in order of increasing m, so decreasing power
+        d = {}
+        for m in sorted(nooned):
+            d[m] = nooned[m]
+          
         coefficient = Frac(sgn)*coefficient
         if AsExpr:
             if len(d) == 0:
@@ -290,6 +295,6 @@ class Frac(Expression):
             return (self**power.num).root(power.den)
         else:
             return Product((
-                self**(power.squo()),
-                (self**power.srem()).root(power.den)
+                self**(power.quo()),
+                (self**power.rem()).root(power.den)
             )).consim(True) #consim to do the multiplication of self**(power.squo()) with the coefficient of the root

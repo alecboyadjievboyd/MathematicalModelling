@@ -89,7 +89,7 @@ class Tangent(Expression):
             if a<Frac(0):
                 a = a + Frac(1)
             
-            if a>Frac(1,2) or a==Frac(1,2):
+            if a>Frac(1,2):
                 return Product((
                     Frac(-1),
                     Tangent(Product((
@@ -120,7 +120,7 @@ class Tangent(Expression):
                     Frac(2)
                 ))
             elif a==Frac(1,2):
-                raise "MATH ERROR: tan(pi/2) is undefined (1/0)"
+                raise "MATH ERROR: tan(pi/2) is undefined"
             elif a==Frac(7,12):
                 return Product((Frac(-1), Tangent(Product((Frac(5,12), Pi()))))).consim(safeMode)
             elif a==Frac(2,3):

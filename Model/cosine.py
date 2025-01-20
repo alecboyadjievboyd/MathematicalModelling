@@ -83,7 +83,7 @@ class Cosine(Expression):
 
         if evalexact:
             if a < Frac(0):
-                a = Frac(-1)*Frac(a)
+                a = Frac(-1)*a
 
             a = a % Frac(2)
             if a > Frac(1):

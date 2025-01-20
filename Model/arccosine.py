@@ -60,6 +60,16 @@ class Arccosine(Expression):
         return (self.argument,)
     
     def consim(self, safeMode = False):
+        from Model.cosine import Cosine
+        from Model.fraction import Frac
+        from Model.pi import Pi
+
+        x = self.argument.consim(safeMode)
+        for b in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12):
+            if Cosine(Product((Frac(b, 12), Pi()))).consim(safeMode) == x:
+                return Product((Frac(b, 12), Pi())).consim(safeMode)
+
+
         return Arccosine(self.argument.consim(safeMode)) 
 
     def pfsf(self, safeMode = False): #simplified form

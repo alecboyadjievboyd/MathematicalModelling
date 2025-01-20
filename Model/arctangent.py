@@ -57,7 +57,18 @@ class Arctangent(Expression):
     def genarg(self):#needed for constant simplification (consim)
         return (self.argument,)
     
-    def consim(self, safeMode):
+    def consim(self, safeMode = False):
+        from Model.tangent import Tangent
+        from Model.fraction import Frac
+        from Model.pi import Pi
+
+        x = self.argument.consim(safeMode)
+        for b in (-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5):
+            if Tangent(Product((Frac(b, 12), Pi()))).consim(safeMode) == x:
+                return Product((Frac(b, 12), Pi())).consim(safeMode)
+
+
+
         return Arctangent(self.argument.consim(safeMode))
     
     def pfsf(self, safeMode = False): #simplified form
