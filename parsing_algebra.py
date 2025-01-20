@@ -21,17 +21,19 @@ def check_implicit(input):
     i = 0
     ans = True
     while (i < len(input)):
-        if ((input[i] >= '0' and input[i] <= '9') or input[i] == '-'):
+
+        if (input[i] >= '0' and input[i] <= '9'):
             ans = True
             i += 1
 
-        elif(input[i] =='/'):
+        elif(input[i] =='/' or input[i] == '-'):
             i += 1   
             ans = False 
+            
         elif ((input[i] == 'x' or input[i] == '(') and ans):
             return i, True
         else:
-            break
+            return i, False
     
     return i, False
     
