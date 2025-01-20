@@ -227,7 +227,7 @@ class Frac(Expression):
                 raise "Cannot take even root of negative value"
             else:
                 sgn = -1
-                S = Frac(-1)*a
+                S = Frac(-1)*S
         else:
             sgn = 1
 

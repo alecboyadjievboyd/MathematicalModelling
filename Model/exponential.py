@@ -220,7 +220,58 @@ class Exponential(Expression):
                             se
                         ))
                     ).consim(safeMode)
-            
+
+
+        if sb.expression_type == ExpressionType.PRODUCT:
+            takenout = () #factors taken out of the exponential, already exponentiated
+            keptin = () #factors kept in the exponential, not exponentiated
+            sgnin = 1 #new factor for inside the exponential
+            if se.expression_type == ExpressionType.FRACTION and se.den.value % 2 == 1:
+                for factor in sb.factors:
+                    takenout += (Exponential(factor, se),)
+            else:
+                for factor in sb.factors:
+                    if factor.expression_type == ExpressionType.FRACTION:
+                        if factor > Frac(0):
+                            takenout += (Exponential(factor, se),)
+                        else: #factor < Frac(0), as factor==Frac(0) would have simplified the product to 0 and we wouldnt be here
+                            if factor == Frac(-1): #this also prevents inf recursion
+                                keptin += (factor,)
+                            else:
+                                takenout += (Exponential(Frac(-1)*factor, se),)
+                                sgnin *= -1
+                    elif factor.expression_type == ExpressionType.PI or factor.expression_type == ExpressionType.EULER:
+                        takenout += (Exponential(factor, se),)
+                    else:
+                        if safeMode:
+                            keptin += (factor,)
+                        else:
+                            print("Warning: Safe Mode Off! Applying (ab)^c = a^c b^c, Domain Issues May Emerge")
+                            takenout += (Exponential(factor, se),)
+            if len(takenout) == 0: #this also prevents infinite recursion
+                return Exponential(sb, se)
+            else:
+                return Product(
+                    takenout
+                    + (Exponential(
+                        Product(
+                            (Frac(sgnin),) +
+                            keptin
+                        ),
+                        se
+                    ),)
+                ).consim(safeMode)
+                
+
+             
+        # # (ab)^c = (a)^c (b)^c case
+        # if basePfsf.expression_type == ExpressionType.PRODUCT:
+        #     print("Warning: Safe Mode Off! Applying (ab)^c = a^c b^c, Domain Issues May Emerge")
+        #     newFactors = []
+        #     for factor in basePfsf.factors:
+        #         newFactors.append(Exponential(factor, argPfsf))
+        #     return Product(newFactors)
+        
         #if nothing is returned yet
         return Exponential(sb, se)
     
