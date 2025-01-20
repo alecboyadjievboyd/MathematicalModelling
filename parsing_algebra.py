@@ -5,6 +5,7 @@ from Rational_model.constant_fraction import ConstantFraction
 from Rational_model.fraction import Fraction
 from Rational_model.product import Product
 from Rational_model.sum import Sum
+from Rational_model.exponential import Exponential
 from Rational_model.polynomial_utils import make_monomial
 
 def check_constant(input):
@@ -50,11 +51,22 @@ def monomial(input):
         return Polynomial([ConstantFraction(int(input), 1)])
     
     elif (input[0] == 'x'):
-        numer = 1
-        if (len(input) != 1):
-            return make_monomial(check_constant(input[2:]))
-        else:
-            return make_monomial(1)
+        return make_monomial(1)
+        
+def exp(input):
+
+    bracket = 0
+    if (input == ""):
+        return
+    for i in range(len(input)):
+        if (input[i] == '('):
+            bracket += 1
+        elif (input[i] == ')'):
+            bracket -= 1
+        elif (input[i] == '^' and bracket == 0):
+            return Exponential(monomial(input[:i]), check_constant(input[(i+1):])) 
+        
+    return monomial(input)
 
 def fraction(input):
 
@@ -66,9 +78,9 @@ def fraction(input):
         elif (input[i] == ')'):
             bracket -= 1
         elif (input[i] == '/' and bracket == 0):
-            return Fraction(monomial(input[:i]), fraction(input[(i+1):]))
+            return Fraction(exp(input[:i]), fraction(input[(i+1):]))
         
-    return monomial(input)
+    return exp(input)
 
 def implicit(input):
 
