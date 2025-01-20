@@ -212,7 +212,7 @@ class Exponential(Expression):
                 if safeMode:
                     return Exponential(sb, se)
                 else:
-                    print(f"Warning: Safe Mode Off! Applying (a^b)^c -> a^(bc), Expression May no longer be well defined. Simplifying {Exponential(sb, se)} into {Exponential(sb.base, Product((sb.argument, se)))}")
+                    print(f"Warning: Safe Mode Off! Applying (a^b)^c -> a^(bc), Expression may no longer be well defined. Simplifying {Exponential(sb, se)} into {Exponential(sb.base, Product((sb.argument, se)))}")
                     return Exponential(
                         sb.base,
                         Product((
@@ -246,7 +246,7 @@ class Exponential(Expression):
                         if safeMode:
                             keptin += (factor,)
                         else:
-                            print("Warning: Safe Mode Off! Applying (ab)^c = a^c b^c, Domain Issues May Emerge")
+                            print(f"Warning: Safe Mode Off! Applying (ab)^c = a^c b^c, Expression may no longer be well defined. Taking {Exponential(factor, se)} out of {Exponential(sb, se)} ")
                             takenout += (Exponential(factor, se),)
             if len(takenout) == 0: #this also prevents infinite recursion
                 return Exponential(sb, se)
