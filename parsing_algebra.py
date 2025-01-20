@@ -8,34 +8,32 @@ from Rational_model.sum import Sum
 from Rational_model.polynomial_utils import make_monomial
 
 def check_constant(input):
-    ans = True
+
     i = 0
     while (i < len(input)):
         if (input[i] >='0' and input[i] <= '9'):
             i += 1
-        elif (input[i] =='*'):
-            ans = False
-            break
-        elif (input[i] == '/'):
-            if (input[i+1] >= '0' and input[i+1] <= '9'):
-                break  
-            else:
-                ans = False
-                break        
-        else: 
-            break
+    return int(input[:i])
     
 
-def const(input):
+def check_implicit(input):
     
     i = 0
+    ans = True
     while (i < len(input)):
-        if (input[i] =='/' or (input[i] >= '0' and input[i] <= '9') or input[i] == '-'):
+        if ((input[i] >= '0' and input[i] <= '9') or input[i] == '-'):
+            ans = True
             i += 1
+
+        elif(input[i] =='/'):
+            i += 1   
+            ans = False 
+        elif (input[i] == 'x' and ans):
+            return i, True
         else:
             break
     
-    return i
+    return i, False
     
 
 def monomial(input):
@@ -52,7 +50,7 @@ def monomial(input):
     elif (input[0] == 'x'):
         numer = 1
         if (len(input) != 1):
-            return make_monomial(int(input[2:]))
+            return make_monomial(check_constant(input[2:]))
         else:
             return make_monomial(1)
 
@@ -80,8 +78,8 @@ def implicit(input):
         elif (input[i] == ')'):
             bracket -= 1
         elif ((input[i] >='0' and input[i] <= '9') and bracket == 0):
-            j = const(input[i:])
-            if ((i +j) < len(input)):
+            j, split = check_implicit(input[i:])
+            if ((i +j) < len(input) and split):
                 return Product([fraction(input[:i+j]), term(input[i+j:])])
             break
                
