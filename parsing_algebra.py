@@ -28,7 +28,7 @@ def check_implicit(input):
         elif(input[i] =='/'):
             i += 1   
             ans = False 
-        elif (input[i] == 'x' and ans):
+        elif ((input[i] == 'x' or input[i] == '(') and ans):
             return i, True
         else:
             break
