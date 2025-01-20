@@ -30,7 +30,7 @@ def const(input):
     
     i = 0
     while (i < len(input)):
-        if (input[i] =='/' or (input[i] >= '0' and input[i] <= '9')):
+        if (input[i] =='/' or (input[i] >= '0' and input[i] <= '9') or input[i] == '-'):
             i += 1
         else:
             break
@@ -129,5 +129,5 @@ def express_alg(input):
 if __name__ == '__main__':
     user_input = str(input("please input in ASCII math "))
     user_input = user_input.replace(" ", "")
-    x = implicit(user_input)
+    x = express_alg(user_input)
     print(x)
