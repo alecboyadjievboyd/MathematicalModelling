@@ -1,94 +1,91 @@
+import multiprocessing
 from Model.variable import Variable
 from Rational_model.polynomial_utils import divide_with_remainder, polynomial_gcd
 from parsing import expression
 from parsing_algebra import express_alg
 
 
-print("Which model would you like to use")
-print("1. Analytic Model  2. Rational Model")
-model = int(input())
+def process_UIoperation(model_input, safeMode, operation_input, expression_input, diffIndex):
+    try:
+        if model_input == 1:
+            if operation_input == 1:  # Differentiate
+                parsed_input = expression(expression_input.replace(" ", ""))
+                
+                print(parsed_input.derivative(Variable(diffIndex), safeMode))
+
+            elif operation_input == 2:  # Simplify
+                parsed_input = expression(expression_input.replace(" ", ""))
+                print(parsed_input.pfsf(safeMode))
+            else:
+                print("Invalid option")
+
+        elif model_input == 2:
+            if operation_input == 1:  # Simplify
+                parsed_input = express_alg(expression_input.replace(" ", ""))
+                print(parsed_input.simplify())
+            elif operation_input == 2:  # Simplify and Factorize
+                parsed_input = express_alg(expression_input.replace(" ", ""))
+                print(parsed_input.get_standard_form())
+            else:
+                print("Invalid option")
+        else:
+            print("Invalid input. Enter correct model number")
+    except RecursionError:
+        print("There was a recursion depth error! Your expression or operation may be too complex or incorrectly inputted!")
+    #except Exception as e:
+        print(f"There was an error {e}! Your expression or operation may be too complex or incorrectly inputted!")
 
 
-if model == 1:
+def UIoperation():
+    print("Which model would you like to use")
+    print("1. Analytic Model  2. Rational Model")
+    model = int(input())
+
+    print("Would you like to use Safe Mode?")
+    print("1. Yes  2. No")
+    safeMode = int(input())
+    if safeMode == 1:
+        safeMode = True
+    if safeMode == 2:
+        safeMode = False
+    else:
+        safeMode = False
 
     print("Which operation would you like to do")
-    print("1. Differentiate  2. Simplify")
-    option = int(input())
-    print("Enter the expression")
-    
-    user_input = input()
-    parsed_input = expression(user_input.replace(" ", ""))
+    if model == 1:
+        print("1. Differentiate  2. Simplify")
+    elif model == 2:
+        print("1. Simplify  2. Simplify and Factorize")
+    else:
+        print("Invalid model")
+        return
 
-    if option == 1:
+    option = int(input())
+
+    if model == 1 and option == 1:
         print("Enter the index variable to differentiate with respect to")
-        print(parsed_input.derivative(Variable(int(input()))))
-
-    elif option == 2:
-        print(parsed_input.pfsf())
-
+        diffIndex = int(input())
     else:
-        print("Invalid option")
+        diffIndex = None
+    print("Enter the expression")
+    user_expression = input()
 
-elif model == 2:
-    
-    print("Which operation would you like to do")
-    print("1. Simplify  2. Simplify and factorize  3. Find roots")
-    print("4. Divide with remainder  5. GCD")
-    option = int(input())
-    
-    if option == 1:
-        print("Enter the expression")
-        user_input = input()
-        parsed_input = express_alg(user_input.replace(" ", ""))
+    return model, safeMode, option, user_expression, diffIndex
 
-        print(parsed_input.simplify())
 
-    elif option == 2:
-        print("Enter the expression")
-        user_input = input()
-        parsed_input = express_alg(user_input.replace(" ", ""))
+if __name__ == "__main__":
+    print(" ")
+    while True:
+        user_input = UIoperation()
+        if user_input is None:
+            continue
 
-        print(parsed_input.get_standard_form())
+        model, safeMode, option, expression_input, diffIndex = user_input
+        process = multiprocessing.Process(
+            target=process_UIoperation, args=(model, safeMode, option, expression_input, diffIndex)
+        )
+        process.start()
+        process.join()
 
-    elif option == 3:
-        print("Enter the expression")
-        user_input = input()
-        parsed_input = express_alg(user_input.replace(" ", ""))
-        parsed_input = parsed_input.simplify()
-
-        roots = parsed_input.find_rational_roots()
-        for root in roots:
-            print(root, end='  ')
-
-    elif option == 4:
-        print("Enter the dividend:")
-        user_input = input()
-        dividend = express_alg(user_input.replace(" ", ""))
-        print("Enter the divider:")
-        user_input = input()
-        divider = express_alg(user_input.replace(" ", ""))
-
-        dividend = dividend.simplify()
-        divider = divider.simplify()
-
-        quotient, remainder = divide_with_remainder(dividend, divider)
-        print("quotient: ", quotient)
-        print("remainder: ", remainder)
-    elif option == 5:
-        print("Enter the first polynomial:")
-        user_input = input()
-        polynomial1 = express_alg(user_input.replace(" ", ""))
-        print("Enter the second polynomial:")
-        user_input = input()
-        polynomial2 = express_alg(user_input.replace(" ", ""))
-
-        polynomial1 = polynomial1.simplify()
-        polynomial2 = polynomial2.simplify()
-
-        print('gcd: ', polynomial_gcd(polynomial1, polynomial2))
-
-    else:
-        print("Invalid option")
-
-else:
-    print("Invalid input. Enter correct model number")
+        if process.exitcode != 0:
+            print(f"Process crashed with exit code {process.exitcode}. Your expression or operation may be too complex or incorrectly inputted!")
