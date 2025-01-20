@@ -47,7 +47,7 @@ def log(input):
     if (input[0] == '('):
         j += bracket(input)            
     elif (input[0] == 'x'):
-        j += 2 + const(input[2:])
+        j += 1 + const(input[1:])
     else:
         j += const(input)
     
@@ -96,7 +96,7 @@ def factor(input):
             start += bracket(input[start:])
       
         elif (input[start] == 'x'):
-            start += 2 + const(input[start+2:])   
+            start += 1 + const(input[start+1:])   
 
         elif (input[start] == 's' or input[start] == 't' or input[start] =='c'):
             start += 3
@@ -146,7 +146,7 @@ def unit(input):
     if (input[0] == '(' and input[-1] == ')'):
         return expression(input[1:len(input)-1])
     elif (input[0] == 'x'):
-        return Variable(int(input[2:]))
+        return Variable(int(input[1:]))
     elif (input[0] == 'e'):
         return  Euler()
     elif (input[0] == 'p'):
