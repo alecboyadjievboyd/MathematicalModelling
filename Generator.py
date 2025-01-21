@@ -326,7 +326,7 @@ if __name__ == "__main__":
         
         ##safeModeTest(4, 3)
 
-print(
+'''print(
     Product((
         Frac(2, 1),
         Exponential(
@@ -336,6 +336,6 @@ print(
             )),
             Integer(-1)
         ))).pfsf().consim()
-)
+)'''
 
 

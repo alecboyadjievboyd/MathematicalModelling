@@ -48,7 +48,24 @@ class Product(Expression):
             return True
                 
         if (self.primaryOrder == other.primaryOrder): # Both products
-            return max(self.factors) > max(other.factors)
+            
+            selfMax = max(self.factors)
+            otherMax = max(other.factors)
+
+            if selfMax == otherMax:
+                sFactors = self.factors.copy()
+                oFactors = other.factors.copy()
+                sFactors.remove(selfMax)
+                oFactors.remove(otherMax)
+                
+                if len(sFactors) == 0: #the other either is identical or more complex
+                    return False
+                elif len(sFactors) != 0 and len(oFactors) == 0:
+                    return True
+
+                return Product(sFactors) > Product(oFactors) # Compare based less complex factors
+            else:
+                return max(self.factors) > max(other.factors)
         
         else: 
             return self.primaryOrder > other.primaryOrder # Ordering classes

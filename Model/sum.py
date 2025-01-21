@@ -57,7 +57,25 @@ class Sum(Expression):
             return True
                 
         if (self.primaryOrder == other.primaryOrder): # Both sums
-            return max(self.terms) > max(other.terms)
+            
+            selfMax = max(self.terms)
+            otherMax = max(other.terms)
+
+            if selfMax == otherMax:
+                sTerms = self.terms.copy()
+                oTerms = other.terms.copy()
+                sTerms.remove(selfMax)
+                oTerms.remove(otherMax)
+
+                if len(sTerms) == 0: #the other either is identical or more complex
+                    return False
+                elif len(sTerms) != 0 and len(oTerms) == 0:
+                    return True
+                
+                return Sum(sTerms) > Sum(oTerms) # Compare based on less complex terms
+            
+            else:
+                return max(self.terms) > max(other.terms)
         
         else: 
             return self.primaryOrder > other.primaryOrder # Ordering classes
