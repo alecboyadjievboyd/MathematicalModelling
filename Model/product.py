@@ -254,16 +254,6 @@ class Product(Expression):
 
 
 
-
-
-
-
-
-        
-
-
-
-    
     # To consolidate a product and remove one terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
     def consolidate(self):
         
@@ -381,7 +371,7 @@ class Product(Expression):
                             factorComp.argument = Sum([factorComp.argument, factor.argument]) # Combine the arguments and join
                             added = True
                             break # we no longer need to compare with other terms
-                        elif factor.base < factorComp.base: # This means that it is lesser in complexity than the current entry, which means it goes before it
+                        elif factor < factorComp: # This means that it is lesser in complexity than the current entry, which means it goes before it
                             orderedFactors.insert(index, factor) 
                             added = True
                             break # stop comparing because we have found its place

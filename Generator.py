@@ -296,7 +296,7 @@ def safeModeTest(depth, maxElements): # Generates a test case for safe mode
 if __name__ == "__main__":
     count = 0
     failCount = 0
-    while True:
+    while False:
         print(" ")
         count = count + 1
         print("RUNNING TEST NUMBER " + str(count))
@@ -338,4 +338,10 @@ if __name__ == "__main__":
         ))).pfsf().consim()
 )'''
 
+print(
+    Exponential(Frac(Integer(1),  Integer(2)), Frac(Integer(7),  Integer(3)))
+)
+print(
+    Exponential(Frac(Integer(1),  Integer(2)), Frac(Integer(7),  Integer(3))).consim()
+)
 
