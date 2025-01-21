@@ -11,6 +11,10 @@ from Rational_model.polynomial_utils import make_monomial
 def check_constant(input):
 
     i = 0
+
+    if (input[0] == '-'):
+        i = 1
+
     while (i < len(input)):
         if (input[i] >='0' and input[i] <= '9'):
             i += 1
