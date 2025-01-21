@@ -52,7 +52,7 @@ class Product(RationalExpression):
                 numerator *= factor
             else:
                 numerator *= factor.numerator
-                denominator = factor.denominator
+                denominator *= factor.denominator
 
         result = Fraction(numerator, denominator, self.coefficient)
         result = result.simplify()

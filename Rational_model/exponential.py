@@ -17,7 +17,7 @@ class Exponential(RationalExpression):
         self.exponent = exponent
 
     def __str__(self):
-        return f'({self.base})^{self.exponent}'
+        return self.string_add_coefficient(f'{self.base.put_brackets()}^{self.exponent}')
 
     def put_brackets(self):
         return str(self)

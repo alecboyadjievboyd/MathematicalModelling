@@ -42,7 +42,7 @@ class Fraction(RationalExpression):
         return self.string_add_coefficient(string_expression)
 
     def put_brackets(self):
-        return str(self)
+        return f'({str(self)})'
 
     def show_representation(self):
         return (f'Fraction({self.coefficient}, {self.numerator.show_representation()}, '
