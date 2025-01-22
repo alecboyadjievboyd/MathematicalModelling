@@ -32,7 +32,7 @@ class Variable(Expression):
         else: 
             return self.primaryOrder > other.primaryOrder # Ordering classes
     
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode = False):
         if self.index == differential.index:
             return Integer(1)
         else:

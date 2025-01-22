@@ -25,7 +25,7 @@ class Pi(Expression):
     def isConstant(self):
         return True
 
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode):
         return Integer(0)
 
     def genarg(self):

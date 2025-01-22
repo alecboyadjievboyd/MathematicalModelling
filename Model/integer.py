@@ -46,7 +46,7 @@ class Integer(Expression):
     def isConstant(self):
         return True
 
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode = False):
         return Integer(0)
 
     def pfsf(self, safeMode = False):

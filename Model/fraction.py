@@ -159,7 +159,7 @@ class Frac(Expression):
             i+=1
         return Frac(sgn*num, den)
     
-    def derivative(self, differential):
+    def derivative(self, differential, safeMode = False):
         return Integer(0)
 
     def genarg(self):#needed for constant simplification (consim)
