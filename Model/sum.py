@@ -380,7 +380,7 @@ class Sum(Expression):
         # When consim works do this -------------------------- orderedTerms.append(Sum(constList).consim()) # Adding the simplified sum of constants to the sum
         if len(constList) > 0:
             if len(constList) == 1:
-                orderedTerms.append(constList[0])
+                orderedTerms.append(constList[0].consim(safeMode))
             else:
                 orderedTerms.append(Sum(constList).consim(safeMode))
                 #orderedTerms.append(Sum(constList))

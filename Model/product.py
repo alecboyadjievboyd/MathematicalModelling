@@ -398,7 +398,7 @@ class Product(Expression):
 
             if len(constList) > 0:
                 if len(constList) == 1:
-                    orderedFactors.insert(0, constList[0])
+                    orderedFactors.insert(0, constList[0].consim(safeMode))
                 else:
                     orderedFactors.insert(0, Product(constList).consim(safeMode))
 
