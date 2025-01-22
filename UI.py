@@ -176,7 +176,6 @@ def ui_rational_model():
         print("Invalid option")
 
 if __name__ == "__main__":
-    print()
     # Continuously gives user prompts to perform an operation on expression(s) with algebraic or rational model
     while True:
 
