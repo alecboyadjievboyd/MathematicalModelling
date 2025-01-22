@@ -48,7 +48,24 @@ class Product(Expression):
             return True
                 
         if (self.primaryOrder == other.primaryOrder): # Both products
-            return max(self.factors) > max(other.factors)
+            
+            selfMax = max(self.factors)
+            otherMax = max(other.factors)
+
+            if selfMax == otherMax:
+                sFactors = self.factors.copy()
+                oFactors = other.factors.copy()
+                sFactors.remove(selfMax)
+                oFactors.remove(otherMax)
+                
+                if len(sFactors) == 0: #the other either is identical or more complex
+                    return False
+                elif len(sFactors) != 0 and len(oFactors) == 0:
+                    return True
+
+                return Product(sFactors) > Product(oFactors) # Compare based less complex factors
+            else:
+                return max(self.factors) > max(other.factors)
         
         else: 
             return self.primaryOrder > other.primaryOrder # Ordering classes
@@ -237,16 +254,6 @@ class Product(Expression):
 
 
 
-
-
-
-
-
-        
-
-
-
-    
     # To consolidate a product and remove one terms. (CONSIM WILL NEED TO USE THIS FOR CONSTANTS)
     def consolidate(self):
         
@@ -364,7 +371,7 @@ class Product(Expression):
                             factorComp.argument = Sum([factorComp.argument, factor.argument]) # Combine the arguments and join
                             added = True
                             break # we no longer need to compare with other terms
-                        elif factor.base < factorComp.base: # This means that it is lesser in complexity than the current entry, which means it goes before it
+                        elif factor < factorComp: # This means that it is lesser in complexity than the current entry, which means it goes before it
                             orderedFactors.insert(index, factor) 
                             added = True
                             break # stop comparing because we have found its place

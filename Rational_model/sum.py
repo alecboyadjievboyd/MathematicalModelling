@@ -35,6 +35,12 @@ class Sum(RationalExpression):
         else:
             return str(self)
 
+    def show_representation(self):
+        term_representation = self.terms[0].show_representation()
+        for i in range(1, len(self.terms)):
+            term_representation += ', ' + self.terms[i].show_representation()
+        return f'Sum({term_representation})'
+
     # Simplifies a sum of rational expressions to a fraction of polynomials
     def simplify(self):
         # Simplify every term of the sum to a polynomial fraction first

@@ -5,6 +5,7 @@ from Rational_model.polynomial import Polynomial
 from Rational_model.product import Product
 from Rational_model.sum import Sum
 from Rational_model.polynomial_utils import polynomial_gcd, make_monomial, divide_with_remainder
+from parsing_algebra import express_alg
 
 # Examples of monomials
 print('\nMonomials:')
@@ -173,3 +174,13 @@ print(exp2.simplify())
 exp3 = Exponential(Polynomial([3, 1]), -2)
 print(exp3)
 print(exp3.simplify())
+
+print('\nShow representation:')
+print(expr1.show_representation())
+print(expr1)
+
+print()
+expr2_1 = express_alg('((x^2+2)/(x+3))*((x^2+4x+3)/(x^2+2))')
+print(expr2_1)
+print(expr2_1.show_representation())
+print(expr2_1.simplify())

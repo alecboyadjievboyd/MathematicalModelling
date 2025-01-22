@@ -17,10 +17,13 @@ class Exponential(RationalExpression):
         self.exponent = exponent
 
     def __str__(self):
-        return f'({self.base})^{self.exponent}'
+        return self.string_add_coefficient(f'{self.base.put_brackets()}^{self.exponent}')
 
     def put_brackets(self):
         return str(self)
+
+    def show_representation(self):
+        return f'Exponential({self.coefficient}, {self.base.show_representation()}), {self.exponent})'
 
     def simplify(self):
         from Rational_model.product import Product

@@ -117,10 +117,10 @@ class Frac(Expression):
         if other.expression_type == ExpressionType.INTEGER: #not sure if this is necessairy
             other = Frac(other)
 
-        if other.expression_type != ExpressionType.FRACTION: #now we use > in the sence of complexity
+        if other.expression_type != ExpressionType.FRACTION: #now we use > in the sense of complexity
             return False
 
-        dif = self + Frac(-1)*other #now in the sence of math
+        dif = self + Frac(-1)*other #now in the sense of math
         if dif.num.value > 0:
             return True
         else:

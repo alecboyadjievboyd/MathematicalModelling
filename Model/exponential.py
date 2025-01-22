@@ -33,8 +33,34 @@ class Exponential(Expression):
         if (self.isConstant() == False) and other.isConstant():
             return True
         
+              
         if (self.primaryOrder == other.primaryOrder): # Both functions
             if (self.secondaryOrder == other.secondaryOrder): # Both exp
+
+                if (
+                    (self.base.expression_type == ExpressionType.VARIABLE and self.argument.isConstant())  #monomial
+                    and 
+                    other.base.expression_type != ExpressionType.VARIABLE): #not monomial
+                    
+                    return False
+
+                if (
+                    (other.base.expression_type == ExpressionType.VARIABLE and other.argument.isConstant())  #monomial
+                    and 
+                    self.base.expression_type != ExpressionType.VARIABLE): #not monomial  
+
+                    return True
+
+                if (
+                    (other.base.expression_type == ExpressionType.VARIABLE and other.argument.isConstant())  #monomial
+                    and 
+                    self.base.expression_type == ExpressionType.VARIABLE and self.argument.isConstant()): # also monomial   
+
+                        if self.base == other.base: # if the base is the same variable
+                            return self.argument > other.argument #compare exponents  
+                        else:
+                            return self.base > other.base
+                
                 if other.base == self.base: # If the other base is equal
                     return self.argument > other.argument
                 else:

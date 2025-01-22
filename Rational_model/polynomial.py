@@ -166,6 +166,9 @@ class Polynomial(RationalExpression):
 
         return str(self)
 
+    def show_representation(self):
+        return f'Polynomial({self.coefficient}, {self.monomial_coefficients})'
+
     def __eq__(self, other):
         if not isinstance(other, Polynomial):
             return NotImplemented
@@ -300,17 +303,20 @@ class Polynomial(RationalExpression):
             else:
                 factors.append(Exponential(factor, multiplicity))
 
+        coefficient = polynomial.coefficient
+        polynomial /= coefficient
+
         if polynomial.degree() > 0:
             factors.append(polynomial)
 
         if len(factors) == 0:
-            return make_monomial(0, self.coefficient)
+            return make_monomial(0, coefficient)
         elif len(factors) == 1:
-            factors[0].coefficient *= polynomial.coefficient
+            factors[0].coefficient *= coefficient
             return factors[0]
         else:
             from Rational_model.product import Product
-            return Product(factors, polynomial.coefficient)
+            return Product(factors, coefficient)
 
 
     # Polynomial is always stored in a standard form, so no simplification needed
