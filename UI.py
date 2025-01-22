@@ -55,9 +55,10 @@ def ui_algebraic_model():
     if operation == '1':
         print("Enter the index variable to differentiate with respect to")
         differentiation_index = input()
-        if type(differentiation_index) != int:
+        if not differentiation_index.isdigit():
             print('Invalid option')
             return
+        differentiation_index = int(differentiation_index)
 
         print("Enter the expression")
         user_expression = input()
