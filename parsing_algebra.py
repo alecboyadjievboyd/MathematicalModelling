@@ -98,7 +98,7 @@ def implicit(input):
         elif ((input[i] >='0' and input[i] <= '9') and bracket == 0):
             j, split = check_implicit(input[i:])
             if ((i +j) < len(input) and split):
-                return Product([fraction(input[:i+j]), term(input[i+j:])])
+                return Product([fraction(input[:i+j]), implicit(input[i+j:])])
             break
                
     return fraction(input)        
