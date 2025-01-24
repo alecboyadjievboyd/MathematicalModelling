@@ -233,16 +233,14 @@ if __name__ == '__main__':
     x = expression(user_input)
     print(x)
 
-
+"""
 # recursion depth tester before stack overflow
 
-"""
-
-n = 141
-word = "x_1*x_2"
+n = 142
+word = "sinx1"
 for i in range(3, n+3):
-    word = "("+ word+")*x_" + str(i)
+    word = "("+ word+")sinx1"
 
-x = term(word)
+x = expression(word)
 print(x)
 """
